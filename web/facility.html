@@ -1,0 +1,373 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>館内 | 雪灯り</title>
+    <meta name="description" content="雪灯りの館内。灯と木の香りが導く静謐な回廊で、心ほどけるひとときを。">
+    <link rel="icon" href="assets/images/common/icon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/facility.css">
+</head>
+<body data-page="facility">
+    <header class="header header--fixed">
+        <div class="header__inner">
+            <div class="header__brand">
+                <a class="header__logo" href="index_web.html#hero" aria-label="雪灯り">
+                    <img src="assets/images/common/icon.png" alt="雪灯り">
+                </a>
+                <button class="header__menu-btn" type="button" aria-expanded="false" aria-controls="site-menu" aria-label="メニューを開く">
+                    <img class="menu-icon__svg" src="assets/images/common/icon-hamburger.svg" alt="" aria-hidden="true">
+                    <img class="menu-icon__close" src="assets/images/common/icon-close.svg" alt="" aria-hidden="true">
+                </button>
+            </div>
+            <div class="header__actions">
+                <a class="header__tel" href="tel:0960-47-0001">Tel. 0960-47-0001</a>
+                <a class="header__reserve" data-i18n="action.reserve" href="reserve/reserve.html" data-nav="reserve">予約</a>
+            </div>
+        </div>
+    </header>
+
+    <div id="site-menu" class="menu" aria-hidden="true">
+        <div class="menu__panel">
+            <div class="menu__top">
+                <a href="index_web.html#hero">
+                    <img class="menu__logo" src="assets/images/common/logo-yukiakari-white.png" alt="雪灯り">
+                </a>
+            </div>
+            <div class="menu__columns">
+                <div class="menu__column">
+                    <div class="menu__column-label">Contents</div>
+                    <ul class="menu__list">
+                        <li><a href="about.html" data-nav="about">はじめに</a></li>
+                        <li><a href="facility.html" data-nav="facility">館内</a></li>
+                        <li><a href="spa.html" data-nav="spa">温泉</a></li>
+                        <li><a href="dining.html" data-nav="dining">お食事</a></li>
+                        <li><a href="rooms.html" data-nav="rooms">客室</a></li>
+                        <li><a href="access.html" data-nav="access">交通案内</a></li>
+                    </ul>
+                </div>
+                <div class="menu__column menu__column--info">
+                    <div class="menu__column-label">Information</div>
+                    <div class="menu__info">
+                        <a class="menu__reserve" data-i18n="action.reserveLong" href="reserve/reserve.html" data-nav="reserve">宿泊のご予約はこちら</a>
+                        <p class="menu__tel">Tel. 0960-47-0001</p>
+                        <p class="menu__hours">受付時間 9:00 ～ 19:00</p>
+                        <p class="menu__address">〒061-2302<br>北海道札幌市南区定山渓温泉東3丁目12-5</p>
+                        <a class="menu__email" href="mailto:info@yukiakari.com">info@yukiakari.com</a>
+                        <a class="menu__link" href="contact.html" data-nav="contact">メールでのお問い合わせ</a>
+                        <div class="menu__policy">
+    <a class="menu__policy-link" href="faq.html" data-nav="faq">よくあるご質問</a>
+    <a class="menu__policy-link" href="guidelines.html" data-nav="guidelines">ご利用案内</a>
+    <a class="menu__policy-link" href="privacypolicy.html" data-nav="privacy">プライバシーポリシー</a>
+    <a class="menu__policy-link" href="sitepolicy.html" data-nav="sitepolicy">サイトポリシー</a>
+</div>
+                    </div>
+                </div>
+                <div class="menu__column menu__column--lang">
+                    <div class="menu__column-label">Language</div>
+                    <ul class="menu__list menu__list--lang">
+                        <li><button type="button" class="lang-option" data-lang="en">English</button></li>
+                        <li><button type="button" class="lang-option" data-lang="ja">日本語</button></li>
+                        <li><button type="button" class="lang-option" data-lang="ko">한국어</button></li>
+                        <li><button type="button" class="lang-option" data-lang="zh-Hans">简体中文</button></li>
+                        <li><button type="button" class="lang-option" data-lang="zh-Hant">繁體中文</button></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="menu__footer">
+                <div class="menu__social">
+                    <a class="menu__social-link" href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">FB</a>
+                    <a class="menu__social-link" href="https://x.com/" target="_blank" rel="noopener noreferrer" aria-label="X">X</a>
+                    <a class="menu__social-link" href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">IG</a>
+                </div>
+                <p class="menu__copy">&copy; 雪灯り</p>
+            </div>
+        </div>
+    </div>
+
+    <main>
+        <section id="hero" class="hero hero--facility" aria-label="館内">
+            <div class="hero__layer" aria-hidden="true"></div>
+            <div class="hero__scrim" aria-hidden="true"></div>
+            <div class="hero__overlay">
+                <div class="hero__title-wrap">
+                    <span class="hero__title-jp">館内</span>
+                </div>
+            </div>
+        </section>
+
+        <div class="scroll-hint scroll-hint--down scroll-hint--overlap" aria-hidden="true">
+            <span class="scroll-hint__line"></span>
+        </div>
+
+        <section id="introduction" class="facility-intro reveal">
+            <div class="facility-intro__inner">
+                <div class="facility-intro__media">
+                    <video class="facility-intro__video" src="assets/images/facility/facility-intro.mp4" autoplay muted loop playsinline></video>
+                </div>
+                <h2 class="facility-intro__title">静謐な回廊に包まれる館内</h2>
+                <p class="facility-intro__text">本館・新館・離れをつなぐ回廊と中庭が、館内の静かな動線をつくっています。館内案内はすべてマップ（俯瞰図）でご覧いただけます。</p>
+                <p class="facility-intro__text">施設のご利用時間と料金をあわせてご案内いたします。ご滞在の計画にお役立てください。</p>
+            </div>
+        </section>
+
+        <div class="scroll-hint scroll-hint--down scroll-hint--overlap" aria-hidden="true">
+            <span class="scroll-hint__line"></span>
+        </div>
+
+        <section id="facility-maps" class="facility-maps section reveal">
+            <div class="facility-maps__inner">
+                <div class="facility-floormap">
+                    <div class="facility-floormap__inner">
+                        <div class="facility-carousel facility-carousel--with-label" data-carousel="floormap" tabindex="0" aria-label="フロアマップのスライダー">
+                            <button class="facility-carousel__nav facility-carousel__nav--prev" type="button" aria-label="前のマップ" data-carousel-prev></button>
+                            <div class="facility-carousel__viewport flickity-viewport">
+                                <ul class="facility-carousel__track flickity-slider" data-carousel-track>
+                                    <li class="facility-carousel__cell carousel-cell is-active" data-label="本館フロア" data-short-label="本館">
+                                        <div class="facility-carousel__cell-inner">
+                                            <img src="assets/images/facility/main.png" alt="本館フロアマップ" loading="lazy" decoding="async">
+                                            <div class="facility-carousel__caption">
+                                                <ol class="facility-carousel__list">
+                                                    <li><span class="facility-list__icon"><img src="assets/images/facility/1.png" alt="1"></span>エントランス</li>
+                                                    <li><span class="facility-list__icon"><img src="assets/images/facility/2.png" alt="2"></span>ホール、ロビー、売店</li>
+                                                    <li><span class="facility-list__icon"><img src="assets/images/facility/3.png" alt="3"></span>フロント</li>
+                                                    <li><span class="facility-list__icon"><img src="assets/images/facility/4.png" alt="4"></span>お食事処</li>
+                                                    <li><span class="facility-list__icon"><img src="assets/images/facility/5.png" alt="5"></span>中庭</li>
+                                                    <li><span class="facility-list__icon"><img src="assets/images/facility/6.png" alt="6"></span>お食事処</li>
+                                                    <li><span class="facility-list__icon"><img src="assets/images/facility/7.png" alt="7"></span>大広間</li>
+                                                    <li><span class="facility-list__icon"><img src="assets/images/facility/8.png" alt="8"></span>自販機/喫煙所</li>
+                                                </ol>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="facility-carousel__cell carousel-cell" data-label="新館フロア" data-short-label="新館">
+                                        <div class="facility-carousel__cell-inner">
+                                            <img src="assets/images/facility/new.png" alt="新館フロアマップ" loading="lazy" decoding="async">
+                                            <div class="facility-carousel__caption">
+                                                <ol class="facility-carousel__list">
+                                                    <li><span class="facility-list__icon"><img src="assets/images/facility/1.png" alt="1"></span>エントランス</li>
+                                                    <li><span class="facility-list__icon"><img src="assets/images/facility/2.png" alt="2"></span>お食事処</li>
+                                                    <li><span class="facility-list__icon"><img src="assets/images/facility/3.png" alt="3"></span>温水熱ブール</li>
+                                                    <li><span class="facility-list__icon"><img src="assets/images/facility/4.png" alt="4"></span>岩盤浴</li>
+                                                </ol>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="facility-carousel__cell carousel-cell" data-label="離れエリア" data-short-label="離れ">
+                                        <div class="facility-carousel__cell-inner">
+                                            <img src="assets/images/facility/annex.png" alt="離れエリアマップ" loading="lazy" decoding="async">
+                                            <div class="facility-carousel__caption">
+                                                <ol class="facility-carousel__list">
+                                                    <li><span class="facility-list__icon"><img src="assets/images/facility/1.png" alt="1"></span>ひのき風呂</li>
+                                                    <li><span class="facility-list__icon"><img src="assets/images/facility/2.png" alt="2"></span>自販機</li>
+                                                </ol>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <span class="facility-carousel__side-label" data-carousel-label-output aria-hidden="true">本館</span>
+                            <button class="facility-carousel__nav facility-carousel__nav--next" type="button" aria-label="次のマップ" data-carousel-next></button>
+                            <div class="facility-carousel__dots">
+                                <button class="facility-carousel__dot is-active" type="button" aria-label="本館フロアへ" data-carousel-dot="0"></button>
+                                <button class="facility-carousel__dot" type="button" aria-label="新館フロアへ" data-carousel-dot="1"></button>
+                                <button class="facility-carousel__dot" type="button" aria-label="離れエリアへ" data-carousel-dot="2"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <figure class="facility-sitemap">
+                    <img src="assets/images/facility/map.png" alt="館内全体マップ" loading="lazy" decoding="async">
+                    <figcaption class="facility-sitemap__caption">
+                        <ol class="facility-sitemap__list">
+                            <li><span class="facility-list__icon"><img src="assets/images/facility/1.png" alt="1"></span>混浴露天風呂・川風呂・酮竄風呂/女性専用露天風呂</li>
+                            <li><span class="facility-list__icon"><img src="assets/images/facility/2.png" alt="2"></span>大浴場/ミストサウナ/水風呂</li>
+                            <li><span class="facility-list__icon"><img src="assets/images/facility/3.png" alt="3"></span>家族風呂(竹の湯)</li>
+                            <li><span class="facility-list__icon"><img src="assets/images/facility/4.png" alt="4"></span>自販機/喫煙所</li>
+                            <li><span class="facility-list__icon"><img src="assets/images/facility/5.png" alt="5"></span>中庭</li>
+                            <li><span class="facility-list__icon"><img src="assets/images/facility/6.png" alt="6"></span>本館(フロント/本館客室/お食事処/大広間等)</li>
+                            <li><span class="facility-list__icon"><img src="assets/images/facility/7.png" alt="7"></span>蒸し処 温泉地獄</li>
+                            <li><span class="facility-list__icon"><img src="assets/images/facility/8.png" alt="8"></span>新館(お食事処/新館客室/温水熱プール/岩盤浴)</li>
+                            <li><span class="facility-list__icon"><img src="assets/images/facility/9.png" alt="9"></span>入口</li>
+                            <li><span class="facility-list__icon"><img src="assets/images/facility/10.png" alt="10"></span>家族風呂(もみじの番/あじさいの湯)</li>
+                            <li><span class="facility-list__icon"><img src="assets/images/facility/11.png" alt="11"></span>離れ和室</li>
+                            <li><span class="facility-list__icon"><img src="assets/images/facility/12.png" alt="12"></span>隠れ一戸建て 竹林別館</li>
+                            <li><span class="facility-list__icon"><img src="assets/images/facility/13.png" alt="13"></span>ひのき風呂</li>
+                            <li><span class="facility-list__icon"><img src="assets/images/facility/14.png" alt="14"></span>駐車場</li>
+                        </ol>
+                    </figcaption>
+                </figure>
+            </div>
+        </section>
+
+        <div class="scroll-hint scroll-hint--up scroll-hint--overlap" aria-hidden="true">
+            <span class="scroll-hint__line"></span>
+        </div>
+
+        <section class="facility-overview section reveal">
+            <div class="facility-overview__inner">
+                <p>雪灯りの敷地は、雪庭と回廊を中心に広がります。四季の静けさと共に、館内の景色がゆるやかに移ろいます。</p>
+            </div>
+        </section>
+
+        <section id="gallery" class="facility-gallery section reveal">
+            <header class="facility-gallery__header">
+                <h3 class="facility-gallery__title">施設</h3>
+            </header>
+            <div class="facility-carousel facility-carousel--gallery" data-carousel="gallery" tabindex="0" aria-label="館内ギャラリーのスライダー">
+                <button class="facility-carousel__nav facility-carousel__nav--prev" type="button" aria-label="前の写真" data-carousel-prev></button>
+                <div class="facility-carousel__viewport flickity-viewport">
+                    <ul class="facility-carousel__track flickity-slider" data-carousel-track>
+                        <li class="facility-carousel__cell carousel-cell is-active" data-label="ロビーラウンジ">
+                            <img class="facility-gallery__image" src="assets/images/facility/lobby-lounge.jpg" alt="ロビーラウンジ">
+                            <p class="facility-gallery__caption">ロビーラウンジ</p>
+                        </li>
+                        <li class="facility-carousel__cell carousel-cell" data-label="大宴会場">
+                            <img class="facility-gallery__image" src="assets/images/facility/grand-banquet.jpg" alt="大宴会場">
+                            <p class="facility-gallery__caption">大宴会場</p>
+                        </li>
+                        <li class="facility-carousel__cell carousel-cell" data-label="回廊">
+                            <img class="facility-gallery__image" src="assets/images/facility/corridor.jpg" alt="回廊">
+                            <p class="facility-gallery__caption">回廊</p>
+                        </li>
+                        <li class="facility-carousel__cell carousel-cell" data-label="中庭">
+                            <img class="facility-gallery__image" src="assets/images/facility/courtyard.jpg" alt="中庭">
+                            <p class="facility-gallery__caption">中庭</p>
+                        </li>
+                    </ul>
+                </div>
+                <button class="facility-carousel__nav facility-carousel__nav--next" type="button" aria-label="次の写真" data-carousel-next></button>
+                <div class="facility-carousel__dots">
+                    <button class="facility-carousel__dot is-active" type="button" aria-label="ロビーラウンジへ" data-carousel-dot="0"></button>
+                    <button class="facility-carousel__dot" type="button" aria-label="大宴会場へ" data-carousel-dot="1"></button>
+                    <button class="facility-carousel__dot" type="button" aria-label="回廊へ" data-carousel-dot="2"></button>
+                    <button class="facility-carousel__dot" type="button" aria-label="中庭へ" data-carousel-dot="3"></button>
+                </div>
+            </div>
+        </section>
+
+        <section id="features" class="facility-features section reveal">
+            <div class="facility-features__item">
+                <figure class="facility-features__media">
+                    <img class="facility-features__image" src="assets/images/facility/afterbath-lounge.jpg" alt="湯上がり処">
+                </figure>
+                <div class="facility-features__content">
+                    <h3 class="facility-features__title">湯上がり処</h3>
+                    <p class="facility-features__text">湯の余韻を味わう静かなラウンジ。雪茶とともに、旅の時間をほどきます。</p>
+                    <p class="facility-features__meta">● ご利用料金／無料　● ご利用時間／6:00〜23:00</p>
+                </div>
+            </div>
+            <div class="facility-features__item facility-features__item--reverse">
+                <figure class="facility-features__media">
+                    <img class="facility-features__image" src="assets/images/facility/drink-bar.jpg" alt="セルフドリンクバー">
+                </figure>
+                <div class="facility-features__content">
+                    <h3 class="facility-features__title">セルフドリンクバー</h3>
+                    <p class="facility-features__text">地元ハーブティーや温かい煎茶をセルフでご用意しています。</p>
+                    <p class="facility-features__meta">● ご利用料金／無料　● ご利用時間／7:00〜22:00</p>
+                </div>
+            </div>
+            <div class="facility-features__item">
+                <figure class="facility-features__media">
+                    <img class="facility-features__image" src="assets/images/facility/grand-banquet.jpg" alt="大宴会場">
+                </figure>
+                <div class="facility-features__content">
+                    <h3 class="facility-features__title">大宴会場</h3>
+                    <p class="facility-features__text">季節の会席や祝宴に対応する広間。人数に合わせて柔軟に設えます。</p>
+                    <p class="facility-features__meta">● ご利用料金／無料（宴会プランに含む）　● ご利用時間／18:00〜21:00</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="outline" class="facility-outline section reveal">
+            <header class="facility-outline__header">
+                <h3 class="facility-outline__title">施設概要</h3>
+            </header>
+            <div class="facility-outline__body">
+                <ul class="facility-outline__list">
+                    <li>所在地：北海道札幌近郊（詳細はお問い合わせください）</li>
+                    <li>敷地面積：約4,000㎡</li>
+                    <li>客室数：本館12室・新館6室・離れ4棟</li>
+                    <li>チェックイン：15:00 / チェックアウト：10:00</li>
+                    <li>駐車場：15台（無料）</li>
+                    <li>Wi‑Fi：全館対応</li>
+                </ul>
+                <p class="facility-outline__note">※ 内容は仮設定です。正式情報にあわせて調整いたします。</p>
+            </div>
+        </section>
+
+        <section id="booking" class="booking reveal">
+            <div class="booking__inner">
+                <h2 class="booking__title">ご予約</h2>
+                <p class="booking__text">ご予約は専用予約フォームまたは、<br>お電話にて承ります。<br>当サイトからのご予約が最もお得です。</p>
+                <a class="booking__cta" href="reserve/reserve.html" data-nav="reserve">宿泊のご予約はこちら</a>
+                <p class="booking__tel">Tel. 0960-47-0001</p>
+                <p class="booking__hours">受付時間 9:00 ～ 19:00</p>
+            </div>
+        </section>
+    </main>
+
+    <div class="scroll-hint scroll-hint--up scroll-hint--overlap" aria-hidden="true">
+        <span class="scroll-hint__line"></span>
+    </div>
+
+    <footer class="footer">
+        <div class="footer__inner">
+            <div class="footer__column">
+                <a class="footer__logo-link" href="index_web.html">
+                <img class="footer__logo" src="assets/images/common/icon.png" alt="雪灯り">
+                </a>
+            </div>
+            <div class="footer__column footer__column--links">
+                <nav class="footer__nav" aria-label="フッターナビゲーション">
+                    <a href="about.html" data-nav="about">はじめに</a>
+                    <a href="facility.html" data-nav="facility">館内</a>
+                    <a href="spa.html" data-nav="spa">温泉</a>
+                    <a href="dining.html" data-nav="dining">お食事</a>
+                    <a href="rooms.html" data-nav="rooms">客室</a>
+                    <a href="access.html" data-nav="access">交通案内</a>
+                </nav>
+                <div class="footer__policies">
+    <a href="contact.html" data-nav="contact">メールでのお問い合わせ</a>
+    <a href="faq.html" data-nav="faq">よくあるご質問</a>
+    <a href="guidelines.html" data-nav="guidelines">ご利用案内</a>
+    <a href="privacypolicy.html" data-nav="privacy">プライバシーポリシー</a>
+    <a href="sitepolicy.html" data-nav="sitepolicy">サイトポリシー</a>
+</div>
+            </div>
+            <div class="footer__column footer__column--contact">
+                <p class="footer__tel">Tel. 0960-47-0001</p>
+                <p class="footer__hours">受付時間 9:00 ～ 19:00</p>
+                <p class="footer__address">〒061-2302<br>北海道札幌市南区定山渓温泉東3丁目12-5</p>
+                <a class="footer__email" href="mailto:info@yukiakari.com">info@yukiakari.com</a>
+                <div class="footer__lang">
+                    <button type="button" class="lang-option" data-lang="en">English</button>
+                    <button type="button" class="lang-option" data-lang="ja">日本語</button>
+                    <button type="button" class="lang-option" data-lang="ko">한국어</button>
+                    <button type="button" class="lang-option" data-lang="zh-Hans">简体中文</button>
+                    <button type="button" class="lang-option" data-lang="zh-Hant">繁體中文</button>
+                </div>
+            </div>
+        </div>
+        <p class="footer__copy">&copy; 雪灯り</p>
+    </footer>
+    <script src="assets/js/i18n-data.js"></script>
+<script src="assets/js/i18n-extra-pages.js"></script>
+<script src="assets/js/i18n-extra-facility.js"></script>
+<script src="assets/js/i18n-extra-policy.js"></script>
+<script src="assets/js/i18n-extra-rooms.js"></script>
+    <script src="assets/js/script.js"></script>
+    <script src="assets/js/facility.js"></script>
+
+    </body>
+</html>
+
+
+
+
+
+

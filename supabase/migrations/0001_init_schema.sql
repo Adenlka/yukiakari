@@ -1,0 +1,15 @@
+-- 占位文件:数据库建表脚本(0001_init_schema.sql)
+--
+-- 用途:对应 docs/yukiakari_设计方案_v1.md 第一节表结构设计
+-- (plans / plan_extras / plan_available_extras / reservations /
+--  reservation_items / reservation_item_extras)。
+--
+-- 实现阶段(角色3下一步)再补:
+-- - 完整建表语句(设计方案第一节已给出 SQL 起点,可直接誊入)
+-- - 索引(设计方案第一节索引表)
+-- - get_availability() 函数(方案A:实时计算库存,不建物化库存表)
+--
+-- 【待 Aden 确认】各房型/日帰りプラン每日总可售数量(plans.total_units)
+-- 真实值,设计方案给的是占位默认值,不代表真实业务数字,上线前必须确认。
+
+-- TODO(角色3下一阶段): 誊入设计方案第一节建表 SQL

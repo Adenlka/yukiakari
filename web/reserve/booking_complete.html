@@ -1,0 +1,171 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ご予約完了 | 雪灯り</title>
+    <meta name="description" content="雪灯りのご予約完了ページ。予約番号をご確認ください。">
+    <link rel="icon" href="../assets/images/common/icon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="booking_complete.css">
+</head>
+<body data-page="reserve-complete">
+    <header class="header header--fixed">
+        <div class="header__inner">
+            <div class="header__brand">
+                <a class="header__logo" href="../index_web.html#hero" aria-label="雪灯り">
+                    <img src="../assets/images/common/icon.png" alt="雪灯り">
+                </a>
+                <button class="header__menu-btn" type="button" aria-expanded="false" aria-controls="site-menu" aria-label="メニューを開く">
+                    <img class="menu-icon__svg" src="../assets/images/common/icon-hamburger.svg" alt="" aria-hidden="true">
+                    <img class="menu-icon__close" src="../assets/images/common/icon-close.svg" alt="" aria-hidden="true">
+                </button>
+            </div>
+            <div class="header__actions">
+                <a class="header__tel" href="tel:0960-47-0001">Tel. 0960-47-0001</a>
+                <a class="header__reserve" data-i18n="action.reserve" href="reserve.html" data-nav="reserve">予約</a>
+            </div>
+        </div>
+    </header>
+
+    <div id="site-menu" class="menu" aria-hidden="true">
+        <div class="menu__panel">
+            <div class="menu__top">
+                <a href="../index_web.html#hero">
+                    <img class="menu__logo" src="../assets/images/common/logo-yukiakari-white.png" alt="雪灯り">
+                </a>
+            </div>
+            <div class="menu__columns">
+                <div class="menu__column">
+                    <div class="menu__column-label">Contents</div>
+                    <ul class="menu__list">
+                        <li><a href="../about.html" data-nav="about">はじめに</a></li>
+                        <li><a href="../facility.html" data-nav="facility">館内</a></li>
+                        <li><a href="../spa.html" data-nav="spa">温泉</a></li>
+                        <li><a href="../dining.html" data-nav="dining">お食事</a></li>
+                        <li><a href="../rooms.html" data-nav="rooms">客室</a></li>
+                        <li><a href="../access.html" data-nav="access">交通案内</a></li>
+                    </ul>
+                </div>
+                <div class="menu__column menu__column--info">
+                    <div class="menu__column-label">Information</div>
+                    <div class="menu__info">
+                        <a class="menu__reserve" data-i18n="action.reserveLong" href="reserve.html" data-nav="reserve">宿泊のご予約はこちら</a>
+                        <p class="menu__tel">Tel. 0960-47-0001</p>
+                        <p class="menu__hours">受付時間 9:00 ～ 19:00</p>
+                        <p class="menu__address">〒061-2302<br>北海道札幌市南区定山渓温泉東3丁目12-5</p>
+                        <a class="menu__email" href="mailto:info@yukiakari.com">info@yukiakari.com</a>
+                        <a class="menu__link" href="../contact.html" data-nav="contact">メールでのお問い合わせ</a>
+                        <div class="menu__policy">
+    <a class="menu__policy-link" href="../faq.html" data-nav="faq">よくあるご質問</a>
+    <a class="menu__policy-link" href="../guidelines.html" data-nav="guidelines">ご利用案内</a>
+    <a class="menu__policy-link" href="../privacypolicy.html" data-nav="privacy">プライバシーポリシー</a>
+    <a class="menu__policy-link" href="../sitepolicy.html" data-nav="sitepolicy">サイトポリシー</a>
+</div>
+                    </div>
+                </div>
+                <div class="menu__column menu__column--lang">
+                    <div class="menu__column-label">Language</div>
+                    <ul class="menu__list menu__list--lang">
+                        <li><button type="button" class="lang-option" data-lang="en">English</button></li>
+                        <li><button type="button" class="lang-option" data-lang="ja">日本語</button></li>
+                        <li><button type="button" class="lang-option" data-lang="ko">한국어</button></li>
+                        <li><button type="button" class="lang-option" data-lang="zh-Hans">简体中文</button></li>
+                        <li><button type="button" class="lang-option" data-lang="zh-Hant">繁體中文</button></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="menu__footer">
+                <div class="menu__social">
+                    <a class="menu__social-link" href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">FB</a>
+                    <a class="menu__social-link" href="https://x.com/" target="_blank" rel="noopener noreferrer" aria-label="X">X</a>
+                    <a class="menu__social-link" href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">IG</a>
+                </div>
+                <p class="menu__copy">&copy; 雪灯り</p>
+            </div>
+        </div>
+    </div>
+
+    <main>
+        <section class="reserve-title reserve-title--sub">
+            <div class="reserve-title__inner reserve-title__inner--center">
+                <h1 class="reserve-title__heading" data-i18n="reserve.complete.title">ご予約完了</h1>
+                <p class="reserve-title__lead" data-i18n="reserve.complete.lead">ご予約ありがとうございます。予約番号をご確認ください。</p>
+            </div>
+        </section>
+
+        <section class="booking-complete">
+            <div class="booking-complete__inner">
+                <div class="booking-complete__card">
+                    <p class="booking-complete__label" data-i18n="reserve.complete.codeLabel">予約番号</p>
+                    <p class="booking-complete__code" data-reservation-code>--</p>
+                    <p class="booking-complete__meta"><span data-i18n="reserve.complete.totalLabel">合計</span> <span data-reservation-total>--</span></p>
+                    <p class="booking-complete__meta"><span data-i18n="reserve.complete.paymentLabel">支払い状況</span> <span data-reservation-payment data-i18n="reserve.complete.payment.unpaid">未決済</span></p>
+                    <p class="booking-complete__note booking-complete__note--alert" data-i18n="reserve.complete.note">この番号と電話番号で予約内容の照会が可能です。</p>
+                </div>
+                <div class="booking-complete__actions">
+                    <a class="booking-complete__button" href="booking_lookup.html" data-i18n="reserve.complete.lookup">予約内容を照会する</a>
+                    <a class="booking-complete__link" href="reserve.html" data-nav="reserve" data-i18n="reserve.complete.back">予約ページへ戻る</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer__inner">
+            <div class="footer__column">
+                <a class="footer__logo-link" href="../index_web.html">
+                <img class="footer__logo" src="../assets/images/common/icon.png" alt="雪灯り">
+                </a>
+            </div>
+            <div class="footer__column footer__column--links">
+                <nav class="footer__nav" aria-label="フッターナビゲーション">
+                    <a href="../about.html" data-nav="about">はじめに</a>
+                    <a href="../facility.html" data-nav="facility">館内</a>
+                    <a href="../spa.html" data-nav="spa">温泉</a>
+                    <a href="../dining.html" data-nav="dining">お食事</a>
+                    <a href="../rooms.html" data-nav="rooms">客室</a>
+                    <a href="../access.html" data-nav="access">交通案内</a>
+                </nav>
+                <div class="footer__policies">
+    <a href="../contact.html" data-nav="contact">メールでのお問い合わせ</a>
+    <a href="../faq.html" data-nav="faq">よくあるご質問</a>
+    <a href="../guidelines.html" data-nav="guidelines">ご利用案内</a>
+    <a href="../privacypolicy.html" data-nav="privacy">プライバシーポリシー</a>
+    <a href="../sitepolicy.html" data-nav="sitepolicy">サイトポリシー</a>
+</div>
+            </div>
+            <div class="footer__column footer__column--contact">
+                <p class="footer__tel">Tel. 0960-47-0001</p>
+                <p class="footer__hours">受付時間 9:00 ～ 19:00</p>
+                <p class="footer__address">〒061-2302<br>北海道札幌市南区定山渓温泉東3丁目12-5</p>
+                <a class="footer__email" href="mailto:info@yukiakari.com">info@yukiakari.com</a>
+                <div class="footer__lang">
+                    <button type="button" class="lang-option" data-lang="en">English</button>
+                    <button type="button" class="lang-option" data-lang="ja">日本語</button>
+                    <button type="button" class="lang-option" data-lang="ko">한국어</button>
+                    <button type="button" class="lang-option" data-lang="zh-Hans">简体中文</button>
+                    <button type="button" class="lang-option" data-lang="zh-Hant">繁體中文</button>
+                </div>
+            </div>
+        </div>
+        <p class="footer__copy">&copy; 雪灯り</p>
+    </footer>
+    <script src="../assets/js/i18n-data.js"></script>
+<script src="../assets/js/i18n-extra-pages.js"></script>
+<script src="../assets/js/i18n-extra-facility.js"></script>
+<script src="../assets/js/i18n-extra-policy.js"></script>
+<script src="../assets/js/i18n-extra-rooms.js"></script>
+    <script src="../assets/js/script.js"></script>
+    <script src="booking_complete.js"></script>
+
+    </body>
+</html>
+
+
+
+
+

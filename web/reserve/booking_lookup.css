@@ -1,0 +1,299 @@
+﻿.reserve-title {
+    padding: 120px 24px 32px;
+}
+
+.reserve-title__inner {
+    max-width: 960px;
+    margin: 0 auto;
+    text-align: center;
+    display: grid;
+    gap: 12px;
+}
+
+.reserve-title__inner--center {
+    text-align: center;
+}
+
+.reserve-title__heading {
+    margin: 0;
+    font-size: clamp(28px, 4.5vw, 48px);
+    letter-spacing: 0.2em;
+}
+
+.reserve-title__lead {
+    margin: 0;
+    color: rgba(238, 242, 243, 0.75);
+    font-size: 14px;
+}
+
+.reserve-title--sub {
+    padding-top: 120px;
+}
+
+.booking-lookup {
+    padding: 20px 24px 120px;
+}
+
+.booking-lookup__inner {
+    max-width: 860px;
+    margin: 0 auto;
+    display: grid;
+    gap: 24px;
+}
+
+.booking-lookup__form {
+    display: grid;
+    gap: 16px;
+    padding: 28px;
+    border-radius: 16px;
+    border: 1px solid rgba(220, 182, 120, 0.25);
+    background: rgba(15, 17, 20, 0.78);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+}
+
+.booking-lookup__field {
+    display: grid;
+    gap: 8px;
+}
+
+.booking-lookup__label {
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    color: rgba(238, 242, 243, 0.65);
+}
+
+.booking-lookup__input {
+    font-family: var(--font-jp);
+    font-size: 14px;
+    color: var(--color-text);
+    background: rgba(12, 14, 16, 0.8);
+    border: 1px solid rgba(220, 182, 120, 0.2);
+    border-radius: 8px;
+    padding: 10px 12px;
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.booking-lookup__select {
+    appearance: none;
+}
+
+.booking-lookup__input:focus {
+    border-color: rgba(220, 182, 120, 0.6);
+    box-shadow: 0 0 0 3px rgba(220, 182, 120, 0.15);
+}
+
+.booking-lookup__submit {
+    border: 1px solid rgba(220, 182, 120, 0.6);
+    background: rgba(220, 182, 120, 0.12);
+    color: var(--color-text);
+    font-family: var(--font-jp);
+    letter-spacing: 0.2em;
+    padding: 12px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s ease, border-color 0.3s ease;
+    justify-self: start;
+}
+
+.booking-lookup__submit:hover {
+    background: rgba(220, 182, 120, 0.25);
+    border-color: rgba(220, 182, 120, 0.85);
+}
+
+.booking-lookup__button {
+    border: 1px solid rgba(220, 182, 120, 0.6);
+    background: rgba(220, 182, 120, 0.12);
+    color: var(--color-text);
+    font-family: var(--font-jp);
+    letter-spacing: 0.16em;
+    padding: 10px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.booking-lookup__button:hover {
+    background: rgba(220, 182, 120, 0.25);
+    border-color: rgba(220, 182, 120, 0.85);
+}
+
+.booking-lookup__button--ghost {
+    background: transparent;
+    border-color: rgba(238, 242, 243, 0.4);
+}
+
+.booking-lookup__button--ghost:hover {
+    border-color: rgba(238, 242, 243, 0.7);
+    background: rgba(238, 242, 243, 0.08);
+}
+
+.booking-lookup__result,
+.booking-lookup__error {
+    border-radius: 16px;
+    padding: 24px;
+    border: 1px solid rgba(220, 182, 120, 0.25);
+    background: rgba(14, 16, 19, 0.6);
+    box-shadow: 0 18px 32px rgba(0, 0, 0, 0.18);
+}
+
+.booking-lookup__result.is-canceled {
+    border-color: rgba(238, 165, 165, 0.4);
+}
+
+.booking-lookup__result-title {
+    margin: 0 0 16px;
+    font-size: 14px;
+    letter-spacing: 0.2em;
+    color: var(--color-accent);
+}
+
+.booking-lookup__result-title + .booking-lookup__manage-form {
+    margin-top: 14px;
+}
+
+.booking-lookup__result-body {
+    display: grid;
+    gap: 10px;
+    font-size: 13px;
+}
+
+.booking-lookup__result-body p {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    margin: 0;
+    color: rgba(238, 242, 243, 0.8);
+}
+
+.booking-lookup__result-body span:first-child {
+    color: rgba(238, 242, 243, 0.6);
+    letter-spacing: 0.12em;
+}
+
+.booking-lookup__breakdown {
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(220, 182, 120, 0.2);
+    display: grid;
+    gap: 10px;
+    font-size: 12px;
+}
+
+.booking-lookup__breakdown div {
+    display: flex;
+    justify-content: space-between;
+    color: rgba(238, 242, 243, 0.75);
+}
+
+.booking-lookup__breakdown-total {
+    font-size: 13px;
+    color: var(--color-text);
+}
+
+.booking-lookup__manage {
+    border-radius: 16px;
+    padding: 24px;
+    border: 1px solid rgba(220, 182, 120, 0.2);
+    background: rgba(13, 15, 18, 0.6);
+    box-shadow: 0 16px 28px rgba(0, 0, 0, 0.18);
+}
+
+.booking-lookup__manage.is-disabled {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.booking-lookup__manage-grid {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+}
+
+.booking-lookup__manage-actions {
+    margin-top: 16px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+}
+
+.booking-lookup__checkbox {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: rgba(238, 242, 243, 0.75);
+}
+
+.booking-lookup__manage-note {
+    margin: 12px 0 0;
+    font-size: 12px;
+    color: rgba(238, 242, 243, 0.55);
+}
+
+.booking-lookup__notice {
+    border-radius: 12px;
+    padding: 14px 18px;
+    border: 1px solid rgba(220, 182, 120, 0.25);
+    background: rgba(220, 182, 120, 0.08);
+    color: rgba(238, 242, 243, 0.8);
+    font-size: 12px;
+}
+
+.booking-lookup__error {
+    color: rgba(238, 242, 243, 0.65);
+    font-size: 13px;
+}
+
+.is-hidden {
+    display: none;
+}
+
+.booking-lookup__result.is-flash,
+.booking-lookup__error.is-flash,
+.booking-lookup__notice.is-flash {
+    animation: lookupFlash 0.7s ease 2;
+}
+
+.booking-lookup__form.is-shake {
+    animation: lookupShake 0.4s ease;
+}
+
+@keyframes lookupFlash {
+    0%,
+    100% {
+        box-shadow: 0 0 0 rgba(220, 182, 120, 0);
+    }
+    50% {
+        box-shadow: 0 0 18px rgba(220, 182, 120, 0.35);
+    }
+}
+
+@keyframes lookupShake {
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+    20% {
+        transform: translateX(-6px);
+    }
+    40% {
+        transform: translateX(6px);
+    }
+    60% {
+        transform: translateX(-4px);
+    }
+    80% {
+        transform: translateX(4px);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .booking-lookup__result.is-flash,
+    .booking-lookup__error.is-flash,
+    .booking-lookup__notice.is-flash,
+    .booking-lookup__form.is-shake {
+        animation: none;
+    }
+}

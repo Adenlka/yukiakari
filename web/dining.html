@@ -1,0 +1,270 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>お食事 | 雪灯り</title>
+    <meta name="description" content="雪灯りのお食事。地元の恵みを活かした会席料理と、四季の彩りに満ちた献立をご紹介します。">
+    <link rel="icon" href="assets/images/common/icon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/dining.css">
+</head>
+<body data-page="dining">
+    <header class="header header--fixed">
+        <div class="header__inner">
+            <div class="header__brand">
+                <a class="header__logo" href="index_web.html#hero" aria-label="雪灯り">
+                    <img src="assets/images/common/icon.png" alt="雪灯り">
+                </a>
+                <button class="header__menu-btn" type="button" aria-expanded="false" aria-controls="site-menu" aria-label="メニューを開く">
+                    <img class="menu-icon__svg" src="assets/images/common/icon-hamburger.svg" alt="" aria-hidden="true">
+                    <img class="menu-icon__close" src="assets/images/common/icon-close.svg" alt="" aria-hidden="true">
+                </button>
+            </div>
+            <div class="header__actions">
+                <a class="header__tel" href="tel:0960-47-0001">Tel. 0960-47-0001</a>
+                <a class="header__reserve" data-i18n="action.reserve" href="reserve/reserve.html" data-nav="reserve">予約</a>
+            </div>
+        </div>
+    </header>
+
+    <div id="site-menu" class="menu" aria-hidden="true">
+        <div class="menu__panel">
+            <div class="menu__top">
+                <a href="index_web.html#hero">
+                    <img class="menu__logo" src="assets/images/common/logo-yukiakari-white.png" alt="雪灯り">
+                </a>
+            </div>
+            <div class="menu__columns">
+                <div class="menu__column">
+                    <div class="menu__column-label">Contents</div>
+                    <ul class="menu__list">
+                        <li><a href="about.html" data-nav="about">はじめに</a></li>
+                        <li><a href="facility.html" data-nav="facility">館内</a></li>
+                        <li><a href="spa.html" data-nav="spa">温泉</a></li>
+                        <li><a href="dining.html" data-nav="dining">お食事</a></li>
+                        <li><a href="rooms.html" data-nav="rooms">客室</a></li>
+                        <li><a href="access.html" data-nav="access">交通案内</a></li>
+                    </ul>
+                </div>
+                <div class="menu__column menu__column--info">
+                    <div class="menu__column-label">Information</div>
+                    <div class="menu__info">
+                        <a class="menu__reserve" data-i18n="action.reserveLong" href="reserve/reserve.html" data-nav="reserve">宿泊のご予約はこちら</a>
+                        <p class="menu__tel">Tel. 0960-47-0001</p>
+                        <p class="menu__hours">受付時間 9:00 ～ 19:00</p>
+                        <p class="menu__address">〒061-2302<br>北海道札幌市南区定山渓温泉東3丁目12-5</p>
+                        <a class="menu__email" href="mailto:info@yukiakari.com">info@yukiakari.com</a>
+                        <a class="menu__link" href="contact.html" data-nav="contact">メールでのお問い合わせ</a>
+                        <div class="menu__policy">
+    <a class="menu__policy-link" href="faq.html" data-nav="faq">よくあるご質問</a>
+    <a class="menu__policy-link" href="guidelines.html" data-nav="guidelines">ご利用案内</a>
+    <a class="menu__policy-link" href="privacypolicy.html" data-nav="privacy">プライバシーポリシー</a>
+    <a class="menu__policy-link" href="sitepolicy.html" data-nav="sitepolicy">サイトポリシー</a>
+</div>
+                    </div>
+                </div>
+                <div class="menu__column menu__column--lang">
+                    <div class="menu__column-label">Language</div>
+                    <ul class="menu__list menu__list--lang">
+                        <li><button type="button" class="lang-option" data-lang="en">English</button></li>
+                        <li><button type="button" class="lang-option" data-lang="ja">日本語</button></li>
+                        <li><button type="button" class="lang-option" data-lang="ko">한국어</button></li>
+                        <li><button type="button" class="lang-option" data-lang="zh-Hans">简体中文</button></li>
+                        <li><button type="button" class="lang-option" data-lang="zh-Hant">繁體中文</button></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="menu__footer">
+                <div class="menu__social">
+                    <a class="menu__social-link" href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">FB</a>
+                    <a class="menu__social-link" href="https://x.com/" target="_blank" rel="noopener noreferrer" aria-label="X">X</a>
+                    <a class="menu__social-link" href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">IG</a>
+                </div>
+                <p class="menu__copy">&copy; 雪灯り</p>
+            </div>
+        </div>
+    </div>
+
+    <main>
+        <section id="hero" class="hero hero--dining" aria-label="お食事" data-i18n-aria="dining.hero.aria">
+            <div class="hero__layer" aria-hidden="true"></div>
+            <div class="hero__scrim" aria-hidden="true"></div>
+            <div class="hero__overlay">
+                <div class="hero__title-wrap">
+                    <span class="hero__title-jp" data-i18n="dining.hero.title">お食事</span>
+                </div>
+            </div>
+        </section>
+
+        <div class="scroll-hint scroll-hint--down scroll-hint--overlap" aria-hidden="true">
+            <span class="scroll-hint__line"></span>
+        </div>
+
+        <section id="dining-intro" class="dining-section reveal">
+            <div class="dining-section__inner">
+                <h2 class="dining-section__title" data-i18n="dining.intro.title">地元食材を使用した田舎風会席料理</h2>
+                <span class="dining-section__rule" aria-hidden="true"></span>
+                <p class="dining-section__subtitle" data-i18n="dining.intro.subtitle">四季の彩りと、大地の恵みをそのままとじ込めました。</p>
+                <p class="dining-section__text" data-i18n-html="dining.intro.text">地元の農家から直接仕入れた新鮮な野菜や、その時期にしか味わえない旬の魚介類。<br>素材本来の味を大切にし、一品一品心を込めて作り上げた会席料理です。<br>懐かしさと新しさが調和する、心温まる味わいをご堪能ください。</p>
+            </div>
+        </section>
+
+        <section id="dining-course" class="dining-section reveal">
+            <div class="dining-section__inner">
+                <h2 class="dining-section__title" data-i18n="dining.course.title">献立</h2>
+                <span class="dining-section__rule" aria-hidden="true"></span>
+                <p class="dining-section__text" data-i18n-html="dining.course.text">低温調理で柔らかく仕上げたローストビーフをメインに、<br>サクサクとした食感の季節の天ぷら、そして宝石のように散りばめられたちらし寿司。<br>煮物や和え物など、多彩な味を少しずつ楽しめる贅沢なお重です。<br>目でも舌でも楽しめる、料理長のこだわりが詰まった一品です。</p>
+            </div>
+        </section>
+
+        <section id="dining-menu" class="dining-menu reveal">
+            <div class="dining-menu__inner">
+                <div class="dining-menu__block dining-menu__block--dinner">
+                    <div class="dining-menu__carousel">
+                        <div class="dining-menu__track dining-menu__track--dinner">
+                            <img src="assets/images/cuisine/dinner-01.jpg" alt="夕食の一皿">
+                            <img src="assets/images/cuisine/dinner-06.jpg" alt="夕食の一皿">
+                            <img src="assets/images/cuisine/dinner-03.jpg" alt="夕食の一皿">
+                            <img src="assets/images/cuisine/dinner-04.jpg" alt="夕食の一皿">
+                            <img src="assets/images/cuisine/dinner-05.jpg" alt="夕食の一皿">
+                            <img src="assets/images/cuisine/dinner-01.jpg" alt="夕食の一皿">
+                            <img src="assets/images/cuisine/dinner-06.jpg" alt="夕食の一皿">
+                            <img src="assets/images/cuisine/dinner-03.jpg" alt="夕食の一皿">
+                            <img src="assets/images/cuisine/dinner-04.jpg" alt="夕食の一皿">
+                            <img src="assets/images/cuisine/dinner-05.jpg" alt="夕食の一皿">
+                        </div>
+                    </div>
+                    <div class="dining-menu__label dining-menu__label--right" data-i18n="dining.menu.dinner.label">ある日の夕食</div>
+                    <div class="dining-menu__list dining-menu__list--left">
+                        <span class="dining-menu__list-title" data-i18n="dining.menu.list.title">おしながき</span>
+                        <span class="dining-menu__items" data-i18n-html="dining.menu.dinner.items">一、食前酒　自家製果実酒<br>ニ、前菜　　季節の彩り五種盛り<br>三、お造り　旬の鮮魚盛り合わせ<br>四、焼物　　道産和牛の陶板焼き<br>五、食事　　季節の炊き込みご飯<br>六、甘味　　本日のデザート</span>
+                    </div>
+                </div>
+
+                <div class="dining-menu__block dining-menu__block--breakfast">
+                    <div class="dining-menu__carousel">
+                        <div class="dining-menu__track dining-menu__track--breakfast">
+                            <img src="assets/images/cuisine/breakfast-01.jpg" alt="朝食の一皿">
+                            <img src="assets/images/cuisine/breakfast-02.jpg" alt="朝食の一皿">
+                            <img src="assets/images/cuisine/breakfast-03.jpg" alt="朝食の一皿">
+                            <img src="assets/images/cuisine/breakfast-04.jpg" alt="朝食の一皿">
+                            <img src="assets/images/cuisine/breakfast-05.jpg" alt="朝食の一皿">
+                            <img src="assets/images/cuisine/breakfast-01.jpg" alt="朝食の一皿">
+                            <img src="assets/images/cuisine/breakfast-02.jpg" alt="朝食の一皿">
+                            <img src="assets/images/cuisine/breakfast-03.jpg" alt="朝食の一皿">
+                            <img src="assets/images/cuisine/breakfast-04.jpg" alt="朝食の一皿">
+                            <img src="assets/images/cuisine/breakfast-05.jpg" alt="朝食の一皿">
+                        </div>
+                    </div>
+                    <div class="dining-menu__label dining-menu__label--left" data-i18n="dining.menu.breakfast.label">ある日の朝食</div>
+                    <div class="dining-menu__list dining-menu__list--right">
+                        <span class="dining-menu__list-title" data-i18n="dining.menu.list.title">おしながき</span>
+                        <span class="dining-menu__items" data-i18n-html="dining.menu.breakfast.items">一、目覚め　フレッシュジュース<br>ニ、焼物　　本日の焼き魚<br>三、温物　　手作り豆腐<br>四、小鉢　　季節の煮物<br>五、食事　　道産米の炊きたてご飯<br>六、汁物　　田舎味噌汁</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="dining-space" class="dining-space reveal">
+            <div class="dining-space__inner">
+                <div class="dining-space__media dining-space__media--main" aria-hidden="true"></div>
+                <div class="dining-section__inner">
+                    <h2 class="dining-section__title" data-i18n="dining.space.title">お食事処</h2>
+                    <span class="dining-section__rule" aria-hidden="true"></span>
+                    <p class="dining-section__text" data-i18n-html="dining.space.text">【お食事処】<br>木漏れ日の中で味わう、至福の時間。大きな窓から望むのは、四季ごとに表情を変える庭園の景色。木の温もりを感じる落ち着いた空間で、ゆったりとお食事をお楽しみいただけます。</p>
+                </div>
+                <div class="dining-space__media dining-space__media--private" aria-hidden="true"></div>
+                <div class="dining-space__details">
+                    <div class="dining-space__thumbs">
+                        <div class="dining-space__thumb dining-space__thumb--one" aria-hidden="true"></div>
+                        <div class="dining-space__thumb dining-space__thumb--two" aria-hidden="true"></div>
+                    </div>
+                    <p class="dining-space__note" data-i18n-html="dining.space.note">プライベートな時間を大切にされたいお客様のために、個室もご用意しております。<br>周りを気にすることなく、大切な方と語らいながら、<br>北国の味覚と美酒に酔いしれるひとときをお過ごしください。</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="dining-special" class="dining-section dining-section--special reveal">
+            <div class="dining-section__inner">
+                <div class="dining-section__media dining-section__media--special" aria-hidden="true"></div>
+                <h2 class="dining-section__title" data-i18n="dining.special.title">特別注文</h2>
+                <span class="dining-section__rule" aria-hidden="true"></span>
+                <p class="dining-section__text" data-i18n="dining.special.text">旅の思い出に、もう一品の贅沢はいかがですか。地元の銘酒や、厳選された黒毛和牛のステーキなど、通常コースに華を添える逸品もご用意しております。</p>
+            </div>
+        </section>
+
+        <section id="booking" class="booking reveal">
+            <div class="booking__inner">
+                <h2 class="booking__title" data-i18n="home.booking.title">ご予約</h2>
+                <p class="booking__text" data-i18n-html="home.booking.text">ご予約は専用予約フォームまたは、<br>お電話にて承ります。<br>当サイトからのご予約が最もお得です。</p>
+                <a class="booking__cta" href="reserve/reserve.html" data-nav="reserve" data-i18n="action.reserveLong">宿泊のご予約はこちら</a>
+                <p class="booking__tel">Tel. 0960-47-0001</p>
+                <p class="booking__hours" data-i18n="contact.hours">受付時間 9:00 ～ 19:00</p>
+            </div>
+        </section>
+    </main>
+
+    <div class="scroll-hint scroll-hint--up scroll-hint--overlap" aria-hidden="true">
+        <span class="scroll-hint__line"></span>
+    </div>
+
+    <footer class="footer">
+        <div class="footer__inner">
+            <div class="footer__column">
+                <a class="footer__logo-link" href="index_web.html">
+                <img class="footer__logo" src="assets/images/common/icon.png" alt="雪灯り">
+                </a>
+            </div>
+            <div class="footer__column footer__column--links">
+                <nav class="footer__nav" aria-label="フッターナビゲーション">
+                    <a href="about.html" data-nav="about">はじめに</a>
+                    <a href="facility.html" data-nav="facility">館内</a>
+                    <a href="spa.html" data-nav="spa">温泉</a>
+                    <a href="dining.html" data-nav="dining">お食事</a>
+                    <a href="rooms.html" data-nav="rooms">客室</a>
+                    <a href="access.html" data-nav="access">交通案内</a>
+                </nav>
+                <div class="footer__policies">
+    <a href="contact.html" data-nav="contact">メールでのお問い合わせ</a>
+    <a href="faq.html" data-nav="faq">よくあるご質問</a>
+    <a href="guidelines.html" data-nav="guidelines">ご利用案内</a>
+    <a href="privacypolicy.html" data-nav="privacy">プライバシーポリシー</a>
+    <a href="sitepolicy.html" data-nav="sitepolicy">サイトポリシー</a>
+</div>
+            </div>
+            <div class="footer__column footer__column--contact">
+                <p class="footer__tel">Tel. 0960-47-0001</p>
+                <p class="footer__hours">受付時間 9:00 ～ 19:00</p>
+                <p class="footer__address">〒061-2302<br>北海道札幌市南区定山渓温泉東3丁目12-5</p>
+                <a class="footer__email" href="mailto:info@yukiakari.com">info@yukiakari.com</a>
+                <div class="footer__lang">
+                    <button type="button" class="lang-option" data-lang="en">English</button>
+                    <button type="button" class="lang-option" data-lang="ja">日本語</button>
+                    <button type="button" class="lang-option" data-lang="ko">한국어</button>
+                    <button type="button" class="lang-option" data-lang="zh-Hans">简体中文</button>
+                    <button type="button" class="lang-option" data-lang="zh-Hant">繁體中文</button>
+                </div>
+            </div>
+        </div>
+        <p class="footer__copy">&copy; 雪灯り</p>
+    </footer>
+    <script src="assets/js/i18n-data.js"></script>
+<script src="assets/js/i18n-extra-pages.js"></script>
+<script src="assets/js/i18n-extra-facility.js"></script>
+<script src="assets/js/i18n-extra-policy.js"></script>
+<script src="assets/js/i18n-extra-rooms.js"></script>
+    <script src="assets/js/script.js"></script>
+    <script src="assets/js/dining.js"></script>
+
+    </body>
+</html>
+
+
+
+
+
+

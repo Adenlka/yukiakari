@@ -1,0 +1,300 @@
+:root {
+    --dining-hero-zoom: 1.18;
+}
+
+.hero--dining .hero__layer {
+    width: 100%;
+    background-image: url("../images/cuisine/cuisine-01.jpg");
+    background-position: center;
+    opacity: 1;
+    transition: none;
+    transform: scale(var(--dining-hero-zoom));
+}
+
+.hero--dining.is-ready .hero__layer {
+    animation: diningZoomOut 12s ease-out forwards;
+}
+
+@keyframes diningZoomOut {
+    from {
+        transform: scale(var(--dining-hero-zoom));
+    }
+    to {
+        transform: scale(1);
+    }
+}
+
+.hero--dining .hero__title-jp {
+    font-size: clamp(16px, 3vw, 36px);
+    letter-spacing: 0.2em;
+}
+
+.dining-section {
+    padding: 110px 24px;
+}
+
+.dining-section__inner {
+    max-width: 880px;
+    margin: 0 auto;
+    text-align: center;
+    display: grid;
+    gap: 18px;
+    justify-items: center;
+}
+
+.dining-section__media {
+    width: 100%;
+    min-height: 320px;
+    border-radius: 12px;
+    background-size: cover;
+    background-position: center;
+}
+
+.dining-section__media--special {
+    background-image: url("../images/cuisine/special.jpg");
+}
+
+.dining-section__title {
+    font-size: clamp(24px, 3.4vw, 38px);
+    letter-spacing: 0.08em;
+    margin: 0;
+}
+
+.dining-section__rule {
+    width: min(220px, 60%);
+    height: 1px;
+    background: rgba(220, 182, 120, 0.35);
+}
+
+.dining-section__subtitle {
+    margin: 0;
+    font-size: 15px;
+    color: rgba(238, 242, 243, 0.85);
+}
+
+.dining-section__text {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.9;
+    color: rgba(238, 242, 243, 0.78);
+}
+
+.dining-menu {
+    padding: 120px 24px;
+}
+
+.dining-menu__inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    gap: 120px;
+}
+
+.dining-menu__block {
+    position: relative;
+    width: min(980px, 92vw);
+    margin: 0 auto;
+}
+
+.dining-menu__carousel {
+    width: 100%;
+    height: 380px;
+    overflow: hidden;
+    border-radius: 10px;
+    background: rgba(12, 14, 18, 0.6);
+}
+
+.dining-menu__track {
+    display: flex;
+    align-items: center;
+    
+    height: 100%;
+    width: max-content;
+    animation: tapeSlide 28s linear infinite;
+    will-change: transform;
+}
+
+.dining-menu__track--breakfast {
+    animation-duration: 32s;
+}
+
+.dining-menu__track img {
+    width: 360px;
+    height: 320px;
+    flex-shrink: 0;
+}
+
+@keyframes tapeSlide {
+    from {
+        transform: translateX(-50%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+.dining-menu__label {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    letter-spacing: 0.2em;
+    font-size: 18px;
+    color: rgba(238, 242, 243, 0.85);
+    background: rgba(10, 12, 14, 0.45);
+    padding: 12px 10px;
+    border: 1px solid rgba(220, 182, 120, 0.22);
+    border-radius: 4px;
+}
+
+.dining-menu__label--right {
+    right: 24px;
+}
+
+.dining-menu__label--left {
+    left: 24px;
+}
+
+.dining-menu__list {
+    position: absolute;
+    bottom: -32px;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    letter-spacing: 0.08em;
+    background: rgba(18, 22, 26, 0.88);
+    border: 1px solid rgba(220, 182, 120, 0.22);
+    padding: 18px 16px;
+    display: grid;
+    gap: 12px;
+    font-size: 13px;
+    color: rgba(238, 242, 243, 0.85);
+}
+
+.dining-menu__list--left {
+    left: -8px;
+}
+
+.dining-menu__list--right {
+    right: -8px;
+}
+
+.dining-menu__list-title {
+    font-size: 14px;
+    letter-spacing: 0.18em;
+}
+
+.dining-menu__items {
+    line-height: 1.9;
+    white-space: pre-line;
+}
+
+.dining-space {
+    padding: 120px 24px;
+}
+
+.dining-space__inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    gap: 48px;
+    text-align: center;
+}
+
+.dining-space__media {
+    min-height: 480px;
+    border-radius: 10px;
+    background-size: cover;
+    background-position: center;
+}
+
+.dining-space__media--main {
+    background-image: url("../images/cuisine/dining-space-01.jpg");
+}
+
+.dining-space__media--private {
+    background-image: url("../images/cuisine/dining-space-02.jpg");
+}
+
+.dining-space__details {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+    align-items: center;
+}
+
+.dining-space__thumbs {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.dining-space__thumb {
+    min-height: 200px;
+    border-radius: 8px;
+    background-size: cover;
+    background-position: center;
+}
+
+.dining-space__thumb--one {
+    background-image: url("../images/cuisine/dinner-06.jpg");
+}
+
+.dining-space__thumb--two {
+    background-image: url("../images/cuisine/breakfast-06.jpg");
+}
+
+.dining-space__note {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.9;
+    color: rgba(238, 242, 243, 0.78);
+}
+
+@media (max-width: 900px) {
+    .dining-menu__block {
+        width: 100%;
+    }
+
+    .dining-menu__carousel {
+        height: 280px;
+    }
+
+    .dining-menu__track img {
+        width: 260px;
+        height: 260px;
+    }
+
+    .dining-menu__label {
+        position: absolute;
+        writing-mode: horizontal-tb;
+        margin: 0;
+        top: 12px;
+        transform: none;
+    }
+
+    .dining-menu__label--right {
+        right: 12px;
+    }
+
+    .dining-menu__label--left {
+        left: 12px;
+    }
+
+    .dining-menu__list {
+        position: static;
+        writing-mode: horizontal-tb;
+        margin-top: 16px;
+        display: block;
+        text-align: center;
+    }
+
+    .dining-menu__list-title {
+        display: block;
+        margin-bottom: 8px;
+    }
+
+    .dining-space__details {
+        grid-template-columns: 1fr;
+    }
+}

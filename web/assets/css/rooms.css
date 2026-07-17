@@ -1,0 +1,229 @@
+:root {
+    --rooms-hero-zoom: 1.2;
+}
+
+.hero--rooms .hero__layer {
+    width: 100%;
+    background-image: url("../images/rooms/room-views.jpg");
+    background-position: center;
+    opacity: 1;
+    transition: none;
+    transform: scale(var(--rooms-hero-zoom));
+}
+
+.hero--rooms.is-ready .hero__layer {
+    animation: roomsZoomOut 12s ease-out forwards;
+}
+
+@keyframes roomsZoomOut {
+    from {
+        transform: scale(var(--rooms-hero-zoom));
+    }
+    to {
+        transform: scale(1);
+    }
+}
+
+.hero--rooms .hero__title-jp {
+    font-size: clamp(16px, 3vw, 36px);
+    letter-spacing: 0.2em;
+}
+
+.rooms-section {
+    padding: 110px 24px;
+}
+
+.rooms-section__inner {
+    max-width: 880px;
+    margin: 0 auto;
+    text-align: center;
+    display: grid;
+    gap: 18px;
+    justify-items: center;
+}
+
+.rooms-section__title {
+    font-size: clamp(24px, 3.4vw, 38px);
+    letter-spacing: 0.08em;
+    margin: 0;
+}
+
+.rooms-section__rule {
+    width: min(220px, 60%);
+    height: 1px;
+    background: rgba(220, 182, 120, 0.35);
+}
+
+.rooms-section__subtitle {
+    margin: 0;
+    font-size: 15px;
+    color: rgba(238, 242, 243, 0.85);
+}
+
+.rooms-section__text {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.9;
+    color: rgba(238, 242, 243, 0.78);
+}
+
+.rooms-zigzag {
+    padding: 120px 24px;
+}
+
+.rooms-zigzag__inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    gap: 72px;
+}
+
+.rooms-unit {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 48px;
+    align-items: center;
+}
+
+.rooms-unit__media {
+    min-height: 360px;
+    border-radius: 10px;
+    background-size: cover;
+    background-position: center;
+}
+
+.rooms-unit__media--villa {
+    background-image: url("../images/rooms/room-awanoyuki.jpg");
+}
+
+.rooms-unit__media--viewbath {
+    background-image: url("../images/rooms/room-kazahana.jpg");
+}
+
+.rooms-unit__media--modern {
+    background-image: url("../images/rooms/room-tsukiakari.jpg");
+}
+
+.rooms-unit__media--standard {
+    background-image: url("../images/rooms/room-standard.jpg");
+}
+
+.rooms-unit__content {
+    text-align: center;
+    display: grid;
+    gap: 12px;
+    justify-items: center;
+}
+
+.rooms-unit__content-link {
+    color: inherit;
+}
+
+.rooms-unit__title {
+    margin: 0;
+    font-size: clamp(20px, 2.8vw, 32px);
+    letter-spacing: 0.08em;
+    display: inline-block;
+    position: relative;
+}
+
+.rooms-unit__text {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.9;
+    color: rgba(238, 242, 243, 0.78);
+}
+
+.rooms-unit__spec {
+    margin: 0;
+    font-size: 12px;
+    letter-spacing: 0.16em;
+    color: rgba(220, 182, 120, 0.8);
+}
+
+.rooms-unit__more {
+    display: inline-flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 13px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+}
+
+.rooms-unit__more-text {
+    position: relative;
+    display: inline-block;
+}
+
+.rooms-unit__more-arrow {
+    position: relative;
+    width: 34px;
+    height: 1px;
+    background: rgba(220, 182, 120, 0.6);
+    display: inline-block;
+}
+
+.rooms-unit__more-arrow::after {
+    content: "";
+    position: absolute;
+    right: -1px;
+    top: 50%;
+    width: 7px;
+    height: 7px;
+    border-top: 1px solid rgba(220, 182, 120, 0.6);
+    border-right: 1px solid rgba(220, 182, 120, 0.6);
+    transform: translateY(-50%) rotate(45deg);
+}
+
+.rooms-unit__title::after,
+.rooms-unit__more-text::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: rgba(220, 182, 120, 0.6);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.6s ease;
+}
+
+.rooms-unit__title::after {
+    bottom: -8px;
+}
+
+.rooms-unit__more-text::after {
+    bottom: -6px;
+}
+
+.rooms-unit__content:hover .rooms-unit__title::after,
+.rooms-unit__content:hover .rooms-unit__more-text::after {
+    transform: scaleX(1);
+}
+
+.rooms-unit--flip .rooms-unit__media {
+    order: 1;
+}
+
+.rooms-unit--flip .rooms-unit__content {
+    order: 2;
+}
+
+@media (max-width: 900px) {
+    .rooms-zigzag__inner {
+        gap: 48px;
+    }
+
+    .rooms-unit {
+        grid-template-columns: 1fr;
+    }
+
+    .rooms-unit__media {
+        min-height: 280px;
+    }
+
+    .rooms-unit--flip .rooms-unit__media,
+    .rooms-unit--flip .rooms-unit__content {
+        order: 0;
+    }
+}

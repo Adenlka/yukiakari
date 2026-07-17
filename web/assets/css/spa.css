@@ -1,0 +1,69 @@
+:root {
+    --spa-hero-zoom: 1.2;
+}
+
+.hero--spa .hero__layer {
+    width: 100%;
+    background-image: url("../images/onsen/onsen-01.jpg");
+    background-position: center;
+    background-size: cover;
+    opacity: 1;
+    transition: none;
+    transform: scale(var(--spa-hero-zoom));
+}
+
+.hero--spa.is-ready .hero__layer {
+    animation: spaZoomOut 12s ease-out forwards;
+}
+
+@keyframes spaZoomOut {
+    from {
+        transform: scale(var(--spa-hero-zoom));
+    }
+    to {
+        transform: scale(1);
+    }
+}
+
+.hero--spa .hero__title-jp {
+    font-size: clamp(16px, 3vw, 36px);
+    letter-spacing: 0.2em;
+}
+
+.feature__media--spa-outdoor {
+    background-image: url("../images/onsen/onsen-02.jpg");
+}
+
+.feature__media--spa-cypress {
+    background-image: url("../images/onsen/onsen-03.jpg");
+}
+
+.feature__media--spa-stone {
+    background-image: url("../images/onsen/onsen-04.jpg");
+}
+
+.feature__media--spa-private {
+    background-image: url("../images/onsen/onsen-05.jpg");
+}
+
+.feature__media--spa-sauna {
+    background-image: url("../images/onsen/onsen-06.jpg");
+}
+
+.spa-meta {
+    margin: 0;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    color: rgba(238, 242, 243, 0.7);
+}
+
+.spa-meta span {
+    color: var(--color-accent);
+    margin-right: 6px;
+}
+
+@media (max-width: 900px) {
+    .spa-meta {
+        letter-spacing: 0.08em;
+    }
+}

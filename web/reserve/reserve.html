@@ -1,0 +1,526 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ご予約 | 雪灯り</title>
+    <meta name="description" content="雪灯りの宿泊予約。空室検索とプラン一覧からご希望の滞在をお選びいただけます。">
+    <link rel="icon" href="../assets/images/common/icon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="reserve.css">
+</head>
+<body data-page="reserve">
+    <header class="header header--fixed">
+        <div class="header__inner">
+            <div class="header__brand">
+                <a class="header__logo" href="../index_web.html#hero" aria-label="雪灯り">
+                    <img src="../assets/images/common/icon.png" alt="雪灯り">
+                </a>
+                <button class="header__menu-btn" type="button" aria-expanded="false" aria-controls="site-menu" aria-label="メニューを開く">
+                    <img class="menu-icon__svg" src="../assets/images/common/icon-hamburger.svg" alt="" aria-hidden="true">
+                    <img class="menu-icon__close" src="../assets/images/common/icon-close.svg" alt="" aria-hidden="true">
+                </button>
+            </div>
+            <div class="header__actions">
+                <a class="header__tel" href="tel:0960-47-0001">Tel. 0960-47-0001</a>
+                <a class="header__reserve" data-i18n="action.reserve" href="#booking" data-nav="reserve">予約</a>
+            </div>
+        </div>
+    </header>
+
+    <div id="site-menu" class="menu" aria-hidden="true">
+        <div class="menu__panel">
+            <div class="menu__top">
+                <a href="../index_web.html#hero">
+                    <img class="menu__logo" src="../assets/images/common/logo-yukiakari-white.png" alt="雪灯り">
+                </a>
+            </div>
+            <div class="menu__columns">
+                <div class="menu__column">
+                    <div class="menu__column-label">Contents</div>
+                    <ul class="menu__list">
+                        <li><a href="../about.html" data-nav="about">はじめに</a></li>
+                        <li><a href="../facility.html" data-nav="facility">館内</a></li>
+                        <li><a href="../spa.html" data-nav="spa">温泉</a></li>
+                        <li><a href="../dining.html" data-nav="dining">お食事</a></li>
+                        <li><a href="../rooms.html" data-nav="rooms">客室</a></li>
+                        <li><a href="../access.html" data-nav="access">交通案内</a></li>
+                    </ul>
+                </div>
+                <div class="menu__column menu__column--info">
+                    <div class="menu__column-label">Information</div>
+                    <div class="menu__info">
+                        <a class="menu__reserve" data-i18n="action.reserveLong" href="#booking" data-nav="reserve">宿泊のご予約はこちら</a>
+                        <p class="menu__tel">Tel. 0960-47-0001</p>
+                        <p class="menu__hours">受付時間 9:00 ～ 19:00</p>
+                        <p class="menu__address">〒061-2302<br>北海道札幌市南区定山渓温泉東3丁目12-5</p>
+                        <a class="menu__email" href="mailto:info@yukiakari.com">info@yukiakari.com</a>
+                        <a class="menu__link" href="../contact.html" data-nav="contact">メールでのお問い合わせ</a>
+                        <div class="menu__policy">
+    <a class="menu__policy-link" href="../faq.html" data-nav="faq">よくあるご質問</a>
+    <a class="menu__policy-link" href="../guidelines.html" data-nav="guidelines">ご利用案内</a>
+    <a class="menu__policy-link" href="../privacypolicy.html" data-nav="privacy">プライバシーポリシー</a>
+    <a class="menu__policy-link" href="../sitepolicy.html" data-nav="sitepolicy">サイトポリシー</a>
+</div>
+                    </div>
+                </div>
+                <div class="menu__column menu__column--lang">
+                    <div class="menu__column-label">Language</div>
+                    <ul class="menu__list menu__list--lang">
+                        <li><button type="button" class="lang-option" data-lang="en">English</button></li>
+                        <li><button type="button" class="lang-option" data-lang="ja">日本語</button></li>
+                        <li><button type="button" class="lang-option" data-lang="ko">한국어</button></li>
+                        <li><button type="button" class="lang-option" data-lang="zh-Hans">简体中文</button></li>
+                        <li><button type="button" class="lang-option" data-lang="zh-Hant">繁體中文</button></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="menu__footer">
+                <div class="menu__social">
+                    <a class="menu__social-link" href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">FB</a>
+                    <a class="menu__social-link" href="https://x.com/" target="_blank" rel="noopener noreferrer" aria-label="X">X</a>
+                    <a class="menu__social-link" href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">IG</a>
+                </div>
+                <p class="menu__copy">&copy; 雪灯り</p>
+            </div>
+        </div>
+    </div>
+
+    <main>
+        <section class="reserve-title">
+            <div class="reserve-title__inner">
+                <h1 class="reserve-title__heading" data-i18n="reserve.title">ご予約</h1>
+                <p class="reserve-title__lead" data-i18n="reserve.lead">日付・人数を選択して、最適なご滞在プランをご確認ください。</p>
+            </div>
+        </section>
+
+        <section id="booking" class="reserve-search reveal">
+            <div class="reserve-search__inner">
+                <div class="reserve-search__intro">
+                    <h2 class="reserve-search__title" data-i18n="reserve.search.title">空室検索</h2>
+                    <p class="reserve-search__lead" data-i18n="reserve.search.lead">空室状況を確認しながら、ご希望のプランをお選びいただけます。</p>
+                </div>
+                <form class="reserve-search__form" action="#" method="get">
+                    <label class="reserve-search__field">
+                        <span class="reserve-search__label" data-i18n="reserve.search.checkin">チェックイン</span>
+                        <input class="reserve-search__input calendar-input" type="date" id="checkin-date" name="checkin">
+                    </label>
+                    <label class="reserve-search__field">
+                        <span class="reserve-search__label" data-i18n="reserve.search.checkout">チェックアウト</span>
+                        <input class="reserve-search__input calendar-input" type="date" id="checkout-date" name="checkout">
+                    </label>
+                    <label class="reserve-search__field">
+                        <span class="reserve-search__label" data-i18n="reserve.search.nights">泊数</span>
+                        <select class="reserve-search__select" name="nights" id="stay-nights">
+                            <option value="0" data-i18n="reserve.search.nights.daytrip">日帰り</option>
+                            <option value="1" selected data-i18n="reserve.search.nights.1">1泊</option>
+                            <option value="2" data-i18n="reserve.search.nights.2">2泊</option>
+                            <option value="3" data-i18n="reserve.search.nights.3">3泊</option>
+                            <option value="4" data-i18n="reserve.search.nights.4">4泊</option>
+                            <option value="5" data-i18n="reserve.search.nights.5">5泊</option>
+                            <option value="6" data-i18n="reserve.search.nights.6">6泊</option>
+                            <option value="7" data-i18n="reserve.search.nights.7">7泊</option>
+                            <option value="8" data-i18n="reserve.search.nights.8">8泊</option>
+                            <option value="9" data-i18n="reserve.search.nights.9">9泊</option>
+                            <option value="10" data-i18n="reserve.search.nights.10">10泊</option>
+                            <option value="11" data-i18n="reserve.search.nights.11">11泊</option>
+                            <option value="12" data-i18n="reserve.search.nights.12">12泊</option>
+                            <option value="13" data-i18n="reserve.search.nights.13">13泊</option>
+                            <option value="14" data-i18n="reserve.search.nights.14">14泊</option>
+                        </select>
+                    </label>
+                    <label class="reserve-search__field">
+                        <span class="reserve-search__label" data-i18n="reserve.search.guests">人数</span>
+                        <select class="reserve-search__select" name="guests" id="stay-guests">
+                            <option value="1" data-i18n="reserve.search.guests.1">1名</option>
+                            <option value="2" selected data-i18n="reserve.search.guests.2">2名</option>
+                            <option value="3" data-i18n="reserve.search.guests.3">3名</option>
+                            <option value="4" data-i18n="reserve.search.guests.4">4名</option>
+                            <option value="5" data-i18n="reserve.search.guests.5">5名</option>
+                            <option value="6" data-i18n="reserve.search.guests.6">6名</option>
+                        </select>
+                    </label>
+                    <label class="reserve-search__field">
+                        <span class="reserve-search__label" data-i18n="reserve.search.roomType">客室タイプ</span>
+                        <select class="reserve-search__select" name="room" id="room-type">
+                            <option value="none" data-i18n="reserve.search.room.none">選択なし</option>
+                            <option value="all" selected data-i18n="reserve.search.room.all">すべて</option>
+                            <option value="villa" data-i18n="reserve.search.room.villa">離れ</option>
+                            <option value="viewbath" data-i18n="reserve.search.room.viewbath">展望風呂付</option>
+                            <option value="modern" data-i18n="reserve.search.room.modern">和洋室</option>
+                            <option value="standard" data-i18n="reserve.search.room.standard">スタンダード和室</option>
+                        </select>
+                    </label>
+                    <label class="reserve-search__field" data-daytrip-field>
+                        <span class="reserve-search__label" data-i18n="reserve.search.daytripPlan">日帰りプラン</span>
+                        <select class="reserve-search__select" name="daytrip_plan" id="daytrip-plan">
+                            <option value="relax" data-i18n="reserve.search.daytripPlan.relax">温泉ゆったり滞在</option>
+                            <option value="sauna" data-i18n="reserve.search.daytripPlan.sauna">サウナ&外気浴</option>
+                            <option value="private" data-i18n="reserve.search.daytripPlan.private">貸切風呂付き</option>
+                        </select>
+                    </label>
+                    <label class="reserve-search__field" data-daytrip-field>
+                        <span class="reserve-search__label" data-i18n="reserve.search.spaAccess">利用施設</span>
+                        <select class="reserve-search__select" name="daytrip_spa" id="daytrip-spa">
+                            <option value="all" data-i18n="reserve.search.spaAccess.all">雪見露天・檜の大浴場・ロウリュサウナ</option>
+                            <option value="outdoor" data-i18n="reserve.search.spaAccess.outdoor">雪見露天・檜の大浴場</option>
+                            <option value="limited" data-i18n="reserve.search.spaAccess.limited">指定浴場のみ（露天/内湯）</option>
+                        </select>
+                    </label>
+                    <label class="reserve-search__field" data-daytrip-field>
+                        <span class="reserve-search__label" data-i18n="reserve.search.meal">お食事</span>
+                        <select class="reserve-search__select" name="daytrip_meal" id="daytrip-meal">
+                            <option value="none" data-i18n="reserve.search.meal.none">食事なし</option>
+                            <option value="light" data-i18n="reserve.search.meal.light">軽食付き</option>
+                            <option value="lunch" data-i18n="reserve.search.meal.lunch">昼食付き</option>
+                        </select>
+                    </label>
+                    <label class="reserve-search__field" data-stay-field>
+                        <span class="reserve-search__label" data-i18n="reserve.search.dinnerTime">ご夕食開始</span>
+                        <select class="reserve-search__select" name="dinner_time" id="dinner-time">
+                            <option value="18" data-i18n="reserve.search.dinnerTime.18">18:00～</option>
+                            <option value="18-30" data-i18n="reserve.search.dinnerTime.1830">18:30～</option>
+                            <option value="19" data-i18n="reserve.search.dinnerTime.19">19:00～</option>
+                            <option value="19-30" data-i18n="reserve.search.dinnerTime.1930">19:30～</option>
+                        </select>
+                    </label>
+                    <label class="reserve-search__field" data-stay-field>
+                        <span class="reserve-search__label" data-i18n="reserve.search.privateBath">貸切風呂</span>
+                        <select class="reserve-search__select" name="private_bath" id="private-bath">
+                            <option value="none" data-i18n="reserve.search.privateBath.none">希望しない</option>
+                            <option value="yes" data-i18n="reserve.search.privateBath.yes">希望する</option>
+                            <option value="later" data-i18n="reserve.search.privateBath.later">現地で相談</option>
+                        </select>
+                    </label>
+                </form>
+                <p class="reserve-search__lookup">
+                    <span data-i18n="reserve.search.lookup">予約内容の照会は</span> <a href="booking_lookup.html" data-i18n="reserve.search.lookupLink">こちら</a>
+                </p>
+            </div>
+        </section>
+
+        <section class="reserve-options">
+            <div class="reserve-options__inner">
+                <div class="reserve-options__group" data-options-daytrip>
+                    <h3 class="reserve-options__title" data-i18n="reserve.options.daytrip.title">日帰りプランのご利用内容</h3>
+                    <ul class="reserve-options__list">
+                        <li data-i18n="reserve.options.daytrip.item1">温泉利用：雪見露天・檜の大浴場・ロウリュサウナ</li>
+                        <li data-i18n="reserve.options.daytrip.item2">利用時間：10:00 ～ 15:00（最終受付 14:00）</li>
+                        <li data-i18n="reserve.options.daytrip.item3">休憩スペース：湯上がり処・雪見テラス</li>
+                        <li data-i18n="reserve.options.daytrip.item4">お食事：軽食付き / 昼食付き / なし</li>
+                        <li data-i18n="reserve.options.daytrip.item5">客室タイプ：選択なし / 離れ / 展望風呂付</li>
+                    </ul>
+                </div>
+                <div class="reserve-options__group" data-options-stay>
+                    <h3 class="reserve-options__title" data-i18n="reserve.options.stay.title">宿泊プランのご利用内容</h3>
+                    <ul class="reserve-options__list">
+                        <li data-i18n="reserve.options.stay.item1">夕朝食：季節の会席コース（朝食のみプランあり）</li>
+                        <li data-i18n="reserve.options.stay.item2">貸切風呂：事前予約でご利用可能</li>
+                        <li data-i18n="reserve.options.stay.item3">ラウンジアクセス：湯上がりドリンクサービス</li>
+                        <li data-i18n="reserve.options.stay.item4">客室タイプ：ご希望のタイプをお選びください</li>
+                        <li data-i18n="reserve.options.stay.item5">レイトチェックアウト：有料で延長可能</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="reserve-layout reveal">
+            <div class="reserve-layout__inner">
+                <aside class="reserve-layout__sidebar">
+                    <div class="reserve-panel">
+                        <div class="reserve-panel__header">
+                            <h2 class="reserve-panel__title" data-i18n="reserve.calendar.title">空室カレンダー</h2>
+                            <p class="reserve-panel__subtitle" data-i18n="reserve.calendar.subtitle">9か月先までの空室状況を確認できます。</p>
+                            <p class="reserve-panel__note" data-i18n="reserve.calendar.note">※ 日付をクリックして空室状況を確認できます。</p>
+                        </div>
+                        <div class="reserve-calendar" data-calendar>
+                            <div class="reserve-calendar__header">
+                                <button class="reserve-calendar__nav" type="button" data-cal-prev aria-label="前の月">‹</button>
+                                <div class="reserve-calendar__month" data-cal-month></div>
+                                <button class="reserve-calendar__nav" type="button" data-cal-next aria-label="次の月">›</button>
+                            </div>
+                            <div class="reserve-calendar__weekdays">
+                                <span data-i18n="reserve.calendar.week.sun">日</span>
+                                <span data-i18n="reserve.calendar.week.mon">月</span>
+                                <span data-i18n="reserve.calendar.week.tue">火</span>
+                                <span data-i18n="reserve.calendar.week.wed">水</span>
+                                <span data-i18n="reserve.calendar.week.thu">木</span>
+                                <span data-i18n="reserve.calendar.week.fri">金</span>
+                                <span data-i18n="reserve.calendar.week.sat">土</span>
+                            </div>
+                            <div class="reserve-calendar__grid" data-cal-grid></div>
+                        </div>
+                    <div class="reserve-calendar__legend">
+                        <span><span class="reserve-calendar__dot reserve-calendar__dot--available"></span><span data-i18n="reserve.calendar.legend.available">空室あり</span></span>
+                        <span><span class="reserve-calendar__dot reserve-calendar__dot--limited"></span><span data-i18n="reserve.calendar.legend.limited">残りわずか</span></span>
+                        <span><span class="reserve-calendar__dot reserve-calendar__dot--unavailable"></span><span data-i18n="reserve.calendar.legend.full">満室</span></span>
+                    </div>
+                </div>
+                <div class="reserve-cart" data-cart>
+                    <div class="reserve-cart__header">
+                        <h3 class="reserve-cart__title" data-i18n="reserve.cart.title">ご予約カート</h3>
+                        <p class="reserve-cart__lead" data-i18n="reserve.cart.lead">プランを追加して、まとめて予約できます。</p>
+                    </div>
+                    <div class="reserve-cart__list" data-cart-list>
+                        <p class="reserve-cart__empty" data-i18n="reserve.cart.empty">プランがまだ追加されていません。</p>
+                    </div>
+                    <div class="reserve-cart__summary">
+                        <div><span data-i18n="reserve.cart.total">合計（目安）</span><span data-cart-total>--</span></div>
+                        <p class="reserve-cart__note" data-cart-note></p>
+                    </div>
+                    <button class="reserve-cart__submit" type="button" data-cart-continue disabled data-i18n="reserve.cart.continue">予約情報入力へ進む</button>
+                </div>
+            </aside>
+
+                <div class="reserve-layout__content">
+                    <div class="reserve-results" data-results>
+                        <div class="reserve-results__header">
+                            <div class="reserve-results__heading">
+                                <h2 class="reserve-results__title" data-i18n="reserve.results.title">おすすめ宿泊プラン</h2>
+                                <p class="reserve-results__summary" data-results-summary data-i18n="reserve.results.summaryDefault">日付を選択してください。</p>
+                            </div>
+                            <div class="reserve-results__sort">
+                                <label>
+                                    <span data-i18n="reserve.results.sort">並び替え</span>
+                                    <select class="reserve-results__select" data-sort>
+                                        <option value="recommended" selected data-i18n="reserve.results.sort.recommended">おすすめ順</option>
+                                        <option value="price-low" data-i18n="reserve.results.sort.low">料金が安い順</option>
+                                        <option value="price-high" data-i18n="reserve.results.sort.high">料金が高い順</option>
+                                    </select>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="reserve-results__list">
+                            <article class="plan-card" data-plan-title="離れ 特別室「淡雪（あわゆき）」" data-plan-price="22800" data-plan-amenity="夕朝食付" data-plan-room="villa">
+                                <div class="plan-card__media plan-card__media--villa" aria-hidden="true">
+                                    <div class="plan-card__badges">
+                                    <span class="plan-card__badge" data-i18n="reserve.plan.badge.web">Web限定</span>
+                                    <span class="plan-card__badge" data-i18n="reserve.plan.badge.popular">人気</span>
+                                </div>
+                            </div>
+                            <div class="plan-card__body">
+                                <h3 class="plan-card__title" data-i18n="reserve.plan.villa.title">離れ 特別室「淡雪（あわゆき）」</h3>
+                                <p class="plan-card__text" data-i18n="reserve.plan.villa.text">誰にも邪魔されない、森の奥に佇む一戸建ての離れ。専用の露天風呂と囲炉裏の間を備えた贅沢な空間です。</p>
+                                <div class="plan-card__amenity" data-i18n="reserve.plan.amenity.dinner">夕朝食付</div>
+                                <div class="plan-card__meta">
+                                    <span data-i18n="reserve.plan.villa.meta1">定員 2〜4名 / 全2室</span>
+                                    <span data-i18n="reserve.plan.villa.meta2">夕朝食：会席料理 / 貸切風呂相談可</span>
+                                </div>
+                                    <div class="plan-card__price">
+                                        <span class="plan-card__price-main" data-price-main>¥22,800</span>
+                                        <span class="plan-card__price-note">1室 / 1泊</span>
+                                    </div>
+                                    <div class="plan-card__price-sub" data-price-sub>目安合計 --</div>
+                                <div class="plan-card__actions">
+                                    <button class="plan-card__detail" type="button" data-plan-detail data-i18n="reserve.plan.detail">詳細を見る</button>
+                                    <button class="plan-card__cta" type="button" data-plan-add data-i18n="reserve.plan.add">カートに追加</button>
+                                </div>
+                            </div>
+                        </article>
+
+                            <article class="plan-card" data-plan-title="展望風呂付客室「風花（かざはな）」" data-plan-price="19800" data-plan-amenity="夕朝食付" data-plan-room="viewbath">
+                                <div class="plan-card__media plan-card__media--viewbath" aria-hidden="true">
+                                    <div class="plan-card__badges">
+                                    <span class="plan-card__badge" data-i18n="reserve.plan.badge.early">早割</span>
+                                    <span class="plan-card__badge" data-i18n="reserve.plan.badge.view">眺望</span>
+                                </div>
+                            </div>
+                            <div class="plan-card__body">
+                                <h3 class="plan-card__title" data-i18n="reserve.plan.viewbath.title">展望風呂付客室「風花（かざはな）」</h3>
+                                <p class="plan-card__text" data-i18n="reserve.plan.viewbath.text">最上階に位置する眺望自慢のお部屋。雪景色を一望できる展望風呂が旅の余韻を深めます。</p>
+                                <div class="plan-card__amenity" data-i18n="reserve.plan.amenity.dinner">夕朝食付</div>
+                                <div class="plan-card__meta">
+                                    <span data-i18n="reserve.plan.viewbath.meta1">定員 2〜3名 / 全5室</span>
+                                    <span data-i18n="reserve.plan.viewbath.meta2">夕朝食：会席料理 / 展望風呂付き</span>
+                                </div>
+                                    <div class="plan-card__price">
+                                        <span class="plan-card__price-main" data-price-main>¥19,800</span>
+                                        <span class="plan-card__price-note">1室 / 1泊</span>
+                                    </div>
+                                    <div class="plan-card__price-sub" data-price-sub>目安合計 --</div>
+                                <div class="plan-card__actions">
+                                    <button class="plan-card__detail" type="button" data-plan-detail data-i18n="reserve.plan.detail">詳細を見る</button>
+                                    <button class="plan-card__cta" type="button" data-plan-add data-i18n="reserve.plan.add">カートに追加</button>
+                                </div>
+                            </div>
+                        </article>
+
+                            <article class="plan-card" data-plan-title="モダン和洋室「月明（つきあかり）」" data-plan-price="15500" data-plan-amenity="朝食付" data-plan-room="modern">
+                                <div class="plan-card__media plan-card__media--modern" aria-hidden="true">
+                                    <div class="plan-card__badges">
+                                    <span class="plan-card__badge" data-i18n="reserve.plan.badge.breakfast">朝食付</span>
+                                    <span class="plan-card__badge" data-i18n="reserve.plan.badge.western">和洋室</span>
+                                </div>
+                            </div>
+                            <div class="plan-card__body">
+                                <h3 class="plan-card__title" data-i18n="reserve.plan.modern.title">モダン和洋室「月明（つきあかり）」</h3>
+                                <p class="plan-card__text" data-i18n="reserve.plan.modern.text">琉球畳の和室と快適なベッドルームを備えた和洋室。和と洋の心地よさを両立します。</p>
+                                <div class="plan-card__amenity" data-i18n="reserve.plan.amenity.breakfast">朝食付</div>
+                                <div class="plan-card__meta">
+                                    <span data-i18n="reserve.plan.modern.meta1">定員 2〜4名 / 全8室</span>
+                                    <span data-i18n="reserve.plan.modern.meta2">朝食付 / 和洋室タイプ</span>
+                                </div>
+                                    <div class="plan-card__price">
+                                        <span class="plan-card__price-main" data-price-main>¥15,500</span>
+                                        <span class="plan-card__price-note">1室 / 1泊</span>
+                                    </div>
+                                    <div class="plan-card__price-sub" data-price-sub>目安合計 --</div>
+                                <div class="plan-card__actions">
+                                    <button class="plan-card__detail" type="button" data-plan-detail data-i18n="reserve.plan.detail">詳細を見る</button>
+                                    <button class="plan-card__cta" type="button" data-plan-add data-i18n="reserve.plan.add">カートに追加</button>
+                                </div>
+                            </div>
+                        </article>
+
+                            <article class="plan-card" data-plan-title="本館 スタンダード和室" data-plan-price="11000" data-plan-amenity="素泊まり" data-plan-room="standard">
+                                <div class="plan-card__media plan-card__media--standard" aria-hidden="true">
+                                    <div class="plan-card__badges">
+                                    <span class="plan-card__badge" data-i18n="reserve.plan.badge.roomonly">素泊まり</span>
+                                    <span class="plan-card__badge" data-i18n="reserve.plan.badge.calm">静寂</span>
+                                </div>
+                            </div>
+                            <div class="plan-card__body">
+                                <h3 class="plan-card__title" data-i18n="reserve.plan.standard.title">本館 スタンダード和室</h3>
+                                <p class="plan-card__text" data-i18n="reserve.plan.standard.text">昔ながらの情緒あふれる純和風の客室。広縁から眺める雪景色が心を穏やかに整えます。</p>
+                                <div class="plan-card__amenity" data-i18n="reserve.plan.amenity.roomonly">素泊まり</div>
+                                <div class="plan-card__meta">
+                                    <span data-i18n="reserve.plan.standard.meta1">定員 2〜5名 / 全12室</span>
+                                    <span data-i18n="reserve.plan.standard.meta2">素泊まり / 夕朝食追加可</span>
+                                </div>
+                                    <div class="plan-card__price">
+                                        <span class="plan-card__price-main" data-price-main>¥11,000</span>
+                                        <span class="plan-card__price-note">1室 / 1泊</span>
+                                    </div>
+                                    <div class="plan-card__price-sub" data-price-sub>目安合計 --</div>
+                                <div class="plan-card__actions">
+                                    <button class="plan-card__detail" type="button" data-plan-detail data-i18n="reserve.plan.detail">詳細を見る</button>
+                                    <button class="plan-card__cta" type="button" data-plan-add data-i18n="reserve.plan.add">カートに追加</button>
+                                </div>
+                            </div>
+                        </article>
+                        </div>
+
+                        <div class="reserve-results__loading" role="status" aria-live="polite">
+                            <span class="reserve-spinner" aria-hidden="true"></span>
+                            <span class="reserve-results__loading-text" data-i18n="reserve.results.loading">空室状況を確認しています...</span>
+                        </div>
+
+                        <p class="reserve-results__footnote" data-i18n="reserve.results.footnote">※ 表示料金は税込・サービス料込の目安です。実際の料金は日程により異なります。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div class="plan-modal" data-plan-modal aria-hidden="true">
+        <div class="plan-modal__backdrop" data-plan-close></div>
+        <div class="plan-modal__panel" role="dialog" aria-modal="true" aria-labelledby="plan-modal-title">
+            <div class="plan-modal__header">
+                <p class="plan-modal__eyebrow" data-i18n="reserve.modal.title">プラン詳細</p>
+                <h3 class="plan-modal__title" id="plan-modal-title">--</h3>
+                <p class="plan-modal__lead" data-plan-modal-text>--</p>
+            </div>
+            <div class="plan-modal__body">
+                <div class="plan-modal__info">
+                    <div>
+                        <p class="plan-modal__label" data-i18n="reserve.modal.features">客室の特徴</p>
+                        <ul class="plan-modal__list" data-plan-modal-features></ul>
+                    </div>
+                    <div>
+                        <p class="plan-modal__label" data-i18n="reserve.modal.facilities">利用可能な館内施設</p>
+                        <ul class="plan-modal__list" data-plan-modal-facilities></ul>
+                    </div>
+                </div>
+                <div class="plan-modal__pricing">
+                    <p class="plan-modal__label" data-i18n="reserve.modal.priceLabel">料金の目安</p>
+                    <p class="plan-modal__price" data-plan-modal-price>--</p>
+                    <p class="plan-modal__note" data-i18n="reserve.modal.priceNote">サービス料・消費税込の目安金額です。</p>
+                </div>
+                <div class="plan-modal__extras">
+                    <p class="plan-modal__label" data-i18n="reserve.modal.extras">追加サービス</p>
+                    <div class="plan-modal__extras-list" data-plan-modal-extras></div>
+                </div>
+            </div>
+            <div class="plan-modal__actions">
+                <button class="plan-modal__button plan-modal__button--ghost" type="button" data-plan-close data-i18n="action.close">閉じる</button>
+                <button class="plan-modal__button" type="button" data-plan-add-modal data-i18n="reserve.plan.add">カートに追加</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="reserve-modal" data-cart-confirm aria-hidden="true">
+        <div class="reserve-modal__backdrop" data-cart-confirm-cancel></div>
+        <div class="reserve-modal__panel" role="dialog" aria-modal="true">
+            <h3 class="reserve-modal__title" data-i18n="reserve.confirm.title">客室数の確認</h3>
+            <p class="reserve-modal__text" data-i18n="reserve.confirm.text">人数に対して客室数が多めのプランがあります。このまま進みますか？</p>
+            <div class="reserve-modal__actions">
+                <button class="reserve-modal__button reserve-modal__button--ghost" type="button" data-cart-confirm-cancel data-i18n="action.back">戻る</button>
+                <button class="reserve-modal__button" type="button" data-cart-confirm-accept data-i18n="action.continue">このまま進む</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="scroll-hint scroll-hint--up scroll-hint--overlap" aria-hidden="true">
+        <span class="scroll-hint__line"></span>
+    </div>
+
+    <footer class="footer">
+        <div class="footer__inner">
+            <div class="footer__column">
+                <a class="footer__logo-link" href="../index_web.html">
+                <img class="footer__logo" src="../assets/images/common/icon.png" alt="雪灯り">
+                </a>
+            </div>
+            <div class="footer__column footer__column--links">
+                <nav class="footer__nav" aria-label="フッターナビゲーション">
+                    <a href="../about.html" data-nav="about">はじめに</a>
+                    <a href="../facility.html" data-nav="facility">館内</a>
+                    <a href="../spa.html" data-nav="spa">温泉</a>
+                    <a href="../dining.html" data-nav="dining">お食事</a>
+                    <a href="../rooms.html" data-nav="rooms">客室</a>
+                    <a href="../access.html" data-nav="access">交通案内</a>
+                </nav>
+                <div class="footer__policies">
+    <a href="../contact.html" data-nav="contact">メールでのお問い合わせ</a>
+    <a href="../faq.html" data-nav="faq">よくあるご質問</a>
+    <a href="../guidelines.html" data-nav="guidelines">ご利用案内</a>
+    <a href="../privacypolicy.html" data-nav="privacy">プライバシーポリシー</a>
+    <a href="../sitepolicy.html" data-nav="sitepolicy">サイトポリシー</a>
+</div>
+            </div>
+            <div class="footer__column footer__column--contact">
+                <p class="footer__tel">Tel. 0960-47-0001</p>
+                <p class="footer__hours">受付時間 9:00 ～ 19:00</p>
+                <p class="footer__address">〒061-2302<br>北海道札幌市南区定山渓温泉東3丁目12-5</p>
+                <a class="footer__email" href="mailto:info@yukiakari.com">info@yukiakari.com</a>
+                <div class="footer__lang">
+                    <button type="button" class="lang-option" data-lang="en">English</button>
+                    <button type="button" class="lang-option" data-lang="ja">日本語</button>
+                    <button type="button" class="lang-option" data-lang="ko">한국어</button>
+                    <button type="button" class="lang-option" data-lang="zh-Hans">简体中文</button>
+                    <button type="button" class="lang-option" data-lang="zh-Hant">繁體中文</button>
+                </div>
+            </div>
+        </div>
+        <p class="footer__copy">&copy; 雪灯り</p>
+    </footer>
+    <script src="../assets/js/i18n-data.js"></script>
+<script src="../assets/js/i18n-extra-pages.js"></script>
+<script src="../assets/js/i18n-extra-facility.js"></script>
+<script src="../assets/js/i18n-extra-policy.js"></script>
+<script src="../assets/js/i18n-extra-rooms.js"></script>
+    <script src="../assets/js/script.js"></script>
+    <script src="reserve.js"></script>
+
+    </body>
+</html>
+
+
+
+
+
+

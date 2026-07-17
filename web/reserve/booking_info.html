@@ -1,0 +1,297 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>予約情報入力 | 雪灯り</title>
+    <meta name="description" content="雪灯りのご予約情報入力ページ。お客様情報をご入力ください。">
+    <link rel="icon" href="../assets/images/common/icon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="booking_info.css">
+</head>
+<body data-page="reserve-info">
+    <header class="header header--fixed">
+        <div class="header__inner">
+            <div class="header__brand">
+                <a class="header__logo" href="../index_web.html#hero" aria-label="雪灯り">
+                    <img src="../assets/images/common/icon.png" alt="雪灯り">
+                </a>
+                <button class="header__menu-btn" type="button" aria-expanded="false" aria-controls="site-menu" aria-label="メニューを開く">
+                    <img class="menu-icon__svg" src="../assets/images/common/icon-hamburger.svg" alt="" aria-hidden="true">
+                    <img class="menu-icon__close" src="../assets/images/common/icon-close.svg" alt="" aria-hidden="true">
+                </button>
+            </div>
+            <div class="header__actions">
+                <a class="header__tel" href="tel:0960-47-0001">Tel. 0960-47-0001</a>
+                <a class="header__reserve" data-i18n="action.reserve" href="reserve.html" data-nav="reserve">予約</a>
+            </div>
+        </div>
+    </header>
+
+    <div id="site-menu" class="menu" aria-hidden="true">
+        <div class="menu__panel">
+            <div class="menu__top">
+                <a href="../index_web.html#hero">
+                    <img class="menu__logo" src="../assets/images/common/logo-yukiakari-white.png" alt="雪灯り">
+                </a>
+            </div>
+            <div class="menu__columns">
+                <div class="menu__column">
+                    <div class="menu__column-label">Contents</div>
+                    <ul class="menu__list">
+                        <li><a href="../about.html" data-nav="about">はじめに</a></li>
+                        <li><a href="../facility.html" data-nav="facility">館内</a></li>
+                        <li><a href="../spa.html" data-nav="spa">温泉</a></li>
+                        <li><a href="../dining.html" data-nav="dining">お食事</a></li>
+                        <li><a href="../rooms.html" data-nav="rooms">客室</a></li>
+                        <li><a href="../access.html" data-nav="access">交通案内</a></li>
+                    </ul>
+                </div>
+                <div class="menu__column menu__column--info">
+                    <div class="menu__column-label">Information</div>
+                    <div class="menu__info">
+                        <a class="menu__reserve" data-i18n="action.reserveLong" href="reserve.html" data-nav="reserve">宿泊のご予約はこちら</a>
+                        <p class="menu__tel">Tel. 0960-47-0001</p>
+                        <p class="menu__hours">受付時間 9:00 ～ 19:00</p>
+                        <p class="menu__address">〒061-2302<br>北海道札幌市南区定山渓温泉東3丁目12-5</p>
+                        <a class="menu__email" href="mailto:info@yukiakari.com">info@yukiakari.com</a>
+                        <a class="menu__link" href="../contact.html" data-nav="contact">メールでのお問い合わせ</a>
+                        <div class="menu__policy">
+    <a class="menu__policy-link" href="../faq.html" data-nav="faq">よくあるご質問</a>
+    <a class="menu__policy-link" href="../guidelines.html" data-nav="guidelines">ご利用案内</a>
+    <a class="menu__policy-link" href="../privacypolicy.html" data-nav="privacy">プライバシーポリシー</a>
+    <a class="menu__policy-link" href="../sitepolicy.html" data-nav="sitepolicy">サイトポリシー</a>
+</div>
+                    </div>
+                </div>
+                <div class="menu__column menu__column--lang">
+                    <div class="menu__column-label">Language</div>
+                    <ul class="menu__list menu__list--lang">
+                        <li><button type="button" class="lang-option" data-lang="en">English</button></li>
+                        <li><button type="button" class="lang-option" data-lang="ja">日本語</button></li>
+                        <li><button type="button" class="lang-option" data-lang="ko">한국어</button></li>
+                        <li><button type="button" class="lang-option" data-lang="zh-Hans">简体中文</button></li>
+                        <li><button type="button" class="lang-option" data-lang="zh-Hant">繁體中文</button></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="menu__footer">
+                <div class="menu__social">
+                    <a class="menu__social-link" href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">FB</a>
+                    <a class="menu__social-link" href="https://x.com/" target="_blank" rel="noopener noreferrer" aria-label="X">X</a>
+                    <a class="menu__social-link" href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">IG</a>
+                </div>
+                <p class="menu__copy">&copy; 雪灯り</p>
+            </div>
+        </div>
+    </div>
+
+    <main>
+        <section class="reserve-title reserve-title--sub">
+            <div class="reserve-title__inner reserve-title__inner--center">
+                <h1 class="reserve-title__heading" data-i18n="reserve.info.title">予約情報入力</h1>
+                <p class="reserve-title__lead" data-i18n="reserve.info.lead">お客様情報をご入力の上、確認へお進みください。</p>
+            </div>
+        </section>
+
+        <section class="booking-info">
+            <div class="booking-info__inner">
+                <aside class="booking-info__summary">
+                    <h2 class="booking-info__heading" data-i18n="reserve.info.summaryTitle">ご予約内容</h2>
+                    <div class="booking-info__card">
+                        <p class="booking-info__label" data-i18n="reserve.info.label.plan">プラン</p>
+                        <p class="booking-info__value" data-plan-title data-i18n="reserve.info.value.selectPlan">プランを選択してください</p>
+                        <p class="booking-info__label" data-i18n="reserve.info.label.price">料金</p>
+                        <p class="booking-info__value" data-plan-price>--</p>
+                        <p class="booking-info__label" data-i18n="reserve.info.label.meal">お食事</p>
+                        <p class="booking-info__value" data-plan-amenity>--</p>
+                        <p class="booking-info__label" data-i18n="reserve.info.label.dates">日程</p>
+                        <p class="booking-info__value" data-plan-dates data-i18n="reserve.info.value.unselected">未選択</p>
+                        <p class="booking-info__label" data-i18n="reserve.info.label.guests">人数</p>
+                        <p class="booking-info__value" data-plan-guests>--</p>
+                        <p class="booking-info__label" data-i18n="reserve.info.label.rooms">客室数</p>
+                        <p class="booking-info__value" data-plan-rooms>--</p>
+                        <p class="booking-info__label" data-i18n="reserve.info.label.total">合計</p>
+                        <p class="booking-info__value booking-info__value--total" data-plan-total>--</p>
+                        <p class="booking-info__label" data-i18n="reserve.info.label.payment">支払い状況</p>
+                        <p class="booking-info__value" data-plan-payment data-i18n="reserve.complete.payment.unpaid">未決済</p>
+                    </div>
+                    <div class="booking-info__breakdown" data-breakdown>
+                        <div class="booking-info__breakdown-row">
+                            <span data-i18n="reserve.info.breakdown.base">基本料金</span>
+                            <span data-breakdown-base>--</span>
+                        </div>
+                        <div class="booking-info__breakdown-row">
+                            <span data-i18n="reserve.info.breakdown.addons">オプション</span>
+                            <span data-breakdown-addons>--</span>
+                        </div>
+                        <div class="booking-info__breakdown-row">
+                            <span data-i18n="reserve.info.breakdown.subtotal">小計</span>
+                            <span data-breakdown-subtotal>--</span>
+                        </div>
+                        <div class="booking-info__breakdown-row">
+                            <span data-i18n="reserve.info.breakdown.service">サービス料(10%)</span>
+                            <span data-breakdown-service>--</span>
+                        </div>
+                        <div class="booking-info__breakdown-row">
+                            <span data-i18n="reserve.info.breakdown.tax">消費税(10%)</span>
+                            <span data-breakdown-tax>--</span>
+                        </div>
+                        <div class="booking-info__breakdown-row booking-info__breakdown-row--total">
+                            <span data-i18n="reserve.info.label.total">合計</span>
+                            <span data-breakdown-total>--</span>
+                        </div>
+                    </div>
+                    <div class="booking-info__rooms-summary" data-room-summary></div>
+                    <a class="booking-info__back" href="reserve.html" data-nav="reserve" data-i18n="reserve.info.back">条件検索に戻る</a>
+                </aside>
+
+                <form class="booking-info__form" action="#" method="post" data-booking-form>
+                    <div class="booking-info__group">
+                        <label class="booking-info__label" for="name"><span data-i18n="reserve.info.field.name">お名前</span><span class="booking-info__required" data-i18n="reserve.required">必須</span></label>
+                        <input class="booking-info__input" type="text" id="name" name="name" required>
+                    </div>
+                    <div class="booking-info__group">
+                        <label class="booking-info__label" for="kana"><span data-i18n="reserve.info.field.kana">ふりがな</span><span class="booking-info__required" data-i18n="reserve.required">必須</span></label>
+                        <input class="booking-info__input" type="text" id="kana" name="kana" required>
+                    </div>
+                    <div class="booking-info__group">
+                        <label class="booking-info__label" for="email"><span data-i18n="reserve.info.field.email">メールアドレス</span><span class="booking-info__required" data-i18n="reserve.required">必須</span></label>
+                        <input class="booking-info__input" type="email" id="email" name="email" required>
+                    </div>
+                    <div class="booking-info__group">
+                        <label class="booking-info__label" for="tel"><span data-i18n="reserve.info.field.tel">電話番号</span><span class="booking-info__required" data-i18n="reserve.required">必須</span></label>
+                        <input class="booking-info__input" type="tel" id="tel" name="tel" required>
+                    </div>
+                    <div class="booking-info__group">
+                        <label class="booking-info__label" for="address" data-i18n="reserve.info.field.address">ご住所</label>
+                        <input class="booking-info__input" type="text" id="address" name="address" placeholder="都道府県・市区町村" data-i18n-placeholder="reserve.info.placeholder.address">
+                    </div>
+                    <div class="booking-info__group">
+                        <label class="booking-info__label" for="arrival" data-i18n="reserve.info.field.arrival">到着予定時刻</label>
+                        <select class="booking-info__select" id="arrival" name="arrival">
+                            <option data-i18n="reserve.info.arrival.1516">15:00〜16:00</option>
+                            <option data-i18n="reserve.info.arrival.1617">16:00〜17:00</option>
+                            <option data-i18n="reserve.info.arrival.1718">17:00〜18:00</option>
+                            <option data-i18n="reserve.info.arrival.1819">18:00〜19:00</option>
+                            <option data-i18n="reserve.info.arrival.1920">19:00〜20:00</option>
+                        </select>
+                    </div>
+                    <div class="booking-info__group">
+                        <label class="booking-info__label" for="room-count" data-i18n="reserve.info.field.roomCount">客室数</label>
+                        <select class="booking-info__select" id="room-count" name="room_count">
+                            <option value="1" selected data-i18n="reserve.info.roomCount.1">1室</option>
+                            <option value="2" data-i18n="reserve.info.roomCount.2">2室</option>
+                            <option value="3" data-i18n="reserve.info.roomCount.3">3室</option>
+                            <option value="4" data-i18n="reserve.info.roomCount.4">4室</option>
+                        </select>
+                    </div>
+                    <div class="booking-info__group booking-info__group--full">
+                        <p class="booking-info__label" data-i18n="reserve.info.field.roomDetails">客室ごとの内容</p>
+                        <div class="booking-info__rooms" data-room-list></div>
+                        <p class="booking-info__hint" data-i18n="reserve.info.roomHint">各客室の人数やご要望を入力してください。</p>
+                    </div>
+                    <div class="booking-info__group booking-info__group--full">
+                        <label class="booking-info__label" for="requests" data-i18n="reserve.info.field.requests">ご要望</label>
+                        <textarea class="booking-info__textarea" id="requests" name="requests" rows="4" placeholder="アレルギーや記念日のご相談など" data-i18n-placeholder="reserve.info.placeholder.requests"></textarea>
+                    </div>
+                    <div class="booking-info__group booking-info__group--full">
+                        <label class="booking-info__label" data-i18n="reserve.info.field.payment">お支払い方法</label>
+                        <div class="booking-info__radios">
+                            <label class="booking-info__radio">
+                                <input type="radio" name="payment" value="card" checked>
+                                <span data-i18n="reserve.info.payment.card">クレジットカード</span>
+                            </label>
+                            <label class="booking-info__radio">
+                                <input type="radio" name="payment" value="onsite">
+                                <span data-i18n="reserve.info.payment.onsite">現地決済</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="booking-info__group booking-info__group--full" data-card-section>
+                        <label class="booking-info__label" data-i18n="reserve.info.card.title">クレジットカード情報</label>
+                        <div class="booking-info__card-grid">
+                            <input class="booking-info__input" type="text" name="card_name" placeholder="名義（TARO YUKIAKARI）" data-i18n-placeholder="reserve.info.card.name">
+                            <input class="booking-info__input" type="text" name="card_number" placeholder="カード番号（1234 5678 9012 3456）" data-i18n-placeholder="reserve.info.card.number">
+                            <input class="booking-info__input" type="text" name="card_expiry" placeholder="有効期限（MM/YY）" data-i18n-placeholder="reserve.info.card.expiry">
+                            <input class="booking-info__input" type="text" name="card_cvc" placeholder="CVC" data-i18n-placeholder="reserve.info.card.cvc">
+                        </div>
+                    </div>
+                    <div class="booking-info__group booking-info__group--full">
+                        <label class="booking-info__checkbox">
+                            <input type="checkbox" id="payment-complete">
+                            <span data-i18n="reserve.info.payment.complete">支払いを完了する</span>
+                        </label>
+                        <p class="booking-info__payment-status"><span data-i18n="reserve.complete.paymentLabel">支払い状況</span>: <span data-payment-status data-i18n="reserve.complete.payment.unpaid">未決済</span></p>
+                    </div>
+                    <div class="booking-info__group booking-info__group--full">
+                        <label class="booking-info__checkbox">
+                            <input type="checkbox" data-agree required>
+                            <span data-i18n="reserve.info.agree">内容を確認し、上記内容に同意します。</span>
+                        </label>
+                    </div>
+                    <button class="booking-info__submit" type="submit" disabled data-i18n="reserve.info.submit">予約内容を確認する</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer__inner">
+            <div class="footer__column">
+                <a class="footer__logo-link" href="../index_web.html">
+                <img class="footer__logo" src="../assets/images/common/icon.png" alt="雪灯り">
+                </a>
+            </div>
+            <div class="footer__column footer__column--links">
+                <nav class="footer__nav" aria-label="フッターナビゲーション">
+                    <a href="../about.html" data-nav="about">はじめに</a>
+                    <a href="../facility.html" data-nav="facility">館内</a>
+                    <a href="../spa.html" data-nav="spa">温泉</a>
+                    <a href="../dining.html" data-nav="dining">お食事</a>
+                    <a href="../rooms.html" data-nav="rooms">客室</a>
+                    <a href="../access.html" data-nav="access">交通案内</a>
+                </nav>
+                <div class="footer__policies">
+    <a href="../contact.html" data-nav="contact">メールでのお問い合わせ</a>
+    <a href="../faq.html" data-nav="faq">よくあるご質問</a>
+    <a href="../guidelines.html" data-nav="guidelines">ご利用案内</a>
+    <a href="../privacypolicy.html" data-nav="privacy">プライバシーポリシー</a>
+    <a href="../sitepolicy.html" data-nav="sitepolicy">サイトポリシー</a>
+</div>
+            </div>
+            <div class="footer__column footer__column--contact">
+                <p class="footer__tel">Tel. 0960-47-0001</p>
+                <p class="footer__hours">受付時間 9:00 ～ 19:00</p>
+                <p class="footer__address">〒061-2302<br>北海道札幌市南区定山渓温泉東3丁目12-5</p>
+                <a class="footer__email" href="mailto:info@yukiakari.com">info@yukiakari.com</a>
+                <div class="footer__lang">
+                    <button type="button" class="lang-option" data-lang="en">English</button>
+                    <button type="button" class="lang-option" data-lang="ja">日本語</button>
+                    <button type="button" class="lang-option" data-lang="ko">한국어</button>
+                    <button type="button" class="lang-option" data-lang="zh-Hans">简体中文</button>
+                    <button type="button" class="lang-option" data-lang="zh-Hant">繁體中文</button>
+                </div>
+            </div>
+        </div>
+        <p class="footer__copy">&copy; 雪灯り</p>
+    </footer>
+    <script src="../assets/js/i18n-data.js"></script>
+<script src="../assets/js/i18n-extra-pages.js"></script>
+<script src="../assets/js/i18n-extra-facility.js"></script>
+<script src="../assets/js/i18n-extra-policy.js"></script>
+<script src="../assets/js/i18n-extra-rooms.js"></script>
+    <script src="../assets/js/script.js"></script>
+    <script src="booking_info.js"></script>
+
+    </body>
+</html>
+
+
+
+
+
+

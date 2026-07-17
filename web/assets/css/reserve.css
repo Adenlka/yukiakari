@@ -1,0 +1,405 @@
+.hero--reserve {
+    min-height: 60vh;
+    background: linear-gradient(160deg, rgba(10, 12, 14, 0.65), rgba(10, 12, 14, 0.2)),
+        url("../images/hero/hero-slide-05-forest.jpg") center/cover no-repeat;
+}
+
+.hero--reserve .hero__overlay {
+    padding: 140px 24px;
+}
+
+.hero--reserve .hero__title-jp {
+    writing-mode: horizontal-tb;
+    font-size: clamp(28px, 6vw, 64px);
+    letter-spacing: 0.28em;
+}
+
+.hero--reserve .hero__title-kana {
+    font-size: 12px;
+    letter-spacing: 0.4em;
+    color: var(--color-accent);
+}
+
+.reserve-search {
+    padding: 90px 24px 40px;
+}
+
+.reserve-search__inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    gap: 24px;
+}
+
+.reserve-search__intro {
+    text-align: center;
+    display: grid;
+    gap: 12px;
+}
+
+.reserve-search__title {
+    margin: 0;
+    font-size: clamp(22px, 3vw, 34px);
+    letter-spacing: 0.12em;
+}
+
+.reserve-search__lead {
+    margin: 0;
+    color: rgba(238, 242, 243, 0.8);
+    font-size: 14px;
+}
+
+.reserve-search__form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    padding: 24px;
+    border-radius: 16px;
+    border: 1px solid rgba(220, 182, 120, 0.25);
+    background: rgba(14, 16, 19, 0.65);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+}
+
+.reserve-search__field {
+    display: grid;
+    gap: 8px;
+    min-width: 0;
+}
+
+.reserve-search__label {
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    color: rgba(238, 242, 243, 0.7);
+}
+
+.reserve-search__input,
+.reserve-search__select {
+    font-family: var(--font-jp);
+    font-size: 14px;
+    color: var(--color-text);
+    background: rgba(9, 10, 12, 0.65);
+    border: 1px solid rgba(220, 182, 120, 0.2);
+    border-radius: 8px;
+    padding: 10px 12px;
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.reserve-search__input:focus,
+.reserve-search__select:focus {
+    border-color: rgba(220, 182, 120, 0.6);
+    box-shadow: 0 0 0 3px rgba(220, 182, 120, 0.15);
+}
+
+.reserve-search__submit {
+    border: 1px solid rgba(220, 182, 120, 0.6);
+    background: rgba(220, 182, 120, 0.12);
+    color: var(--color-text);
+    font-family: var(--font-jp);
+    letter-spacing: 0.2em;
+    padding: 12px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s ease, border-color 0.3s ease;
+    align-self: end;
+    min-height: 44px;
+}
+
+.reserve-search__submit:hover {
+    background: rgba(220, 182, 120, 0.25);
+    border-color: rgba(220, 182, 120, 0.85);
+}
+
+.reserve-search__note {
+    font-size: 12px;
+    color: rgba(238, 242, 243, 0.6);
+    text-align: center;
+    margin: 0;
+}
+
+.reserve-layout {
+    padding: 40px 24px 120px;
+}
+
+.reserve-layout__inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    gap: 36px;
+    grid-template-columns: minmax(0, 360px) minmax(0, 1fr);
+    align-items: start;
+}
+
+.reserve-panel {
+    background: rgba(14, 16, 19, 0.55);
+    border: 1px solid rgba(220, 182, 120, 0.2);
+    border-radius: 16px;
+    padding: 24px;
+    display: grid;
+    gap: 20px;
+    box-shadow: 0 18px 32px rgba(0, 0, 0, 0.18);
+}
+
+.reserve-panel__title {
+    margin: 0;
+    font-size: 18px;
+    letter-spacing: 0.2em;
+}
+
+.reserve-panel__subtitle {
+    margin: 0;
+    font-size: 12px;
+    color: rgba(238, 242, 243, 0.65);
+}
+
+.reserve-calendar__months {
+    display: grid;
+    gap: 18px;
+}
+
+.reserve-calendar__month {
+    display: grid;
+    gap: 10px;
+}
+
+.reserve-calendar__month-title {
+    font-size: 14px;
+    letter-spacing: 0.2em;
+    color: rgba(238, 242, 243, 0.75);
+}
+
+.reserve-calendar__grid {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 6px;
+    text-align: center;
+}
+
+.reserve-calendar__weekday {
+    font-size: 11px;
+    color: rgba(238, 242, 243, 0.5);
+    letter-spacing: 0.08em;
+}
+
+.reserve-calendar__day {
+    font-size: 12px;
+    padding: 8px 0;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid transparent;
+    color: rgba(238, 242, 243, 0.75);
+}
+
+.reserve-calendar__day.is-muted {
+    color: rgba(238, 242, 243, 0.2);
+}
+
+.reserve-calendar__day.is-available {
+    border-color: rgba(220, 182, 120, 0.35);
+    color: var(--color-text);
+}
+
+.reserve-calendar__day.is-limited {
+    border-color: rgba(220, 182, 120, 0.2);
+    color: rgba(238, 242, 243, 0.6);
+}
+
+.reserve-calendar__day.is-unavailable {
+    color: rgba(238, 242, 243, 0.3);
+    background: rgba(12, 12, 12, 0.3);
+}
+
+.reserve-calendar__day.is-selected {
+    background: rgba(220, 182, 120, 0.22);
+    border-color: rgba(220, 182, 120, 0.6);
+}
+
+.reserve-calendar__legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 11px;
+    color: rgba(238, 242, 243, 0.65);
+}
+
+.reserve-calendar__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 6px;
+}
+
+.reserve-calendar__dot--available {
+    background: rgba(220, 182, 120, 0.8);
+}
+
+.reserve-calendar__dot--limited {
+    background: rgba(220, 182, 120, 0.35);
+}
+
+.reserve-calendar__dot--unavailable {
+    background: rgba(120, 120, 120, 0.6);
+}
+
+.reserve-results {
+    display: grid;
+    gap: 24px;
+}
+
+.reserve-results__header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.reserve-results__title {
+    margin: 0;
+    font-size: clamp(22px, 3vw, 34px);
+    letter-spacing: 0.12em;
+}
+
+.reserve-results__count {
+    font-size: 12px;
+    letter-spacing: 0.24em;
+    color: rgba(238, 242, 243, 0.6);
+}
+
+.plan-card {
+    display: grid;
+    grid-template-columns: minmax(0, 0.6fr) minmax(0, 1fr);
+    gap: 24px;
+    padding: 24px;
+    border-radius: 18px;
+    border: 1px solid rgba(220, 182, 120, 0.2);
+    background: rgba(14, 16, 19, 0.55);
+    box-shadow: 0 18px 36px rgba(0, 0, 0, 0.22);
+}
+
+.plan-card__media {
+    min-height: 200px;
+    border-radius: 14px;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.plan-card__media::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(160deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.45));
+}
+
+.plan-card__body {
+    display: grid;
+    gap: 12px;
+}
+
+.plan-card__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+}
+
+.plan-card__tag {
+    padding: 4px 8px;
+    border-radius: 999px;
+    border: 1px solid rgba(220, 182, 120, 0.25);
+    color: rgba(238, 242, 243, 0.7);
+}
+
+.plan-card__title {
+    margin: 0;
+    font-size: 20px;
+    letter-spacing: 0.08em;
+}
+
+.plan-card__text {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.8;
+    color: rgba(238, 242, 243, 0.75);
+}
+
+.plan-card__meta {
+    display: grid;
+    gap: 4px;
+    font-size: 12px;
+    color: rgba(238, 242, 243, 0.6);
+}
+
+.plan-card__price {
+    font-size: 18px;
+    letter-spacing: 0.08em;
+    color: var(--color-accent);
+}
+
+.plan-card__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 18px;
+    border: 1px solid rgba(220, 182, 120, 0.6);
+    color: var(--color-text);
+    letter-spacing: 0.2em;
+    transition: background 0.3s ease, border-color 0.3s ease;
+    width: fit-content;
+}
+
+.plan-card__cta:hover {
+    background: rgba(220, 182, 120, 0.2);
+    border-color: rgba(220, 182, 120, 0.85);
+}
+
+.plan-card__note {
+    font-size: 11px;
+    color: rgba(238, 242, 243, 0.55);
+}
+
+.plan-card__media--villa {
+    background-image: url("../images/rooms/room-views.jpg");
+}
+
+.plan-card__media--viewbath {
+    background-image: url("../images/hero/hero-slide-01-exterior.jpg");
+}
+
+.plan-card__media--modern {
+    background-image: url("../images/hero/hero-slide-03-stonewall.jpg");
+}
+
+.plan-card__media--standard {
+    background-image: url("../images/hero/hero-slide-10-Onsenhotel.jpg");
+}
+
+.reserve-results__footnote {
+    margin: 0;
+    font-size: 12px;
+    color: rgba(238, 242, 243, 0.55);
+}
+
+@media (max-width: 1000px) {
+    .reserve-layout__inner {
+        grid-template-columns: 1fr;
+    }
+
+    .plan-card {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 700px) {
+    .reserve-search {
+        padding: 70px 24px 30px;
+    }
+
+    .reserve-search__form {
+        padding: 18px;
+    }
+}

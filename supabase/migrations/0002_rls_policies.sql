@@ -1,0 +1,14 @@
+-- 占位文件:RLS 权限策略脚本(0002_rls_policies.sql)
+--
+-- 用途:对应 docs/yukiakari_设计方案_v1.md 第三节 3.3 RLS 策略要点。
+-- 覆盖表:plans / plan_extras / plan_available_extras(anon 只读)、
+-- reservations / reservation_items / reservation_item_extras(anon 不给直接读写,
+-- 走 SECURITY DEFINER 函数)、contact_messages(anon 只给 INSERT)、
+-- admin_profiles(仅 service_role 写,本人可读自己记录)。
+--
+-- 实现阶段(角色3下一步)再补:
+-- - enable row level security 语句
+-- - 各表 create policy 语句
+-- - submit_reservation() / lookup_reservation() 两个 SECURITY DEFINER 函数
+
+-- TODO(角色3下一阶段): 誊入设计方案第三节 RLS 策略

@@ -1,0 +1,271 @@
+﻿.page-title {
+    padding: 140px 24px 90px;
+    text-align: center;
+    background:
+        linear-gradient(180deg, rgba(18, 22, 28, 0.95) 0%, rgba(21, 24, 28, 0.92) 100%),
+        var(--line-texture);
+    background-size: cover, 4px 4px;
+}
+
+.page-title__inner {
+    max-width: 900px;
+    margin: 0 auto;
+    display: grid;
+    gap: 16px;
+}
+
+.page-title__eyebrow {
+    font-size: 12px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: rgba(238, 242, 243, 0.6);
+}
+
+.page-title__headline {
+    margin: 0;
+    font-size: clamp(26px, 3.4vw, 40px);
+    letter-spacing: 0.3em;
+}
+
+.page-title__headline span {
+    display: inline-block;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(220, 182, 120, 0.55);
+}
+
+.page-title__lead {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.9;
+    color: rgba(238, 242, 243, 0.78);
+}
+
+.access-intro__inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    gap: 40px;
+    align-items: center;
+}
+
+.access-intro__fig {
+    margin: 0;
+}
+
+.access-intro__fig img {
+    width: 100%;
+    display: block;
+    border: 1px solid rgba(220, 182, 120, 0.35);
+    background: rgba(12, 14, 18, 0.7);
+}
+
+.access-intro__placeholder {
+    min-height: 340px;
+    border: 1px solid rgba(220, 182, 120, 0.35);
+    background: rgba(12, 14, 18, 0.7);
+    display: grid;
+    place-items: center;
+    gap: 8px;
+    color: rgba(238, 242, 243, 0.6);
+    letter-spacing: 0.2em;
+    text-align: center;
+    padding: 20px;
+}
+
+.access-intro__placeholder small {
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: rgba(238, 242, 243, 0.45);
+}
+
+.access-intro__body {
+    display: grid;
+    gap: 14px;
+}
+
+.access-intro__name {
+    font-size: 18px;
+    letter-spacing: 0.2em;
+    margin: 0;
+}
+
+.access-intro__address {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.8;
+    color: rgba(238, 242, 243, 0.78);
+}
+
+.access-intro__note {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.9;
+    color: rgba(238, 242, 243, 0.78);
+}
+
+.access-intro__link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 10px 22px;
+    border: 1px solid rgba(220, 182, 120, 0.55);
+    color: var(--color-accent);
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.access-intro__link:hover {
+    background: rgba(220, 182, 120, 0.15);
+    border-color: rgba(220, 182, 120, 0.85);
+    color: var(--color-text);
+}
+
+.access-route__inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    gap: 28px;
+}
+
+.access-route__label {
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(220, 182, 120, 0.75);
+    margin: 0 0 6px;
+}
+
+.access-route__title {
+    margin: 0 0 10px;
+    font-size: clamp(20px, 2.8vw, 30px);
+    letter-spacing: 0.12em;
+}
+
+.access-route__lead {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.9;
+    color: rgba(238, 242, 243, 0.8);
+}
+
+.access-route__cards {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.access-route__card {
+    border: 1px solid rgba(220, 182, 120, 0.2);
+    background: rgba(18, 22, 28, 0.6);
+    padding: 22px;
+    display: grid;
+    gap: 10px;
+}
+
+.access-route__card h3 {
+    margin: 0;
+    font-size: 15px;
+    letter-spacing: 0.1em;
+}
+
+.access-route__card p {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.8;
+    color: rgba(238, 242, 243, 0.75);
+}
+
+.access-route__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 6px;
+    font-size: 13px;
+    color: rgba(238, 242, 243, 0.75);
+}
+
+.access-route__meta {
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    color: rgba(220, 182, 120, 0.7);
+}
+
+.access-route__note {
+    margin: 0;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    color: rgba(238, 242, 243, 0.6);
+}
+
+.access-parking__inner {
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+    display: grid;
+    gap: 28px;
+}
+
+.access-parking__title {
+    margin: 0;
+    font-size: clamp(20px, 2.6vw, 28px);
+    letter-spacing: 0.12em;
+}
+
+.access-parking__grid {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    text-align: left;
+}
+
+.access-parking__card {
+    border: 1px solid rgba(220, 182, 120, 0.2);
+    background: rgba(18, 22, 28, 0.6);
+    padding: 22px;
+    display: grid;
+    gap: 10px;
+}
+
+.access-parking__card h3 {
+    margin: 0;
+    font-size: 15px;
+    letter-spacing: 0.1em;
+}
+
+.access-parking__card p {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.8;
+    color: rgba(238, 242, 243, 0.75);
+}
+
+.connect-vline {
+    position: relative;
+}
+
+.connect-vline::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: -70px;
+    width: 1px;
+    height: 70px;
+    background: rgba(220, 182, 120, 0.25);
+    transform: translateX(-50%);
+}
+
+@media (min-width: 900px) {
+    .access-intro__inner {
+        grid-template-columns: 1.1fr 0.9fr;
+    }
+}
+
+@media (max-width: 900px) {
+    .page-title {
+        padding-top: 120px;
+    }
+}

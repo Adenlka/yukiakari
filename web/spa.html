@@ -1,0 +1,240 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>温泉 | 雪灯り</title>
+    <meta name="description" content="雪灯りの温泉。銀世界に溶け込む癒やしの湯と、雪景色に包まれた湯けむりの時間をご案内します。">
+    <link rel="icon" href="assets/images/common/icon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/spa.css">
+</head>
+<body data-page="spa">
+    <header class="header header--fixed">
+        <div class="header__inner">
+            <div class="header__brand">
+                <a class="header__logo" href="index_web.html#hero" aria-label="雪灯り">
+                    <img src="assets/images/common/icon.png" alt="雪灯り">
+                </a>
+                <button class="header__menu-btn" type="button" aria-expanded="false" aria-controls="site-menu" aria-label="メニューを開く">
+                    <img class="menu-icon__svg" src="assets/images/common/icon-hamburger.svg" alt="" aria-hidden="true">
+                    <img class="menu-icon__close" src="assets/images/common/icon-close.svg" alt="" aria-hidden="true">
+                </button>
+            </div>
+            <div class="header__actions">
+                <a class="header__tel" href="tel:0960-47-0001">Tel. 0960-47-0001</a>
+                <a class="header__reserve" data-i18n="action.reserve" href="reserve/reserve.html" data-nav="reserve">予約</a>
+            </div>
+        </div>
+    </header>
+
+    <div id="site-menu" class="menu" aria-hidden="true">
+        <div class="menu__panel">
+            <div class="menu__top">
+                <a href="index_web.html#hero">
+                    <img class="menu__logo" src="assets/images/common/logo-yukiakari-white.png" alt="雪灯り">
+                </a>
+            </div>
+            <div class="menu__columns">
+                <div class="menu__column">
+                    <div class="menu__column-label">Contents</div>
+                    <ul class="menu__list">
+                        <li><a href="about.html" data-nav="about">はじめに</a></li>
+                        <li><a href="facility.html" data-nav="facility">館内</a></li>
+                        <li><a href="spa.html" data-nav="spa">温泉</a></li>
+                        <li><a href="dining.html" data-nav="dining">お食事</a></li>
+                        <li><a href="rooms.html" data-nav="rooms">客室</a></li>
+                        <li><a href="access.html" data-nav="access">交通案内</a></li>
+                    </ul>
+                </div>
+                <div class="menu__column menu__column--info">
+                    <div class="menu__column-label">Information</div>
+                    <div class="menu__info">
+                        <a class="menu__reserve" data-i18n="action.reserveLong" href="reserve/reserve.html" data-nav="reserve">宿泊のご予約はこちら</a>
+                        <p class="menu__tel">Tel. 0960-47-0001</p>
+                        <p class="menu__hours">受付時間 9:00 ～ 19:00</p>
+                        <p class="menu__address">〒061-2302<br>北海道札幌市南区定山渓温泉東3丁目12-5</p>
+                        <a class="menu__email" href="mailto:info@yukiakari.com">info@yukiakari.com</a>
+                        <a class="menu__link" href="contact.html" data-nav="contact">メールでのお問い合わせ</a>
+                        <div class="menu__policy">
+    <a class="menu__policy-link" href="faq.html" data-nav="faq">よくあるご質問</a>
+    <a class="menu__policy-link" href="guidelines.html" data-nav="guidelines">ご利用案内</a>
+    <a class="menu__policy-link" href="privacypolicy.html" data-nav="privacy">プライバシーポリシー</a>
+    <a class="menu__policy-link" href="sitepolicy.html" data-nav="sitepolicy">サイトポリシー</a>
+</div>
+                    </div>
+                </div>
+                <div class="menu__column menu__column--lang">
+                    <div class="menu__column-label">Language</div>
+                    <ul class="menu__list menu__list--lang">
+                        <li><button type="button" class="lang-option" data-lang="en">English</button></li>
+                        <li><button type="button" class="lang-option" data-lang="ja">日本語</button></li>
+                        <li><button type="button" class="lang-option" data-lang="ko">한국어</button></li>
+                        <li><button type="button" class="lang-option" data-lang="zh-Hans">简体中文</button></li>
+                        <li><button type="button" class="lang-option" data-lang="zh-Hant">繁體中文</button></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="menu__footer">
+                <div class="menu__social">
+                    <a class="menu__social-link" href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">FB</a>
+                    <a class="menu__social-link" href="https://x.com/" target="_blank" rel="noopener noreferrer" aria-label="X">X</a>
+                    <a class="menu__social-link" href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">IG</a>
+                </div>
+                <p class="menu__copy">&copy; 雪灯り</p>
+            </div>
+        </div>
+    </div>
+
+    <main>
+        <section id="hero" class="hero hero--spa" aria-label="温泉" data-i18n-aria="spa.hero.aria">
+            <div class="hero__layer" aria-hidden="true"></div>
+            <div class="hero__scrim" aria-hidden="true"></div>
+            <div class="hero__overlay">
+                <div class="hero__title-wrap">
+                    <span class="hero__title-jp" data-i18n="spa.hero.title">温泉</span>
+                </div>
+            </div>
+        </section>
+
+        <div class="scroll-hint scroll-hint--down scroll-hint--overlap" aria-hidden="true">
+            <span class="scroll-hint__line"></span>
+        </div>
+
+        <section id="spa-outdoor" class="feature feature--tone reveal">
+            <div class="feature__inner">
+                <div class="feature__media feature__media--spa-outdoor" aria-hidden="true"></div>
+                <div class="feature__content">
+                    <div class="feature__link">
+                        <span class="feature__eyebrow" data-i18n="spa.outdoor.eyebrow">雪見露天</span>
+                        <h2 class="feature__headline" data-i18n="spa.outdoor.title">雪見露天「白銀の湯」</h2>
+                        <p class="feature__body" data-i18n="spa.outdoor.text">目の前に広がるのは、手つかずの原生林と白銀の世界。しんしんと降り積もる雪の音に耳を澄ませながら、熱めのお湯に身を委ねれば、心も体も大自然の一部となります。</p>
+                        <p class="spa-meta"><span data-i18n="spa.meta.hours">利用時間</span>5:00〜23:30　<span data-i18n="spa.meta.fee">料金</span><span data-i18n="spa.meta.free">宿泊者無料</span></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="spa-cypress" class="feature feature--reverse feature--line reveal">
+            <div class="feature__inner">
+                <div class="feature__media feature__media--spa-cypress" aria-hidden="true"></div>
+                <div class="feature__content">
+                    <div class="feature__link">
+                        <span class="feature__eyebrow" data-i18n="spa.cypress.eyebrow">内湯</span>
+                        <h2 class="feature__headline" data-i18n="spa.cypress.title">檜の大浴場「森の詩」</h2>
+                        <p class="feature__body" data-i18n="spa.cypress.text">香り高い総檜造りの内湯。大きなガラス窓の向こうには霧氷の森が広がり、木の温もりとやわらかな湯が旅の疲れを優しく解きほぐします。</p>
+                        <p class="spa-meta"><span data-i18n="spa.meta.hours">利用時間</span>5:00〜24:00　<span data-i18n="spa.meta.fee">料金</span><span data-i18n="spa.meta.free">宿泊者無料</span></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="spa-stone" class="feature feature--tone reveal">
+            <div class="feature__inner">
+                <div class="feature__media feature__media--spa-stone" aria-hidden="true"></div>
+                <div class="feature__content">
+                    <div class="feature__link">
+                        <span class="feature__eyebrow" data-i18n="spa.stone.eyebrow">寝湯</span>
+                        <h2 class="feature__headline" data-i18n="spa.stone.title">石造り「星見の寝湯」</h2>
+                        <p class="feature__body" data-i18n="spa.stone.text">浅めの湯船に横たわり、空を見上げる贅沢。晴れた冬の夜には満天の星空が広がります。頭寒足熱の心地よさに包まれる静かな時間です。</p>
+                        <p class="spa-meta"><span data-i18n="spa.meta.hours">利用時間</span>6:00〜23:00　<span data-i18n="spa.meta.fee">料金</span><span data-i18n="spa.meta.free">宿泊者無料</span></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="spa-private" class="feature feature--reverse feature--line reveal">
+            <div class="feature__inner">
+                <div class="feature__media feature__media--spa-private" aria-hidden="true"></div>
+                <div class="feature__content">
+                    <div class="feature__link">
+                        <span class="feature__eyebrow" data-i18n="spa.private.eyebrow">貸切</span>
+                        <h2 class="feature__headline" data-i18n="spa.private.title">貸切風呂「灯（あかり）」</h2>
+                        <p class="feature__body" data-i18n="spa.private.text">プライベートな空間で雪景色を独占できる貸切風呂。雪見障子を開ければ二人だけの銀世界。行灯の柔らかな光に包まれて語らいの時を。</p>
+                        <p class="spa-meta"><span data-i18n="spa.meta.hours">利用時間</span>15:00〜22:30　<span data-i18n="spa.meta.fee">料金</span><span data-i18n="spa.meta.privateFee">45分 3,300円</span></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="spa-sauna" class="feature feature--tone reveal">
+            <div class="feature__inner">
+                <div class="feature__media feature__media--spa-sauna" aria-hidden="true"></div>
+                <div class="feature__content">
+                    <div class="feature__link">
+                        <span class="feature__eyebrow" data-i18n="spa.sauna.eyebrow">サウナ</span>
+                        <h2 class="feature__headline" data-i18n="spa.sauna.title">ロウリュサウナ & 水風呂</h2>
+                        <p class="feature__body" data-i18n="spa.sauna.text">本場フィンランド式のロウリュを楽しめるサウナ室。火照った体を冷やすのは、北海道の清冽な雪解け水を使用した水風呂。外気浴とともに「ととのう」体験を。</p>
+                        <p class="spa-meta"><span data-i18n="spa.meta.hours">利用時間</span>6:00〜23:00　<span data-i18n="spa.meta.fee">料金</span><span data-i18n="spa.meta.free">宿泊者無料</span></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div class="scroll-hint scroll-hint--up scroll-hint--overlap" aria-hidden="true">
+        <span class="scroll-hint__line"></span>
+    </div>
+
+    <footer class="footer">
+        <div class="footer__inner">
+            <div class="footer__column">
+                <a class="footer__logo-link" href="index_web.html">
+                <img class="footer__logo" src="assets/images/common/icon.png" alt="雪灯り">
+                </a>
+            </div>
+            <div class="footer__column footer__column--links">
+                <nav class="footer__nav" aria-label="フッターナビゲーション">
+                    <a href="about.html" data-nav="about">はじめに</a>
+                    <a href="facility.html" data-nav="facility">館内</a>
+                    <a href="spa.html" data-nav="spa">温泉</a>
+                    <a href="dining.html" data-nav="dining">お食事</a>
+                    <a href="rooms.html" data-nav="rooms">客室</a>
+                    <a href="access.html" data-nav="access">交通案内</a>
+                </nav>
+                <div class="footer__policies">
+    <a href="contact.html" data-nav="contact">メールでのお問い合わせ</a>
+    <a href="faq.html" data-nav="faq">よくあるご質問</a>
+    <a href="guidelines.html" data-nav="guidelines">ご利用案内</a>
+    <a href="privacypolicy.html" data-nav="privacy">プライバシーポリシー</a>
+    <a href="sitepolicy.html" data-nav="sitepolicy">サイトポリシー</a>
+</div>
+            </div>
+            <div class="footer__column footer__column--contact">
+                <p class="footer__tel">Tel. 0960-47-0001</p>
+                <p class="footer__hours">受付時間 9:00 ～ 19:00</p>
+                <p class="footer__address">〒061-2302<br>北海道札幌市南区定山渓温泉東3丁目12-5</p>
+                <a class="footer__email" href="mailto:info@yukiakari.com">info@yukiakari.com</a>
+                <div class="footer__lang">
+                    <button type="button" class="lang-option" data-lang="en">English</button>
+                    <button type="button" class="lang-option" data-lang="ja">日本語</button>
+                    <button type="button" class="lang-option" data-lang="ko">한국어</button>
+                    <button type="button" class="lang-option" data-lang="zh-Hans">简体中文</button>
+                    <button type="button" class="lang-option" data-lang="zh-Hant">繁體中文</button>
+                </div>
+            </div>
+        </div>
+        <p class="footer__copy">&copy; 雪灯り</p>
+    </footer>
+    <script src="assets/js/i18n-data.js"></script>
+<script src="assets/js/i18n-extra-pages.js"></script>
+<script src="assets/js/i18n-extra-facility.js"></script>
+<script src="assets/js/i18n-extra-policy.js"></script>
+<script src="assets/js/i18n-extra-rooms.js"></script>
+    <script src="assets/js/script.js"></script>
+    <script src="assets/js/spa.js"></script>
+
+    </body>
+</html>
+
+
+
+
+
+
+
+
+

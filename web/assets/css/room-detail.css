@@ -1,0 +1,219 @@
+﻿:root {
+    --room-hero-zoom: 1.18;
+}
+
+.hero--room .hero__layer {
+    width: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 1;
+    transition: none;
+    transform: scale(var(--room-hero-zoom));
+}
+
+.hero--room.is-ready .hero__layer {
+    animation: roomZoomOut 12s ease-out forwards;
+}
+
+@keyframes roomZoomOut {
+    from {
+        transform: scale(var(--room-hero-zoom));
+    }
+    to {
+        transform: scale(1);
+    }
+}
+
+.hero--room .hero__title-jp {
+    font-size: clamp(16px, 3vw, 36px);
+    letter-spacing: 0.2em;
+}
+
+.hero--room-awanoyuki .hero__layer {
+    background-image: url("../images/rooms/room-awanoyuki.jpg");
+}
+
+.hero--room-kazahana .hero__layer {
+    background-image: url("../images/rooms/room-kazahana.jpg");
+}
+
+.hero--room-tsukiakari .hero__layer {
+    background-image: url("../images/rooms/room-tsukiakari.jpg");
+}
+
+.hero--room-standard .hero__layer {
+    background-image: url("../images/rooms/room-standard.jpg");
+}
+
+.room-detail-intro,
+.room-detail-gallery,
+.room-detail-specs,
+.room-detail-details,
+.room-detail-booking {
+    padding: 110px 24px;
+}
+
+.room-detail-intro__inner,
+.room-detail-specs__inner,
+.room-detail-details__inner,
+.room-detail-booking__inner {
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+    display: grid;
+    gap: 16px;
+}
+
+.room-detail-intro__title {
+    margin: 0;
+    font-size: clamp(24px, 3.2vw, 40px);
+    letter-spacing: 0.08em;
+}
+
+.room-detail-intro__text {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.9;
+    color: rgba(238, 242, 243, 0.78);
+}
+
+.room-detail-gallery__inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    gap: 24px;
+}
+
+.room-detail-gallery__grid {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.room-detail-gallery__image {
+    width: 100%;
+    min-height: 260px;
+    border-radius: 10px;
+    object-fit: cover;
+    display: block;
+}
+
+.room-detail-specs__list {
+    display: grid;
+    gap: 10px;
+    margin: 0;
+}
+
+.room-detail-specs__item {
+    display: grid;
+    gap: 4px;
+    padding: 14px 16px;
+    border: 1px solid rgba(220, 182, 120, 0.25);
+    background: rgba(16, 18, 22, 0.6);
+}
+
+.room-detail-specs__item dt {
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    color: rgba(220, 182, 120, 0.7);
+}
+
+.room-detail-specs__item dd {
+    margin: 0;
+    font-size: 14px;
+    color: rgba(238, 242, 243, 0.85);
+}
+
+.room-detail-specs__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 12px 26px;
+    border: 1px solid rgba(220, 182, 120, 0.6);
+    color: var(--color-accent);
+    letter-spacing: 0.2em;
+    font-size: 12px;
+    text-transform: uppercase;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+.room-detail-specs__cta:hover {
+    background: rgba(220, 182, 120, 0.15);
+    color: var(--color-text);
+}
+
+.room-detail-details__grid {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    gap: 24px;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.room-detail-details__card {
+    padding: 20px;
+    border: 1px solid rgba(220, 182, 120, 0.2);
+    background: rgba(18, 22, 28, 0.55);
+    text-align: left;
+    display: grid;
+    gap: 12px;
+}
+
+.room-detail-details__card h3 {
+    margin: 0;
+    font-size: 15px;
+    letter-spacing: 0.1em;
+}
+
+.room-detail-details__card p,
+.room-detail-details__card li {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.8;
+    color: rgba(238, 242, 243, 0.75);
+}
+
+.room-detail-details__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 6px;
+}
+
+.room-detail-booking__title {
+    font-size: clamp(20px, 2.6vw, 30px);
+    letter-spacing: 0.1em;
+    margin: 0;
+}
+
+.room-detail-booking__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 28px;
+    border: 1px solid rgba(220, 182, 120, 0.6);
+    color: var(--color-accent);
+    letter-spacing: 0.2em;
+    font-size: 12px;
+    text-transform: uppercase;
+}
+
+.room-detail-booking__text {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.8;
+    color: rgba(238, 242, 243, 0.75);
+}
+
+@media (max-width: 900px) {
+    .room-detail-intro,
+    .room-detail-gallery,
+    .room-detail-specs,
+    .room-detail-details,
+    .room-detail-booking {
+        padding: 90px 24px;
+    }
+}

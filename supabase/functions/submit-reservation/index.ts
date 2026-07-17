@@ -1,19 +1,102 @@
-// 占位文件:提交预约 Edge Function(submit-reservation/index.ts)
+// supabase/functions/submit-reservation/index.ts
 //
-// 用途:对应 docs/yukiakari_设计方案_v1.md 第三节 —— 前端不能直接 INSERT
-// reservations 相关表(购物车总价由前端算出,直接开放 INSERT 权限会被
-// 篡改总价)。这个函数接收"选了什么房型/日期/人数/追加项",内部重新按
-// plans/plan_extras 当前价格计算 total_price、校验 get_availability()
-// 是否够、再写入 reservations / reservation_items / reservation_item_extras
-// 三张表。
+// 用途:预约提交的 HTTP 入口。真正的"服务端重算价格 + 校验库存 + 写入三张
+// 预约表"逻辑在数据库函数 submit_reservation()(SECURITY DEFINER,见
+// supabase/migrations/0002_rls_policies.sql)里完成 —— 这样即使有人绕过本
+// Edge Function 直接调用 RPC,安全性依然成立,不依赖这一层前置校验。
+// 本函数只负责三件事:CORS/请求方法处理、IP 频率限制、把数据库报错转成
+// 不泄露内部细节的提示(business 校验错误例外,见下方 error.code 分支)。
 //
-// 安全要点(实现阶段务必遵守):
-// - 服务端重新计算价格,不信任前端传入的金额
-// - 参数化查询 / 使用 Supabase 官方 SDK,不手拼 SQL 字符串
-// - 建议加简单的 IP 限流,防止被用来暴力刷单
-// - 错误信息不暴露堆栈/SQL 细节
-//
-// 密钥:如需绕过 RLS 使用 service_role key,只能通过本函数的环境变量读取,
-// 绝不能出现在 web/ 前端代码或 Git 仓库里。
+// 密钥说明:本函数只使用 SUPABASE_ANON_KEY(Supabase 平台自动注入的默认环境
+// 变量,不需要手动配置),不使用 service_role key —— submit_reservation()
+// 本身已经是 SECURITY DEFINER,这一层不需要再叠加一次更高权限的 key,少一个
+// 密钥暴露的风险点。
 
-// TODO(角色3下一阶段): 实现提交预约逻辑
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+const RATE_LIMIT = 5; // 每个 IP 每个窗口最多提交次数
+const RATE_WINDOW_SECONDS = 60; // 窗口长度(秒)
+const MAX_ITEMS = 10; // 与 0002 迁移里 submit_reservation() 的上限保持一致(防止超大 payload)
+
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*", // 部署时按实际前端域名收紧,不建议长期用 *
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+};
+
+function jsonResponse(body: unknown, status = 200): Response {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { ...corsHeaders, "Content-Type": "application/json" },
+  });
+}
+
+Deno.serve(async (req: Request) => {
+  if (req.method === "OPTIONS") {
+    return new Response("ok", { headers: corsHeaders });
+  }
+  if (req.method !== "POST") {
+    return jsonResponse({ error: "Method not allowed" }, 405);
+  }
+
+  const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+  const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY")!;
+  const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+  // x-forwarded-for 的第一个 IP 做限流 key(Supabase Edge Runtime 会注入该头)
+  const clientIp =
+    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
+
+  const { data: allowed, error: rlError } = await supabase.rpc(
+    "check_rate_limit",
+    {
+      p_bucket: `submit-reservation:${clientIp}`,
+      p_limit: RATE_LIMIT,
+      p_window_seconds: RATE_WINDOW_SECONDS,
+    },
+  );
+
+  if (rlError) {
+    // 限流检查本身出错时选择保守拒绝,而不是放行,避免限流机制故障时被绕过刷单
+    console.error("check_rate_limit RPC error:", rlError);
+    return jsonResponse({ error: "服务暂时不可用,请稍后重试" }, 503);
+  }
+  if (!allowed) {
+    return jsonResponse({ error: "请求过于频繁,请稍后再试" }, 429);
+  }
+
+  let payload: Record<string, unknown>;
+  try {
+    payload = await req.json();
+  } catch {
+    return jsonResponse({ error: "请求格式不正确" }, 400);
+  }
+
+  const items = payload.items;
+  if (!Array.isArray(items) || items.length === 0 || items.length > MAX_ITEMS) {
+    return jsonResponse({ error: "预约明细数量不合法" }, 400);
+  }
+
+  const { data, error } = await supabase.rpc("submit_reservation", {
+    p_guest_name: payload.guest_name,
+    p_guest_kana: payload.guest_kana ?? null,
+    p_guest_email: payload.guest_email,
+    p_guest_phone: payload.guest_phone,
+    p_guest_address: payload.guest_address ?? null,
+    p_arrival_time: payload.arrival_time ?? null,
+    p_special_requests: payload.special_requests ?? null,
+    p_payment_method: payload.payment_method ?? "onsite",
+    p_locale: payload.locale ?? null,
+    p_items: items,
+  });
+
+  if (error) {
+    console.error("submit_reservation RPC error:", error);
+    // submit_reservation() 内部把"业务校验错误"(errcode YK001)和"未预期的
+    // 数据库错误"(errcode P0001,已被数据库函数统一替换成通用提示)分开处理,
+    // 两种情况传到这里的 error.message 都已经是不含表名/字段名的安全文案,
+    // 可以直接透传给前端。
+    return jsonResponse({ error: error.message || "预约提交失败,请稍后重试" }, 400);
+  }
+
+  return jsonResponse({ data });
+});

@@ -103,8 +103,9 @@
                     <p class="booking-complete__label" data-i18n="reserve.complete.codeLabel">予約番号</p>
                     <p class="booking-complete__code" data-reservation-code>--</p>
                     <p class="booking-complete__meta"><span data-i18n="reserve.complete.totalLabel">合計</span> <span data-reservation-total>--</span></p>
-                    <p class="booking-complete__meta"><span data-i18n="reserve.complete.paymentLabel">支払い状況</span> <span data-reservation-payment data-i18n="reserve.complete.payment.unpaid">未決済</span></p>
+                    <p class="booking-complete__meta"><span data-i18n="reserve.complete.paymentLabel">お支払い方法</span> <span data-reservation-payment>--</span></p>
                     <p class="booking-complete__note booking-complete__note--alert" data-i18n="reserve.complete.note">この番号と電話番号で予約内容の照会が可能です。</p>
+                    <p class="booking-complete__note" data-reservation-items></p>
                 </div>
                 <div class="booking-complete__actions">
                     <a class="booking-complete__button" href="booking_lookup.html" data-i18n="reserve.complete.lookup">予約内容を照会する</a>
@@ -160,6 +161,10 @@
 <script src="../assets/js/i18n-extra-policy.js"></script>
 <script src="../assets/js/i18n-extra-rooms.js"></script>
     <script src="../assets/js/script.js"></script>
+    <!-- Supabase 接入:引入顺序固定,config.js → supabase-js CDN → supabase-client.js → 页面脚本 -->
+    <script src="../config.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+    <script src="../assets/js/supabase-client.js"></script>
     <script src="booking_complete.js"></script>
 
     </body>

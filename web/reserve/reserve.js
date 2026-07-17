@@ -1,4 +1,4 @@
-﻿
+
 (() => {
     const calendarRoot = document.querySelector('[data-calendar]');
     const calendarGrid = document.querySelector('[data-cal-grid]');
@@ -44,6 +44,21 @@
         return;
     }
 
+    // ---------- Supabase 接入 ----------
+    // 商品目录(plans/plan_extras/plan_available_extras)和房态查询
+    // (get_availability RPC)都改成从数据库读取,替换掉原来硬编码的
+    // planDetailsByRoom/daytripPlans/extraOptions 和伪随机可用性算法。
+    // 没有 supabaseClient 说明 config.js/CDN 没接好,预约功能没法用,
+    // 直接给出明显提示并中止,而不是静默展示假数据。
+    const supabase = window.supabaseClient;
+    if (!supabase) {
+        console.error('[reserve] window.supabaseClient 未初始化,请检查 config.js 与 supabase-js CDN 是否正确引入。');
+        if (resultsSummary) {
+            resultsSummary.textContent = '予約システムに接続できませんでした。しばらくしてから再度お試しください。';
+        }
+        return;
+    }
+
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     const maxDate = new Date(today);
@@ -53,57 +68,169 @@
     const TAX_RATE = 0.1;
     const MAX_ROOMS = 4;
 
-    const extraOptions = {
-        dinnerUpgrade: { label: '夕朝食アップグレード', price: 2000, per: 'guest', perNight: true },
-        loungeAccess: { label: '雪見ラウンジ利用', price: 500, per: 'guest', perNight: false },
-        privateBath: { label: '貸切風呂', price: 1600, per: 'room', perNight: true },
-        lateCheckout: { label: 'レイトチェックアウト', price: 900, per: 'room', perNight: false },
-        daytripAllAccess: { label: '館内オールアクセス', price: 500, per: 'guest', perNight: false },
-        daytripMealUpgrade: { label: '季節の昼食追加', price: 1000, per: 'guest', perNight: false }
-    };
+    // 日帰りプランの子選択肢(お風呂プラン/お食事)の追加料金。plans/plan_extras
+    // の schema にはこの2つの子選択肢専用の列がなく、後端の submit_reservation()
+    // (supabase/migrations/0002_rls_policies.sql)にも同じ対応表がハードコードされている。
+    // 表示価格はあくまで目安で、最終価格は必ずサーバー側で再計算されるため、
+    // 万一この対応表がずれても金額の不整合は起きない(セキュリティ上の問題にはならない)。
+    const DAYTRIP_PLAN_ADDON = { relax: 0, sauna: 400, private: 900 };
+    const DAYTRIP_MEAL_ADDON = { none: 0, light: 400, lunch: 900 };
 
-    const planDetailsByRoom = {
+    // 展示用文案(セールスポイント/館内設備リスト)。plans テーブルの schema には
+    // こうした一覧型の項目がないため、これらは今回もフロント側の静的データとして
+    // 保持する ——「価格・在庫・追加オプション」というお金に直結するデータを
+    // データベース駆動にするのが今回の改修の主眼で、マーケティング文言まで
+    // データベースに移す必要はない。
+    const PLAN_STATIC_CONTENT = {
         villa: {
-            capacity: 4,
-            baseGuests: 2,
-            extraGuestRate: 3000,
-            unitLabel: '1室 / 1泊',
-            pricingModel: 'stay',
-            extras: ['dinnerUpgrade', 'privateBath', 'loungeAccess', 'lateCheckout'],
             features: ['専用露天風呂', '囲炉裏の間', '森の独立棟'],
             facilities: ['湯上がり処', '雪見テラス', '送迎サービス']
         },
         viewbath: {
-            capacity: 3,
-            baseGuests: 2,
-            extraGuestRate: 2500,
-            unitLabel: '1室 / 1泊',
-            pricingModel: 'stay',
-            extras: ['dinnerUpgrade', 'loungeAccess', 'lateCheckout'],
             features: ['展望風呂', '雪景色ビュー', '広縁'],
             facilities: ['湯上がり処', '雪見テラス', 'ラウンジドリンク']
         },
         modern: {
-            capacity: 4,
-            baseGuests: 2,
-            extraGuestRate: 2000,
-            unitLabel: '1室 / 1泊',
-            pricingModel: 'stay',
-            extras: ['dinnerUpgrade', 'loungeAccess'],
             features: ['和洋室', '琉球畳', 'ツインベッド'],
             facilities: ['湯上がり処', 'ラウンジドリンク', '売店']
         },
         standard: {
-            capacity: 5,
-            baseGuests: 2,
-            extraGuestRate: 1600,
-            unitLabel: '1室 / 1泊',
-            pricingModel: 'stay',
-            extras: ['dinnerUpgrade', 'loungeAccess'],
             features: ['純和風客室', '広縁', '静かな眺望'],
             facilities: ['湯上がり処', '売店', '回廊散策']
         }
     };
+
+    const DAYTRIP_STATIC_CONTENT = {
+        'daytrip-relax': {
+            title: '日帰り温泉「雪灯り」プラン',
+            text: '雪見露天と檜の大浴場で湯けむりを満喫。湯上がり処で静かな時間をお過ごしください。',
+            amenity: '温泉利用付',
+            badges: ['日帰り', '人気'],
+            meta: ['利用時間 10:00～15:00', 'タオル付 / 湯上がり処利用可'],
+            image: 'url("../assets/images/onsen/onsen-01.jpg")',
+            features: ['雪見露天風呂', '檜の大浴場', '湯上がり処'],
+            facilities: ['露天風呂', '大浴場', '湯上がり処']
+        },
+        'daytrip-sauna': {
+            title: 'サウナ集中「ととのい」プラン',
+            text: 'ロウリュサウナと水風呂でリフレッシュ。外気浴テラスで深くととのいます。',
+            amenity: 'サウナ利用付',
+            badges: ['日帰り', 'サウナ'],
+            meta: ['利用時間 10:00～14:00', '外気浴テラス利用'],
+            image: 'url("../assets/images/onsen/onsen-06.jpg")',
+            features: ['ロウリュサウナ', '外気浴テラス', '水風呂'],
+            facilities: ['サウナ', '水風呂', '外気浴テラス']
+        },
+        'daytrip-private': {
+            title: '貸切風呂「灯」プラン',
+            text: '信楽焼の貸切風呂で静かな時間を。雪見障子越しの景色をご堪能ください。',
+            amenity: '貸切風呂付',
+            badges: ['日帰り', '限定'],
+            meta: ['利用時間 11:00～15:00', '事前予約必須'],
+            image: 'url("../assets/images/onsen/onsen-03.jpg")',
+            features: ['信楽焼貸切風呂', '雪見障子', 'プライベート空間'],
+            facilities: ['貸切風呂', '湯上がり処']
+        }
+    };
+
+    // 数据库读取结果填充到这几个变量里,取代原来的硬编码常量。
+    let extraOptions = {};
+    let planDetailsByRoom = {};
+    let daytripPlans = [];
+    let plansByCode = new Map();
+
+    // 从 plans / plan_extras / plan_available_extras 三张表读取商品目录。
+    // 这三张表的 RLS 只对 anon 开放 SELECT(见 0002_rls_policies.sql),
+    // 用 anon key 直接查询是安全的。
+    const loadCatalog = async () => {
+        const [plansRes, extrasRes, mappingRes] = await Promise.all([
+            supabase.from('plans').select('*').eq('is_active', true).order('sort_order'),
+            supabase.from('plan_extras').select('*'),
+            supabase.from('plan_available_extras').select('plan_id, extra_id')
+        ]);
+
+        if (plansRes.error || extrasRes.error || mappingRes.error) {
+            console.error('[reserve] 商品目录読み込み失敗', plansRes.error || extrasRes.error || mappingRes.error);
+            return false;
+        }
+
+        const extrasById = new Map();
+        extraOptions = {};
+        (extrasRes.data || []).forEach((row) => {
+            extraOptions[row.code] = {
+                label: row.name_ja,
+                price: row.price,
+                per: row.charge_unit,
+                perNight: row.per_night
+            };
+            extrasById.set(row.id, row.code);
+        });
+
+        const extrasByPlanId = new Map();
+        (mappingRes.data || []).forEach((row) => {
+            const code = extrasById.get(row.extra_id);
+            if (!code) {
+                return;
+            }
+            if (!extrasByPlanId.has(row.plan_id)) {
+                extrasByPlanId.set(row.plan_id, []);
+            }
+            extrasByPlanId.get(row.plan_id).push(code);
+        });
+
+        plansByCode = new Map();
+        planDetailsByRoom = {};
+        const daytripRows = [];
+
+        (plansRes.data || []).forEach((row) => {
+            plansByCode.set(row.code, row);
+            const availableExtras = extrasByPlanId.get(row.id) || [];
+
+            if (row.plan_type === 'room') {
+                const staticContent = PLAN_STATIC_CONTENT[row.code] || { features: [], facilities: [] };
+                planDetailsByRoom[row.code] = {
+                    dbId: row.id,
+                    capacity: row.capacity,
+                    baseGuests: row.base_guests,
+                    extraGuestRate: row.extra_guest_rate,
+                    unitLabel: row.unit_label,
+                    pricingModel: 'stay',
+                    price: row.base_price,
+                    extras: availableExtras,
+                    features: staticContent.features || [],
+                    facilities: staticContent.facilities || []
+                };
+            } else {
+                const staticContent = DAYTRIP_STATIC_CONTENT[row.code] || {};
+                daytripRows.push({
+                    id: row.code,
+                    dbId: row.id,
+                    title: staticContent.title || row.name_ja,
+                    text: staticContent.text || '',
+                    amenity: staticContent.amenity || '',
+                    price: row.base_price,
+                    roomType: 'none',
+                    badges: staticContent.badges || [],
+                    meta: staticContent.meta || [],
+                    image: staticContent.image || '',
+                    capacity: row.capacity,
+                    baseGuests: row.base_guests,
+                    extraGuestRate: row.extra_guest_rate,
+                    unitLabel: row.unit_label,
+                    pricingModel: 'daytrip',
+                    extras: availableExtras,
+                    features: staticContent.features || [],
+                    facilities: staticContent.facilities || [],
+                    sortOrder: row.sort_order || 0
+                });
+            }
+        });
+
+        daytripRows.sort((a, b) => a.sortOrder - b.sortOrder);
+        daytripPlans = daytripRows;
+        return true;
+    };
+
     const startOfMonth = (date) => new Date(date.getFullYear(), date.getMonth(), 1);
     const isSameDay = (a, b) => a && b && a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
     const formatDate = (date) => {
@@ -138,13 +265,58 @@
 
     const formatCurrency = (value) => (Number.isFinite(value) ? `¥${value.toLocaleString('ja-JP')}` : '--');
 
-    const availabilityForDate = (date) => {
-        const seed = date.getFullYear() + date.getMonth() * 31 + date.getDate();
-        const mod = seed % 7;
-        if (mod === 0 || mod === 1) {
+    // ---------- 房态查询:调用 get_availability() RPC,替换原来的伪随机算法 ----------
+    // 简单内存缓存,key 为 `${planId}:${日期}`,避免同一个月里来回翻页/切换
+    // 筛选条件时重复请求同一个日期。
+    const availabilityCache = new Map();
+
+    const fetchAvailability = async (planDbId, date) => {
+        if (!planDbId) {
+            return null;
+        }
+        const key = `${planDbId}:${formatDateInput(date)}`;
+        if (availabilityCache.has(key)) {
+            return availabilityCache.get(key);
+        }
+        const { data, error } = await supabase.rpc('get_availability', {
+            p_plan_id: planDbId,
+            p_date: formatDateInput(date)
+        });
+        const value = error ? null : (typeof data === 'number' ? data : null);
+        if (error) {
+            console.error('[reserve] get_availability 呼び出し失敗', error);
+        }
+        availabilityCache.set(key, value);
+        return value;
+    };
+
+    // 汇总"当前模式(住宿/日帰り) + 当前房型筛选"下相关 plan 在某天的总剩余量,
+    // 换算成日历要用的 available/limited/unavailable 三档展示。
+    const computeDateStatus = async (date) => {
+        const daytripMode = isDaytrip();
+        const relevantPlans = daytripMode ? daytripPlans : Object.keys(planDetailsByRoom).map((code) => ({
+            roomType: code,
+            dbId: planDetailsByRoom[code].dbId
+        }));
+        const roomFilter = roomSelect ? roomSelect.value : '';
+        const filtered = (!daytripMode && roomFilter && roomFilter !== 'all' && roomFilter !== 'none')
+            ? relevantPlans.filter((plan) => plan.roomType === roomFilter)
+            : relevantPlans;
+        const targets = filtered.length ? filtered : relevantPlans;
+
+        const results = await Promise.all(targets.map((plan) => fetchAvailability(plan.dbId, date)));
+        const validResults = results.filter((value) => typeof value === 'number');
+        if (!validResults.length) {
+            // 查询失败(网络问题等)时保守展示为"可选",不因为前端查询故障就
+            // 把日期误标成满房劝退用户 —— 真正的库存校验在提交时由后端
+            // submit_reservation() 再做一次,不会因为这里的展示问题导致超卖。
+            return 'available';
+        }
+        const total = validResults.reduce((sum, value) => sum + Math.max(0, value), 0);
+        if (total <= 0) {
             return 'unavailable';
         }
-        if (mod === 2) {
+        if (total <= 2) {
             return 'limited';
         }
         return 'available';
@@ -173,72 +345,13 @@
         };
     };
 
-    const defaultPlans = planCards.map(getPlanDataFromCard).map((plan) => ({
+    let defaultPlans = [];
+    let currentPlans = [];
+
+    const buildDefaultPlans = () => planCards.map(getPlanDataFromCard).map((plan) => ({
         ...plan,
-        ...planDetailsByRoom[plan.roomType]
+        ...(planDetailsByRoom[plan.roomType] || {})
     }));
-
-    const daytripPlans = [
-        {
-            id: 'daytrip-relax',
-            title: '日帰り温泉「雪灯り」プラン',
-            text: '雪見露天と檜の大浴場で湯けむりを満喫。湯上がり処で静かな時間をお過ごしください。',
-            amenity: '温泉利用付',
-            price: 4800,
-            roomType: 'none',
-            badges: ['日帰り', '人気'],
-            meta: ['利用時間 10:00～15:00', 'タオル付 / 湯上がり処利用可'],
-            image: 'url("../assets/images/onsen/onsen-01.jpg")',
-            capacity: 6,
-            baseGuests: 1,
-            extraGuestRate: 0,
-            unitLabel: '1名 / 日帰り',
-            pricingModel: 'daytrip',
-            extras: ['daytripAllAccess', 'daytripMealUpgrade'],
-            features: ['雪見露天風呂', '檜の大浴場', '湯上がり処'],
-            facilities: ['露天風呂', '大浴場', '湯上がり処']
-        },
-        {
-            id: 'daytrip-sauna',
-            title: 'サウナ集中「ととのい」プラン',
-            text: 'ロウリュサウナと水風呂でリフレッシュ。外気浴テラスで深くととのいます。',
-            amenity: 'サウナ利用付',
-            price: 5400,
-            roomType: 'none',
-            badges: ['日帰り', 'サウナ'],
-            meta: ['利用時間 10:00～14:00', '外気浴テラス利用'],
-            image: 'url("../assets/images/onsen/onsen-06.jpg")',
-            capacity: 6,
-            baseGuests: 1,
-            extraGuestRate: 0,
-            unitLabel: '1名 / 日帰り',
-            pricingModel: 'daytrip',
-            extras: ['daytripAllAccess', 'daytripMealUpgrade'],
-            features: ['ロウリュサウナ', '外気浴テラス', '水風呂'],
-            facilities: ['サウナ', '水風呂', '外気浴テラス']
-        },
-        {
-            id: 'daytrip-private',
-            title: '貸切風呂「灯」プラン',
-            text: '信楽焼の貸切風呂で静かな時間を。雪見障子越しの景色をご堪能ください。',
-            amenity: '貸切風呂付',
-            price: 7200,
-            roomType: 'none',
-            badges: ['日帰り', '限定'],
-            meta: ['利用時間 11:00～15:00', '事前予約必須'],
-            image: 'url("../assets/images/onsen/onsen-03.jpg")',
-            capacity: 4,
-            baseGuests: 1,
-            extraGuestRate: 0,
-            unitLabel: '1名 / 日帰り',
-            pricingModel: 'daytrip',
-            extras: ['daytripAllAccess', 'daytripMealUpgrade'],
-            features: ['信楽焼貸切風呂', '雪見障子', 'プライベート空間'],
-            facilities: ['貸切風呂', '湯上がり処']
-        }
-    ];
-
-    let currentPlans = defaultPlans;
 
     const allocateGuests = (totalGuests, roomCount) => {
         const base = Math.floor(totalGuests / roomCount);
@@ -277,6 +390,9 @@
         return Math.max(1, Math.ceil(guests / capacity));
     };
 
+    // 前端即时计价:只用于选房阶段的展示反馈,不是最终成交价。
+    // 真正入账的价格由后端 submit_reservation()(SECURITY DEFINER)按数据库
+    // 当前价格重新计算,前端这份计算结果即使被人在控制台里改掉也不影响实际扣款。
     const computePlanTotals = (plan, options) => {
         const guests = Math.max(1, options.guests || 1);
         const roomCount = Math.max(1, options.roomCount || 1);
@@ -312,10 +428,8 @@
         });
 
         if (plan.pricingModel === 'daytrip') {
-            const planAddonMap = { relax: 0, sauna: 400, private: 900 };
-            const mealAddonMap = { none: 0, light: 400, lunch: 900 };
-            const planAddon = planAddonMap[daytripOptionsValue.plan] || 0;
-            const mealAddon = mealAddonMap[daytripOptionsValue.meal] || 0;
+            const planAddon = DAYTRIP_PLAN_ADDON[daytripOptionsValue.plan] || 0;
+            const mealAddon = DAYTRIP_MEAL_ADDON[daytripOptionsValue.meal] || 0;
             addOns += (planAddon + mealAddon) * guests;
         }
 
@@ -605,6 +719,30 @@
         applySearch();
     };
 
+    // 日历网格的日期可用性(available/limited/unavailable)现在来自数据库真实
+    // 库存,而不是伪随机数。为了不阻塞翻页/切换筛选的即时反馈,renderCalendar()
+    // 先同步画出格子(默认给一个乐观的 is-available 初始状态),再用
+    // refreshVisibleAvailability() 异步把真实结果补上去。
+    let availabilityRequestToken = 0;
+
+    const refreshVisibleAvailability = async () => {
+        const token = (availabilityRequestToken += 1);
+        const buttons = Array.from(calendarGrid.querySelectorAll('button[data-date]'));
+        await Promise.all(buttons.map(async (button) => {
+            const date = parseDate(button.dataset.date);
+            if (!date) {
+                return;
+            }
+            const status = await computeDateStatus(date);
+            if (token !== availabilityRequestToken || !button.isConnected) {
+                // 用户已经翻页/切换了筛选条件,这批结果已经过期,丢弃不应用
+                return;
+            }
+            button.classList.remove('is-available', 'is-limited', 'is-unavailable');
+            button.classList.add(`is-${status}`);
+        }));
+    };
+
     const renderCalendar = () => {
         const year = currentMonth.getFullYear();
         const month = currentMonth.getMonth();
@@ -642,8 +780,8 @@
                     button.classList.add('is-disabled');
                     button.disabled = true;
                 } else {
-                    const availability = availabilityForDate(cellDate);
-                    button.classList.add(`is-${availability}`);
+                    // 初始给乐观的 is-available,真实状态由 refreshVisibleAvailability() 异步补上
+                    button.classList.add('is-available');
                     button.dataset.date = formatDate(cellDate);
                 }
             }
@@ -656,6 +794,8 @@
 
             calendarGrid.appendChild(button);
         }
+
+        refreshVisibleAvailability();
     };
 
     const moveMonth = (direction) => {
@@ -801,7 +941,10 @@
     }
 
     if (roomSelect) {
-        roomSelect.addEventListener('change', applySearch);
+        roomSelect.addEventListener('change', () => {
+            applySearch();
+            renderCalendar();
+        });
     }
 
     const searchForm = document.querySelector('.reserve-search__form');
@@ -828,6 +971,10 @@
     }
     let cart = [];
 
+    // 购物车里存的是"用户临时选择状态"(选了哪个 plan、日期、人数、勾了哪些
+    // 追加项),不含任何个人身份信息或价格承诺,继续用 sessionStorage 暂存没有
+    // 安全问题——真正会写入数据库的顾客信息在 booking_info.html 才收集,
+    // 且直接提交给后端,不落 localStorage。
     const saveCart = () => {
         sessionStorage.setItem('reservationCart', JSON.stringify(cart));
     };
@@ -854,6 +1001,27 @@
         cartNote.textContent = message || '';
     };
 
+    // 价格免责声明:提醒这里看到的都是即时展示用的估算价,不是最终成交价。
+    const insertDisclaimer = (afterEl, text) => {
+        if (!afterEl || !afterEl.parentElement) {
+            return;
+        }
+        if (afterEl.parentElement.querySelector('[data-price-disclaimer]')) {
+            return;
+        }
+        const p = document.createElement('p');
+        p.dataset.priceDisclaimer = '';
+        p.style.cssText = 'margin-top:6px;font-size:0.78em;opacity:0.7;line-height:1.5;';
+        p.textContent = text;
+        afterEl.parentElement.appendChild(p);
+    };
+
+    const cartSummaryEl = document.querySelector('.reserve-cart__summary');
+    insertDisclaimer(cartSummaryEl, '※表示価格は目安です。実際のご請求額はご予約確定時にサーバー側で再計算されます。');
+    if (planModalPrice) {
+        insertDisclaimer(planModalPrice, '※上記は目安価格です。最終価格はご予約確定時に再計算されます。');
+    }
+
     const normalizeExtras = (plan, extras) => {
         const result = {};
         (plan.extras || []).forEach((extraId) => {
@@ -875,6 +1043,7 @@
         return {
             id: `${plan.id}-${Date.now()}-${Math.random().toString(16).slice(2, 6)}`,
             planId: plan.id,
+            planDbId: plan.dbId || null, // 真正提交预约时用的数据库 UUID
             title: plan.title,
             amenity: plan.amenity,
             roomType: plan.roomType,
@@ -1129,6 +1298,7 @@
             existing.checkin = updated.checkin;
             existing.checkout = updated.checkout;
             existing.nights = updated.nights;
+            existing.planDbId = updated.planDbId;
             showCartNote('同じプランを更新しました。');
         } else {
             cart.push(buildCartItem(plan, extras));
@@ -1341,12 +1511,27 @@
         checkoutInput.max = maxDateInput;
     }
 
-    toggleOptions();
-    setSelectionMode('checkin');
-    renderCalendar();
-    updateCheckoutBounds();
-    updateSummary();
-    applySearch();
-    loadCart();
-    renderCart();
+    // ---------- 启动流程:先从数据库加载商品目录,再进行原有的初始化 ----------
+    const init = async () => {
+        const ok = await loadCatalog();
+        if (!ok) {
+            if (resultsSummary) {
+                resultsSummary.textContent = 'プラン情報の取得に失敗しました。しばらくしてから再度お試しください。';
+            }
+            return;
+        }
+        defaultPlans = buildDefaultPlans();
+        currentPlans = defaultPlans;
+
+        toggleOptions();
+        setSelectionMode('checkin');
+        renderCalendar();
+        updateCheckoutBounds();
+        updateSummary();
+        applySearch();
+        loadCart();
+        renderCart();
+    };
+
+    init();
 })();

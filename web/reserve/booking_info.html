@@ -114,11 +114,12 @@
                         <p class="booking-info__value" data-plan-guests>--</p>
                         <p class="booking-info__label" data-i18n="reserve.info.label.rooms">客室数</p>
                         <p class="booking-info__value" data-plan-rooms>--</p>
-                        <p class="booking-info__label" data-i18n="reserve.info.label.total">合計</p>
+                        <p class="booking-info__label" data-i18n="reserve.info.label.total">合計（目安）</p>
                         <p class="booking-info__value booking-info__value--total" data-plan-total>--</p>
-                        <p class="booking-info__label" data-i18n="reserve.info.label.payment">支払い状況</p>
-                        <p class="booking-info__value" data-plan-payment data-i18n="reserve.complete.payment.unpaid">未決済</p>
+                        <p class="booking-info__label" data-i18n="reserve.info.field.payment">お支払い方法</p>
+                        <p class="booking-info__value" data-plan-payment>--</p>
                     </div>
+                    <p class="booking-info__hint" data-price-disclaimer style="opacity:0.7;">※表示価格は目安です。実際のご請求額はご予約確定時にサーバー側で再計算されます。</p>
                     <div class="booking-info__breakdown" data-breakdown>
                         <div class="booking-info__breakdown-row">
                             <span data-i18n="reserve.info.breakdown.base">基本料金</span>
@@ -149,7 +150,7 @@
                     <a class="booking-info__back" href="reserve.html" data-nav="reserve" data-i18n="reserve.info.back">条件検索に戻る</a>
                 </aside>
 
-                <form class="booking-info__form" action="#" method="post" data-booking-form>
+                <form class="booking-info__form" data-booking-form>
                     <div class="booking-info__group">
                         <label class="booking-info__label" for="name"><span data-i18n="reserve.info.field.name">お名前</span><span class="booking-info__required" data-i18n="reserve.required">必須</span></label>
                         <input class="booking-info__input" type="text" id="name" name="name" required>
@@ -202,30 +203,15 @@
                         <label class="booking-info__label" data-i18n="reserve.info.field.payment">お支払い方法</label>
                         <div class="booking-info__radios">
                             <label class="booking-info__radio">
-                                <input type="radio" name="payment" value="card" checked>
-                                <span data-i18n="reserve.info.payment.card">クレジットカード</span>
-                            </label>
-                            <label class="booking-info__radio">
-                                <input type="radio" name="payment" value="onsite">
+                                <input type="radio" name="payment" value="onsite" checked>
                                 <span data-i18n="reserve.info.payment.onsite">現地決済</span>
                             </label>
+                            <label class="booking-info__radio">
+                                <input type="radio" name="payment" value="bank_transfer">
+                                <span data-i18n="reserve.info.payment.bankTransfer">銀行振込</span>
+                            </label>
                         </div>
-                    </div>
-                    <div class="booking-info__group booking-info__group--full" data-card-section>
-                        <label class="booking-info__label" data-i18n="reserve.info.card.title">クレジットカード情報</label>
-                        <div class="booking-info__card-grid">
-                            <input class="booking-info__input" type="text" name="card_name" placeholder="名義（TARO YUKIAKARI）" data-i18n-placeholder="reserve.info.card.name">
-                            <input class="booking-info__input" type="text" name="card_number" placeholder="カード番号（1234 5678 9012 3456）" data-i18n-placeholder="reserve.info.card.number">
-                            <input class="booking-info__input" type="text" name="card_expiry" placeholder="有効期限（MM/YY）" data-i18n-placeholder="reserve.info.card.expiry">
-                            <input class="booking-info__input" type="text" name="card_cvc" placeholder="CVC" data-i18n-placeholder="reserve.info.card.cvc">
-                        </div>
-                    </div>
-                    <div class="booking-info__group booking-info__group--full">
-                        <label class="booking-info__checkbox">
-                            <input type="checkbox" id="payment-complete">
-                            <span data-i18n="reserve.info.payment.complete">支払いを完了する</span>
-                        </label>
-                        <p class="booking-info__payment-status"><span data-i18n="reserve.complete.paymentLabel">支払い状況</span>: <span data-payment-status data-i18n="reserve.complete.payment.unpaid">未決済</span></p>
+                        <p class="booking-info__hint" data-i18n="reserve.info.payment.note">オンライン決済は現在ご利用いただけません。お支払いはチェックイン時に現地にて、または事前の銀行振込にてお願いいたします。</p>
                     </div>
                     <div class="booking-info__group booking-info__group--full">
                         <label class="booking-info__checkbox">
@@ -285,6 +271,10 @@
 <script src="../assets/js/i18n-extra-policy.js"></script>
 <script src="../assets/js/i18n-extra-rooms.js"></script>
     <script src="../assets/js/script.js"></script>
+    <!-- Supabase 接入:引入顺序固定,config.js → supabase-js CDN → supabase-client.js → 页面脚本 -->
+    <script src="../config.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+    <script src="../assets/js/supabase-client.js"></script>
     <script src="booking_info.js"></script>
 
     </body>

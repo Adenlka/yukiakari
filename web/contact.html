@@ -96,7 +96,7 @@
                 <span class="contact-section__rule" aria-hidden="true"></span>
                 <p class="contact-section__text" data-i18n-html="contact.lead">ご宿泊に関するご質問・ご要望など、お気軽にお問い合わせください。<br>以下のフォームに必要事項をご入力の上、送信ボタンを押してください。<br>※「必須」の項目は必ずご入力をお願いいたします。</p>
 
-                <form class="contact-form" action="#" method="post" data-contact-form novalidate>
+                <form class="contact-form" data-contact-form novalidate>
                     <div class="contact-form__field">
                         <label class="contact-form__label" for="name"><span data-i18n="contact.field.name">お名前</span><span class="contact-form__required" data-i18n="form.required">必須</span></label>
                         <input class="contact-form__input" type="text" id="name" name="name" placeholder="例）雪灯　太郎" data-i18n-placeholder="contact.placeholder.name" required>
@@ -131,6 +131,7 @@
                         </label>
                     </div>
 
+                    <p class="contact-form__feedback" data-contact-feedback role="status" aria-live="polite"></p>
                     <button class="contact-submit" type="submit" data-submit disabled data-i18n="contact.submit">入力内容を確認する</button>
                 </form>
             </div>
@@ -187,6 +188,10 @@
 <script src="assets/js/i18n-extra-policy.js"></script>
 <script src="assets/js/i18n-extra-rooms.js"></script>
     <script src="assets/js/script.js"></script>
+    <!-- Supabase 接入:引入顺序固定,config.js → supabase-js CDN → supabase-client.js → 页面脚本 -->
+    <script src="config.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+    <script src="assets/js/supabase-client.js"></script>
     <script src="assets/js/contact.js"></script>
 
     </body>

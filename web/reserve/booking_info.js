@@ -1,5 +1,7 @@
-﻿
+
 (() => {
+    const supabase = window.supabaseClient;
+
     const draftRaw = sessionStorage.getItem('reservationDraft');
     let draft = null;
     if (draftRaw) {
@@ -65,11 +67,8 @@
     const roomListEl = document.querySelector('[data-room-list]');
     const roomSummaryEl = document.querySelector('[data-room-summary]');
 
-    const paymentCheckbox = document.querySelector('#payment-complete');
-    const paymentStatusText = document.querySelector('[data-payment-status]');
     const summaryPaymentText = document.querySelector('[data-plan-payment]');
     const paymentMethodRadios = document.querySelectorAll('input[name="payment"]');
-    const cardSection = document.querySelector('[data-card-section]');
 
     const summaryEls = {
         title: document.querySelector('[data-plan-title]'),
@@ -90,18 +89,17 @@
         total: document.querySelector('[data-breakdown-total]')
     };
 
-    const draftKey = 'bookingDraft';
     const SERVICE_RATE = 0.1;
     const TAX_RATE = 0.1;
 
-    const extraOptions = {
-        dinnerUpgrade: { label: '夕朝食アップグレード', price: 2000, per: 'guest', perNight: true },
-        loungeAccess: { label: '雪見ラウンジ利用', price: 500, per: 'guest', perNight: false },
-        privateBath: { label: '貸切風呂', price: 1600, per: 'room', perNight: true },
-        lateCheckout: { label: 'レイトチェックアウト', price: 900, per: 'room', perNight: false },
-        daytripAllAccess: { label: '館内オールアクセス', price: 500, per: 'guest', perNight: false },
-        daytripMealUpgrade: { label: '季節の昼食追加', price: 1000, per: 'guest', perNight: false }
+    const PAYMENT_METHOD_LABELS = {
+        onsite: '現地決済',
+        bank_transfer: '銀行振込'
     };
+
+    // 追加选项价格用来做前端即时展示估算,从数据库 plan_extras 读取(不再硬编码),
+    // 真正入账价格由后端 submit_reservation() 重新计算。
+    let extraOptions = {};
 
     const normalizePhone = (value) => (value || '').replace(/\D/g, '');
 
@@ -195,6 +193,8 @@
         });
 
         if (plan.pricingModel === 'daytrip') {
+            // 日帰り子选项(风呂プラン/お食事)的附加费,和 reserve.js /
+            // 后端 submit_reservation() 保持同一份对照表,详见 reserve.js 注释。
             const planAddonMap = { relax: 0, sauna: 400, private: 900 };
             const mealAddonMap = { none: 0, light: 400, lunch: 900 };
             const planAddon = planAddonMap[daytripOptionsValue.plan] || 0;
@@ -212,6 +212,7 @@
             rooms.push({
                 cartIndex: item.cartIndex,
                 planId: item.planId,
+                planDbId: item.planDbId || null,
                 planTitle: item.title,
                 planAmenity: item.amenity,
                 roomType: item.roomType,
@@ -334,7 +335,6 @@
                     note: noteInput.value.trim()
                 };
                 updateSummary();
-                saveDraft();
             };
 
             guestsSelect.addEventListener('change', updateRoom);
@@ -369,24 +369,17 @@
         const tax = Math.round((subtotal + service) * TAX_RATE);
         const total = subtotal + service + tax;
 
-        return {
-            base,
-            addOns,
-            subtotal,
-            service,
-            tax,
-            total
-        };
+        return { base, addOns, subtotal, service, tax, total };
     };
 
-    const updatePaymentStatus = () => {
-        const paid = paymentCheckbox && paymentCheckbox.checked;
-        const statusText = paid ? '支払い済み' : '未決済';
-        if (paymentStatusText) {
-            paymentStatusText.textContent = statusText;
-        }
+    const getSelectedPaymentMethod = () => (
+        Array.from(paymentMethodRadios).find((radio) => radio.checked)?.value || 'onsite'
+    );
+
+    const updatePaymentSummary = () => {
+        const label = PAYMENT_METHOD_LABELS[getSelectedPaymentMethod()] || '--';
         if (summaryPaymentText) {
-            summaryPaymentText.textContent = statusText;
+            summaryPaymentText.textContent = label;
         }
     };
 
@@ -425,106 +418,16 @@
         }
 
         updateRoomSummary();
-        updatePaymentStatus();
+        updatePaymentSummary();
     };
 
-    const saveDraft = () => {
-        const draftData = {
-            name: nameInput ? nameInput.value : '',
-            kana: kanaInput ? kanaInput.value : '',
-            email: emailInput ? emailInput.value : '',
-            tel: telInput ? telInput.value : '',
-            address: addressInput ? addressInput.value : '',
-            arrival: arrivalSelect ? arrivalSelect.value : '',
-            requests: requestsInput ? requestsInput.value : '',
-            roomCount: roomCountSelect ? roomCountSelect.value : '1',
-            rooms: roomState,
-            paymentMethod: Array.from(paymentMethodRadios).find((radio) => radio.checked)?.value || 'card',
-            paymentComplete: paymentCheckbox ? paymentCheckbox.checked : false,
-            cardName: form ? form.querySelector('[name="card_name"]')?.value : '',
-            cardNumber: form ? form.querySelector('[name="card_number"]')?.value : '',
-            cardExpiry: form ? form.querySelector('[name="card_expiry"]')?.value : '',
-            cardCvc: form ? form.querySelector('[name="card_cvc"]')?.value : ''
-        };
-        localStorage.setItem(draftKey, JSON.stringify(draftData));
-    };
+    // 【安全/隐私】这个页面收集的都是顾客个人信息(姓名/邮箱/电话/住所等),
+    // 不再像旧版那样自动存进 localStorage 做"草稿恢复"—— 哪怕去掉了信用卡
+    // 字段,姓名/邮箱/电话/住所本身也是需要最小化收集的个人数据(需求文档
+    // 第五节 GDPR 提醒),没必要为了"刷新页面不丢草稿"这种小的体验优化,
+    // 把这些信息以明文长期留在用户浏览器本地存储里。
 
-    const restoreDraft = () => {
-        const raw = localStorage.getItem(draftKey);
-        if (!raw) {
-            return;
-        }
-        try {
-            const stored = JSON.parse(raw);
-            if (nameInput && stored.name !== undefined) {
-                nameInput.value = stored.name;
-            }
-            if (kanaInput && stored.kana !== undefined) {
-                kanaInput.value = stored.kana;
-            }
-            if (emailInput && stored.email !== undefined) {
-                emailInput.value = stored.email;
-            }
-            if (telInput && stored.tel !== undefined) {
-                telInput.value = stored.tel;
-            }
-            if (addressInput && stored.address !== undefined) {
-                addressInput.value = stored.address;
-            }
-            if (arrivalSelect && stored.arrival) {
-                arrivalSelect.value = stored.arrival;
-            }
-            if (requestsInput && stored.requests !== undefined) {
-                requestsInput.value = stored.requests;
-            }
-            if (roomCountSelect && stored.roomCount) {
-                roomCountSelect.value = stored.roomCount;
-            }
-            if (Array.isArray(stored.rooms) && stored.rooms.length) {
-                roomState = roomState.map((room, index) => ({
-                    ...room,
-                    guests: parseInt(stored.rooms[index]?.guests, 10) || room.guests,
-                    note: stored.rooms[index]?.note || room.note
-                }));
-            }
-            if (paymentMethodRadios.length && stored.paymentMethod) {
-                paymentMethodRadios.forEach((radio) => {
-                    radio.checked = radio.value === stored.paymentMethod;
-                });
-            }
-            if (paymentCheckbox && stored.paymentComplete) {
-                paymentCheckbox.checked = Boolean(stored.paymentComplete);
-            }
-            if (form) {
-                const cardName = form.querySelector('[name="card_name"]');
-                const cardNumber = form.querySelector('[name="card_number"]');
-                const cardExpiry = form.querySelector('[name="card_expiry"]');
-                const cardCvc = form.querySelector('[name="card_cvc"]');
-                if (cardName && stored.cardName !== undefined) {
-                    cardName.value = stored.cardName;
-                }
-                if (cardNumber && stored.cardNumber !== undefined) {
-                    cardNumber.value = stored.cardNumber;
-                }
-                if (cardExpiry && stored.cardExpiry !== undefined) {
-                    cardExpiry.value = stored.cardExpiry;
-                }
-                if (cardCvc && stored.cardCvc !== undefined) {
-                    cardCvc.value = stored.cardCvc;
-                }
-            }
-        } catch (error) {
-            return;
-        }
-    };
-    const updateCardVisibility = () => {
-        if (!cardSection || !paymentMethodRadios.length) {
-            return;
-        }
-        const selected = Array.from(paymentMethodRadios).find((radio) => radio.checked);
-        const isCard = selected ? selected.value === 'card' : true;
-        cardSection.style.display = isCard ? '' : 'none';
-    };
+    const updateCardVisibility = () => {}; // 已移除信用卡区块,保留空函数避免遗漏调用处报错
 
     const showError = (field, message) => {
         if (!field) {
@@ -580,15 +483,15 @@
         return true;
     };
 
+    // 前端校验只是体验优化(尽早提示格式问题),不是安全边界——真正的输入
+    // 校验/转义在后端 submit_reservation() 数据库函数里做,即使有人绕过这里
+    // 直接调用 Edge Function,后端校验依然会挡下不合法的数据。
     const attachValidation = (field) => {
         if (!field) {
             return;
         }
         field.addEventListener('blur', () => validateField(field));
-        field.addEventListener('input', () => {
-            validateField(field);
-            saveDraft();
-        });
+        field.addEventListener('input', () => validateField(field));
     };
 
     const updateSubmitState = () => {
@@ -624,23 +527,12 @@
                 buildRoomState();
                 renderRooms();
                 updateSummary();
-                saveDraft();
             });
         }
     }
 
-    if (paymentCheckbox) {
-        paymentCheckbox.addEventListener('change', () => {
-            updatePaymentStatus();
-            saveDraft();
-        });
-    }
-
     paymentMethodRadios.forEach((radio) => {
-        radio.addEventListener('change', () => {
-            updateCardVisibility();
-            saveDraft();
-        });
+        radio.addEventListener('change', updatePaymentSummary);
     });
 
     if (agree) {
@@ -650,41 +542,104 @@
 
     [nameInput, kanaInput, emailInput, telInput].forEach(attachValidation);
 
-    if (addressInput) {
-        addressInput.addEventListener('input', saveDraft);
-    }
-    if (arrivalSelect) {
-        arrivalSelect.addEventListener('change', saveDraft);
-    }
-    if (requestsInput) {
-        requestsInput.addEventListener('input', saveDraft);
-    }
-    if (form) {
-        form.querySelectorAll('[name^="card_"]').forEach((input) => {
-            input.addEventListener('input', saveDraft);
-        });
-    }
-
-    restoreDraft();
     updateCardVisibility();
     renderRooms();
-    updateSummary();
 
-    const generateCode = (records) => {
-        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-        let code = '';
-        do {
-            code = '';
-            for (let i = 0; i < 16; i += 1) {
-                code += chars[Math.floor(Math.random() * chars.length)];
+    // ---------- 提交错误提示区(替代原来的 alert) ----------
+    let submitErrorEl = null;
+    const showSubmitError = (message) => {
+        if (!form) {
+            return;
+        }
+        if (!submitErrorEl) {
+            submitErrorEl = document.createElement('p');
+            submitErrorEl.className = 'booking-info__error';
+            submitErrorEl.style.cssText = 'margin-top:12px;font-weight:600;';
+            submit.insertAdjacentElement('beforebegin', submitErrorEl);
+        }
+        submitErrorEl.textContent = message;
+        submitErrorEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    };
+    const clearSubmitError = () => {
+        if (submitErrorEl) {
+            submitErrorEl.textContent = '';
+        }
+    };
+
+    // ---------- 组装提交给 submit-reservation Edge Function 的请求体 ----------
+    const buildSubmissionPayload = () => {
+        const items = cartItems.map((item, index) => {
+            const rooms = roomState.filter((room) => room.cartIndex === index);
+            const totalGuests = rooms.reduce((sum, room) => sum + (room.guests || 1), 0) || item.guests || 1;
+            const roomCount = rooms.length || item.roomCount || 1;
+            const extraCodes = Object.entries(item.selectedExtras || {})
+                .filter(([, checked]) => checked)
+                .map(([code]) => code);
+
+            const toIsoDate = (value) => (value ? value.replace(/\//g, '-') : '');
+            const checkin = toIsoDate(item.checkin || draft?.checkin || '');
+            const checkoutRaw = item.checkout || draft?.checkout || item.checkin || draft?.checkin || '';
+            const checkout = toIsoDate(checkoutRaw);
+
+            return {
+                plan_id: item.planDbId,
+                checkin_date: checkin,
+                checkout_date: item.pricingModel === 'daytrip' ? checkin : checkout,
+                guests: totalGuests,
+                room_count: roomCount,
+                extra_codes: extraCodes,
+                daytrip_options: item.pricingModel === 'daytrip' ? (item.daytripOptions || {}) : null
+            };
+        });
+
+        // 各客室的个别备注(在客室ごとの内容里填写),schema 没有为每个房间
+        // 单独建备注字段,合并进整单的 special_requests 一起提交。
+        const roomNotes = roomState
+            .filter((room) => room.note)
+            .map((room, index) => `客室${index + 1}: ${room.note}`)
+            .join(' / ');
+        const requestsValue = requestsInput ? requestsInput.value.trim() : '';
+        const combinedRequests = [requestsValue, roomNotes].filter(Boolean).join(' | ');
+
+        return {
+            guest_name: nameInput ? nameInput.value.trim() : '',
+            guest_kana: kanaInput ? kanaInput.value.trim() : '',
+            guest_email: emailInput ? emailInput.value.trim() : '',
+            guest_phone: telInput ? telInput.value.trim() : '',
+            guest_address: addressInput ? addressInput.value.trim() : null,
+            arrival_time: arrivalSelect ? arrivalSelect.value : null,
+            special_requests: combinedRequests || null,
+            payment_method: getSelectedPaymentMethod(),
+            locale: document.documentElement.lang || 'ja',
+            items
+        };
+    };
+
+    // supabase.functions.invoke 返回 { data, error };出错时 error.context 是
+    // 原始 Response,里面是我们 Edge Function 自己写的、不含内部细节的中文提示。
+    const extractErrorMessage = async (error) => {
+        const fallback = '予約の送信に失敗しました。しばらくしてから再度お試しください。';
+        if (!error) {
+            return fallback;
+        }
+        try {
+            if (error.context && typeof error.context.json === 'function') {
+                const body = await error.context.json();
+                if (body && body.error) {
+                    return body.error;
+                }
             }
-        } while (records && records[code]);
-        return code;
+        } catch (parseError) {
+            // 解析失败就用兜底提示,不把解析异常细节展示给用户
+        }
+        return fallback;
     };
 
     if (form && submit) {
-        form.addEventListener('submit', (event) => {
+        form.addEventListener('submit', async (event) => {
             event.preventDefault();
+            clearSubmitError();
+
             const valid = [nameInput, kanaInput, emailInput, telInput].every(validateField);
             if (!valid) {
                 const firstInvalid = form.querySelector('.is-invalid');
@@ -694,48 +649,66 @@
             if (agree && !agree.checked) {
                 return;
             }
-            const phone = normalizePhone(telInput ? telInput.value : '');
-            const recordsRaw = localStorage.getItem('reservationRecords');
-            let records = {};
-            if (recordsRaw) {
-                try {
-                    records = JSON.parse(recordsRaw) || {};
-                } catch (error) {
-                    records = {};
-                }
+            if (!cartItems.length || cartItems.some((item) => !item.planDbId)) {
+                showSubmitError('プラン情報が正しく取得できていません。予約ページからやり直してください。');
+                return;
             }
-            const code = generateCode(records);
-            const breakdown = computeBreakdown();
-            const totalGuests = roomState.reduce((sum, room) => sum + (room.guests || 1), 0);
-            const planTitles = cartItems.map((item) => item.title).filter(Boolean).join(' / ');
-            const planAmenities = cartItems.map((item) => item.amenity).filter(Boolean).join(' / ');
+            if (!supabase) {
+                showSubmitError('予約システムに接続できませんでした。しばらくしてから再度お試しください。');
+                return;
+            }
 
-            const fallbackDates = cartItems[0] || {};
-            const record = {
-                code,
-                phone,
-                status: 'confirmed',
-                planTitle: planTitles,
-                planAmenity: planAmenities,
-                plans: cartItems,
-                checkin: draft?.checkin || fallbackDates.checkin || '',
-                checkout: draft?.checkout || fallbackDates.checkout || '',
-                nights: draft?.nights || fallbackDates.nights || '',
-                rooms: roomState,
-                roomCount: roomState.length,
-                guests: totalGuests,
-                totalPrice: breakdown.total,
-                breakdown,
-                paymentStatus: paymentCheckbox && paymentCheckbox.checked ? 'paid' : 'unpaid',
-                paymentMethod: Array.from(paymentMethodRadios).find((radio) => radio.checked)?.value || 'card',
-                createdAt: new Date().toISOString()
-            };
+            const payload = buildSubmissionPayload();
 
-            records[code] = record;
-            localStorage.setItem('reservationRecords', JSON.stringify(records));
-            sessionStorage.setItem('reservationSuccess', JSON.stringify(record));
-            localStorage.removeItem(draftKey);
+            submit.disabled = true;
+            const originalLabel = submit.textContent;
+            submit.textContent = '送信中…';
+
+            const { data, error } = await supabase.functions.invoke('submit-reservation', {
+                body: payload
+            });
+
+            if (error || !data || !data.data) {
+                const message = await extractErrorMessage(error);
+                showSubmitError(message);
+                submit.disabled = !agree || !agree.checked;
+                submit.textContent = originalLabel;
+                return;
+            }
+
+            const result = data.data;
+            sessionStorage.setItem('reservationSuccess', JSON.stringify({
+                code: result.code,
+                totalPrice: result.total_price,
+                paymentMethod: payload.payment_method,
+                planTitles: cartItems.map((item) => item.title).filter(Boolean).join(' / ')
+            }));
+            sessionStorage.removeItem('reservationCart');
+            sessionStorage.removeItem('reservationDraft');
             window.location.href = 'booking_complete.html';
         });
     }
+
+    // ---------- 启动流程:先从数据库读取追加选项价格,再渲染页面 ----------
+    const init = async () => {
+        if (supabase) {
+            const { data, error } = await supabase.from('plan_extras').select('*');
+            if (error) {
+                console.error('[booking_info] plan_extras 読み込み失敗', error);
+            } else {
+                extraOptions = {};
+                (data || []).forEach((row) => {
+                    extraOptions[row.code] = {
+                        label: row.name_ja,
+                        price: row.price,
+                        per: row.charge_unit,
+                        perNight: row.per_night
+                    };
+                });
+            }
+        }
+        updateSummary();
+    };
+
+    init();
 })();

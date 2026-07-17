@@ -121,7 +121,8 @@
                         <p><span data-i18n="reserve.lookup.result.rooms">客室数</span><span data-result-rooms>--</span></p>
                         <p><span data-i18n="reserve.lookup.result.roomdetail">客室内訳</span><span data-result-roomdetail>--</span></p>
                         <p><span data-i18n="reserve.lookup.result.price">料金</span><span data-result-price>--</span></p>
-                        <p><span data-i18n="reserve.lookup.result.payment">支払い状況</span><span data-result-payment>--</span></p>
+                        <p><span data-i18n="reserve.info.field.payment">お支払い方法</span><span data-result-payment>--</span></p>
+                        <p><span data-i18n="reserve.info.field.arrival">到着予定時刻</span><span data-result-arrival>--</span></p>
                     </div>
                     <div class="booking-lookup__breakdown">
                         <div><span data-i18n="reserve.info.breakdown.base">基本料金</span><span data-result-base>--</span></div>
@@ -134,47 +135,11 @@
 
                 <div class="booking-lookup__manage is-hidden" data-lookup-manage>
                     <p class="booking-lookup__result-title" data-i18n="reserve.lookup.manage.title">予約の変更・キャンセル</p>
-                    <form class="booking-lookup__manage-form" data-manage-form>
-                        <div class="booking-lookup__manage-grid">
-                            <label class="booking-lookup__field">
-                                <span class="booking-lookup__label" data-i18n="reserve.search.checkin">チェックイン</span>
-                                <input class="booking-lookup__input" type="date" data-manage-checkin>
-                            </label>
-                            <label class="booking-lookup__field">
-                                <span class="booking-lookup__label" data-i18n="reserve.search.checkout">チェックアウト</span>
-                                <input class="booking-lookup__input" type="date" data-manage-checkout>
-                            </label>
-                            <label class="booking-lookup__field">
-                                <span class="booking-lookup__label" data-i18n="reserve.lookup.manage.guests">合計人数</span>
-                                <select class="booking-lookup__input booking-lookup__select" data-manage-guests>
-                                    <option value="1" data-i18n="reserve.search.guests.1">1名</option>
-                                    <option value="2" data-i18n="reserve.search.guests.2">2名</option>
-                                    <option value="3" data-i18n="reserve.search.guests.3">3名</option>
-                                    <option value="4" data-i18n="reserve.search.guests.4">4名</option>
-                                    <option value="5" data-i18n="reserve.search.guests.5">5名</option>
-                                    <option value="6" data-i18n="reserve.search.guests.6">6名</option>
-                                </select>
-                            </label>
-                            <label class="booking-lookup__field">
-                                <span class="booking-lookup__label" data-i18n="reserve.info.field.roomCount">客室数</span>
-                                <select class="booking-lookup__input booking-lookup__select" data-manage-rooms>
-                                    <option value="1" data-i18n="reserve.info.roomCount.1">1室</option>
-                                    <option value="2" data-i18n="reserve.info.roomCount.2">2室</option>
-                                    <option value="3" data-i18n="reserve.info.roomCount.3">3室</option>
-                                    <option value="4" data-i18n="reserve.info.roomCount.4">4室</option>
-                                </select>
-                            </label>
-                        </div>
-                        <div class="booking-lookup__manage-actions">
-                            <label class="booking-lookup__checkbox">
-                                <input type="checkbox" data-manage-paid>
-                                <span data-i18n="reserve.lookup.manage.markPaid">支払い済みにする</span>
-                            </label>
-                            <button class="booking-lookup__button" type="submit" data-i18n="reserve.lookup.manage.update">内容を更新する</button>
-                            <button class="booking-lookup__button booking-lookup__button--ghost" type="button" data-manage-cancel data-i18n="reserve.lookup.manage.cancel">予約をキャンセル</button>
-                        </div>
-                        <p class="booking-lookup__manage-note" data-i18n="reserve.lookup.manage.note">変更後の料金が再計算されます。</p>
-                    </form>
+                    <p class="booking-lookup__manage-note" data-i18n="reserve.lookup.manage.contactNote">
+                        恐れ入りますが、ご予約内容の変更・キャンセルは現在オンラインで承っておりません。
+                        お電話（0960-47-0001 / 受付時間 9:00〜19:00）またはメールにて承っておりますので、
+                        本ページに表示された予約番号をお伝えの上、お問い合わせください。
+                    </p>
                 </div>
 
                 <div class="booking-lookup__notice is-hidden" data-lookup-notice></div>
@@ -232,6 +197,10 @@
 <script src="../assets/js/i18n-extra-policy.js"></script>
 <script src="../assets/js/i18n-extra-rooms.js"></script>
     <script src="../assets/js/script.js"></script>
+    <!-- Supabase 接入:引入顺序固定,config.js → supabase-js CDN → supabase-client.js → 页面脚本 -->
+    <script src="../config.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+    <script src="../assets/js/supabase-client.js"></script>
     <script src="booking_lookup.js"></script>
 
     </body>

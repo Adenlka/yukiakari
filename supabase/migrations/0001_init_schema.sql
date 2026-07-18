@@ -143,10 +143,23 @@ create index contact_messages_created_idx on contact_messages (created_at desc);
 -- ============================================================
 -- 库存查询函数(方案A:实时计算,见设计方案 1.3)
 -- ============================================================
+-- 【安全修复 · 安全审查报告中危问题③】原先这个函数只声明 language sql
+-- stable,没有 security definer,PostgREST 把它暴露成 RPC 给 anon 调用时
+-- 就以 anon 身份执行——而 reservation_items 表的 RLS(见 0002 迁移)没有
+-- 给 anon 任何 SELECT 策略,导致函数内部 left join reservation_items 这
+-- 一步对 anon 而言永远查不到任何一行,coalesce(sum(...), 0) 恒为 0,函数
+-- 返回值恒等于 total_units,前端日历因此"永远显示满库存",不是真的库存
+-- 查询失败,而是被 RLS 静默过滤成了空结果。加 security definer 后函数以
+-- 属主权限运行,能看到真实的 reservation_items 数据;这个函数只返回一个
+-- 聚合后的整数(剩余数量),不暴露任何顾客个人信息或预约明细,加 DEFINER
+-- 权限不引入新的数据泄露面。set search_path = public 与 submit_reservation
+-- /lookup_reservation 保持一致写法,防止 search_path 劫持。
 create or replace function get_availability(p_plan_id uuid, p_date date)
 returns int
 language sql
 stable
+security definer
+set search_path = public
 as $$
   select p.total_units - coalesce(sum(ri.room_count), 0)
   from plans p
@@ -157,7 +170,7 @@ as $$
   where p.id = p_plan_id
   group by p.total_units, p.id;
 $$;
-comment on function get_availability(uuid, date) is '实时计算某 plan 在某日期的剩余可售数量 = total_units - 未取消预约中占用的 room_count 之和。不建物化库存表,取消预约只需改 reservations.status,库存自动恢复。';
+comment on function get_availability(uuid, date) is '实时计算某 plan 在某日期的剩余可售数量 = total_units - 未取消预约中占用的 room_count 之和。不建物化库存表,取消预约只需改 reservations.status,库存自动恢复。security definer:见上方安全修复说明,否则 anon 通过 RPC 调用时因 RLS 看不到 reservation_items 数据,永远返回满库存。';
 
 -- ============================================================
 -- 种子数据:客室 4 种(取自 reserve.js/reserve.html 真实数据)

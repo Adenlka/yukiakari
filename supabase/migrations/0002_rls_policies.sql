@@ -173,6 +173,15 @@ declare
     v_pending        integer;
     v_day            date;
     v_item_count     integer;
+    -- 【安全修复 · 安全审查报告严重问题②】之前只校验了 checkout 晚于
+    -- checkin、checkin 不早于今天,没有任何"最大跨度"上限。p_items 里的
+    -- checkin/checkout 完全由前端提交决定,而这个函数对 anon 开放执行——
+    -- 攻击者可以直接提交一个跨度极大的区间(比如 checkin=今天,
+    -- checkout=若干年后),下面逐日校验库存的 while 循环就会跑几万次,
+    -- 单次请求即可造成明显的数据库负载尖峰。这两个上限值堵住这个口子:
+    v_max_nights       constant smallint := 30; -- 单次预约最大连续入住晚数
+    v_max_advance      constant interval := interval '9 months'; -- 最大提前预订窗口,与前端 web/reserve/reserve.js 的 maxDate(今天+9个月)保持一致
+    v_max_advance_date date;
 begin
     -- ---------- 基础输入校验(不信任前端传来的任何字段) ----------
     if p_guest_name is null or btrim(p_guest_name) = '' then
@@ -191,6 +200,57 @@ begin
     if v_item_count = 0 or v_item_count > 10 then
         raise exception '预约明细数量不合法' using errcode = 'YK001';
     end if;
+
+    v_max_advance_date := current_date + v_max_advance;
+
+    -- ---------- 前置校验:统一校验完所有 items 再进入下面真正写入/逐日查
+    -- 库存的循环(安全审查报告严重问题②要求)----------
+    -- 这一遍只做"廉价"的输入校验(商品是否存在、人数房间数是否合法、日期
+    -- 区间是否在允许范围内),不做任何数据库写入,也不触发下面 O(天数) 的
+    -- get_availability() 循环。这样即使 p_items 数组里排在后面的某一行本身
+    -- 就不合法(比如跨度极大的日期区间),也会在这一遍就直接被拒绝,不会先
+    -- 把前面几行开销更大的库存校验/价格计算跑完才发现要整单回滚——省下的是
+    -- 已经被浪费掉的 CPU/IO,而不是数据一致性(数据一致性由函数整体在一个
+    -- 事务里、任何 raise 都会回滚保证,这一点本身与本次修复无关)。
+    for v_item in select * from jsonb_array_elements(p_items)
+    loop
+        select * into v_plan from plans where id = (v_item->>'plan_id')::uuid and is_active;
+        if not found then
+            raise exception '所选商品不存在或已下架' using errcode = 'YK001';
+        end if;
+
+        v_guests := coalesce((v_item->>'guests')::smallint, 1);
+        v_room_count := coalesce((v_item->>'room_count')::smallint, 1);
+        if v_guests < 1 or v_room_count < 1 or v_room_count > 4 then
+            -- room_count 上限对应前端 reserve.js 的 MAX_ROOMS = 4
+            raise exception '人数或房间数不合法' using errcode = 'YK001';
+        end if;
+        if v_guests > v_plan.capacity * v_room_count then
+            -- 安全审查报告中危问题⑦:人数不能超过该房型可容纳人数
+            raise exception '入住人数超过该房型可容纳人数' using errcode = 'YK001';
+        end if;
+
+        v_checkin := (v_item->>'checkin_date')::date;
+        if v_plan.plan_type = 'daytrip' then
+            v_checkout := v_checkin;
+            v_nights := 0;
+        else
+            v_checkout := (v_item->>'checkout_date')::date;
+            v_nights := greatest(1, v_checkout - v_checkin);
+            if v_checkout <= v_checkin then
+                raise exception '退房日期必须晚于入住日期' using errcode = 'YK001';
+            end if;
+        end if;
+        if v_checkin < current_date then
+            raise exception '入住日期不能早于今天' using errcode = 'YK001';
+        end if;
+        if v_checkin > v_max_advance_date then
+            raise exception '入住日期超出可预订范围(最多可提前预订约9个月)' using errcode = 'YK001';
+        end if;
+        if v_nights > v_max_nights then
+            raise exception '单次预约的连续入住晚数不能超过 % 晚', v_max_nights using errcode = 'YK001';
+        end if;
+    end loop;
 
     -- 用于同一次提交内累加"待占用库存",避免同一笔订单里对同一 plan/日期
     -- 多次下单时,靠 get_availability() 单独判断反而漏掉互相之间的挤占。
@@ -215,7 +275,9 @@ begin
 
     for v_item in select * from jsonb_array_elements(p_items)
     loop
-        -- ---------- 逐行读取 plan,校验存在且上架 ----------
+        -- ---------- 逐行读取 plan(存在性/人数/日期范围已在上面的前置校验
+        -- 循环里确认过,这里 not found 理论上不会发生,只作并发下架的兜底,
+        -- 不重复抛出已经检查过的业务错误)----------
         select * into v_plan from plans where id = (v_item->>'plan_id')::uuid and is_active;
         if not found then
             raise exception '所选商品不存在或已下架' using errcode = 'YK001';
@@ -223,10 +285,6 @@ begin
 
         v_guests := coalesce((v_item->>'guests')::smallint, 1);
         v_room_count := coalesce((v_item->>'room_count')::smallint, 1);
-        if v_guests < 1 or v_room_count < 1 or v_room_count > 4 then
-            -- room_count 上限对应前端 reserve.js 的 MAX_ROOMS = 4
-            raise exception '人数或房间数不合法' using errcode = 'YK001';
-        end if;
 
         v_checkin := (v_item->>'checkin_date')::date;
         if v_plan.plan_type = 'daytrip' then
@@ -235,12 +293,6 @@ begin
         else
             v_checkout := (v_item->>'checkout_date')::date;
             v_nights := greatest(1, v_checkout - v_checkin);
-            if v_checkout <= v_checkin then
-                raise exception '退房日期必须晚于入住日期' using errcode = 'YK001';
-            end if;
-        end if;
-        if v_checkin < current_date then
-            raise exception '入住日期不能早于今天' using errcode = 'YK001';
         end if;
 
         -- ---------- 逐日校验库存(覆盖跨夜预约区间,日帰り只查当天) ----------

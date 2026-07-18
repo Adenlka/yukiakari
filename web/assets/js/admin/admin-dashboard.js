@@ -19,6 +19,15 @@
 // 两个有意义的操作是:把已确认的预约标记为"完了"(利用/入住已完成)或者
 // "キャンセル"(取消)。这是根据实际状态机设计出的两个动作,不是任务卡
 // 字面提到的"确认"在裸抠字眼实现一个多余的按钮。
+//
+// 【安全修复 · 安全审查报告严重问题①】renderRow() 里 code/guest_name/
+// guest_email/guest_phone 这四个字段全部来自顾客在预约表单自由填写的内容
+// (submit_reservation() 只校验邮箱格式和非空,不限制字符集),之前直接
+// 拼进 innerHTML 构成存储型 XSS——顾客提交一次带 <script>/<img onerror>
+// 的姓名,管理员打开预约列表就会在自己的浏览器里执行该脚本,而管理员的
+// Supabase Auth JWT 默认存在 localStorage,等于可以被脚本直接读走、完全
+// 接管管理后台。修复方式:比照 admin-contact-messages.js 已有的
+// escapeHtml(),对这四个字段转义后再拼进模板。
 
 (() => {
     const supabase = window.supabaseClient;
@@ -49,6 +58,15 @@
     };
 
     let allReservations = [];
+
+    // 顾客可控字段(code/guest_name/guest_email/guest_phone)拼进 innerHTML
+    // 前必须转义,防止存储型 XSS(安全审查报告严重问题①)。
+    const escapeHtml = (input) => String(input || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
 
     const formatCurrency = (value) => (Number.isFinite(Number(value)) ? `¥${Number(value).toLocaleString('ja-JP')}` : '--');
 
@@ -115,9 +133,9 @@
             : '<span class="admin-text-muted">--</span>';
 
         tr.innerHTML = `
-            <td>${reservation.code}</td>
-            <td>${reservation.guest_name || '--'}</td>
-            <td>${reservation.guest_email || ''}<br>${reservation.guest_phone || ''}</td>
+            <td>${escapeHtml(reservation.code)}</td>
+            <td>${escapeHtml(reservation.guest_name) || '--'}</td>
+            <td>${escapeHtml(reservation.guest_email)}<br>${escapeHtml(reservation.guest_phone)}</td>
             <td class="admin-table__wrap">${formatItemsSummary(reservation.reservation_items)}</td>
             <td>${totalGuests}名 / ${totalRooms}室</td>
             <td>${formatCurrency(reservation.total_price)}</td>

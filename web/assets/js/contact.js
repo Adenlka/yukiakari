@@ -168,21 +168,38 @@
         const originalLabel = submitButton.textContent;
         submitButton.textContent = '送信中…';
 
-        // contact_messages 的 RLS 只允许 anon INSERT,不允许 SELECT(见
-        // 0002_rls_policies.sql),所以这里插入后拿不到、也不需要拿到刚插入的
-        // 那一行数据,只要 error 为空就代表写入成功。
-        const { error } = await supabase.from('contact_messages').insert({
-            guest_name: fields.name.value.trim(),
-            guest_kana: fields.kana.value.trim(),
-            guest_email: fields.email.value.trim(),
-            guest_phone: fields.tel && fields.tel.value ? fields.tel.value.trim() : null,
-            message: fields.message.value.trim(),
-            privacy_agreed: consentOk
+        // 【安全修复 · 安全审查报告中危问题④】原来这里是前端直接
+        // `supabase.from('contact_messages').insert(...)`——contact_messages
+        // 的 RLS 对 anon 是无条件允许 INSERT(见 0002_rls_policies.sql),
+        // 任何人拿公开的 anon key 都能绕开这个页面直接批量灌库,完全没有
+        // 频率限制。现在改成调用 submit-contact-message Edge Function,
+        // 由它在真正写库前先做 IP 限流(见该函数注释),前端这里拿不到、也
+        // 不需要拿到刚插入的那一行数据,只要 error 为空就代表提交成功。
+        const { error } = await supabase.functions.invoke('submit-contact-message', {
+            body: {
+                guest_name: fields.name.value.trim(),
+                guest_kana: fields.kana.value.trim(),
+                guest_email: fields.email.value.trim(),
+                guest_phone: fields.tel && fields.tel.value ? fields.tel.value.trim() : null,
+                message: fields.message.value.trim(),
+                privacy_agreed: consentOk
+            }
         });
 
         if (error) {
-            console.error('[contact] contact_messages insert error', error);
-            showFeedback('送信に失敗しました。しばらくしてから再度お試しいただくか、お電話にてお問い合わせください。', 'error');
+            console.error('[contact] submit-contact-message invoke error', error);
+            let message = '送信に失敗しました。しばらくしてから再度お試しいただくか、お電話にてお問い合わせください。';
+            try {
+                if (error.context && typeof error.context.json === 'function') {
+                    const body = await error.context.json();
+                    if (body && body.error) {
+                        message = body.error;
+                    }
+                }
+            } catch (parseError) {
+                // 解析失败就用兜底提示,不把解析异常细节展示给用户
+            }
+            showFeedback(message, 'error');
             submitButton.disabled = false;
             submitButton.textContent = originalLabel;
             return;

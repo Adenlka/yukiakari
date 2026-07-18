@@ -28,6 +28,7 @@
 //   WEBHOOK_SECRET   自己生成一个随机字符串,同时填进上面的 Webhook Header 里
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { timingSafeEqual } from "https://deno.land/std@0.224.0/crypto/timing_safe_equal.ts";
 
 const RATE_LIMIT = 20; // 一小时内最多发信次数,防止异常情况下被反复触发刷邮件配额
 const RATE_WINDOW_SECONDS = 3600;
@@ -63,8 +64,22 @@ Deno.serve(async (req: Request) => {
   }
 
   // ---------- 端点鉴权:必须带对共享密钥,否则一律拒绝 ----------
+  // 【安全修复 · 安全审查报告中危问题⑥】原来用 `!==` 做字符串比较,逐字符
+  // 比较、遇到第一个不相等字符就提前退出,理论上存在时序侧信道(响应时间
+  // 的细微差异可以被用来逐字符猜出密钥)。改用 Deno 标准库的
+  // timingSafeEqual 做常量时间比较,不管密钥对不对,比较耗时基本一致。
   const webhookSecret = Deno.env.get("WEBHOOK_SECRET");
-  if (!webhookSecret || req.headers.get("x-webhook-secret") !== webhookSecret) {
+  const providedSecret = req.headers.get("x-webhook-secret") ?? "";
+  const encoder = new TextEncoder();
+  const providedBytes = encoder.encode(providedSecret);
+  const expectedBytes = encoder.encode(webhookSecret ?? "");
+  // 长度不一致时 timingSafeEqual 本身无法比较等长以外的输入,这里先判等长
+  // 再做常量时间比较;泄露的只是"密钥长度是否碰巧一致"这个极弱信号,不影响
+  // 实际安全性(密钥本身没有被泄露,也不会被这一步逐字符区分出来)。
+  const isSecretValid = Boolean(webhookSecret) &&
+    providedBytes.length === expectedBytes.length &&
+    timingSafeEqual(providedBytes, expectedBytes);
+  if (!isSecretValid) {
     return jsonResponse({ error: "Unauthorized" }, 401);
   }
 

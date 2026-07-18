@@ -43,6 +43,7 @@
 
     "home.hero.title": "Yukiakari",
     "home.hero.kana": "YUKIAKARI",
+    "home.hero.aria": "Yukiakari main visual",
 
     "home.intro.eyebrow": "Introduction",
     "home.intro.headline.1": "A retreat embraced",
@@ -81,6 +82,8 @@
 
     "dining.hero.aria": "Dining",
     "dining.hero.title": "Dining",
+    "dining.photo.dinner.alt": "A dinner dish at Yukiakari",
+    "dining.photo.breakfast.alt": "A breakfast dish at Yukiakari",
     "dining.intro.title": "Rustic kaiseki with local ingredients",
     "dining.intro.subtitle": "Seasonal colors and the gifts of the land.",
     "dining.intro.text": "Fresh vegetables sourced directly from local farmers and seasonal seafood you can only enjoy at certain times of year.<br>Each dish is crafted with care to honor the ingredients’ natural flavor.<br>Please savor a comforting taste where nostalgia meets newness.",
@@ -494,6 +497,7 @@
 
     "home.hero.title": "雪灯り",
     "home.hero.kana": "YUKIAKARI",
+    "home.hero.aria": "雪灯りのメインビジュアル",
 
     "home.intro.eyebrow": "はじめに",
     "home.intro.headline.1": "白銀の峰々に抱かれた、",
@@ -532,6 +536,8 @@
 
     "dining.hero.aria": "お食事",
     "dining.hero.title": "お食事",
+    "dining.photo.dinner.alt": "雪灯りの夕食の一皿",
+    "dining.photo.breakfast.alt": "雪灯りの朝食の一皿",
     "dining.intro.title": "地元食材を使用した田舎風会席料理",
     "dining.intro.subtitle": "四季の彩りと、大地の恵みをそのままとじ込めました。",
     "dining.intro.text": "地元の農家から直接仕入れた新鮮な野菜や、その時期にしか味わえない旬の魚介類。<br>素材本来の味を大切にし、一品一品心を込めて作り上げた会席料理です。<br>懐かしさと新しさが調和する、心温まる味わいをご堪能ください。",
@@ -945,6 +951,7 @@
 
     "home.hero.title": "유키아카리",
     "home.hero.kana": "YUKIAKARI",
+    "home.hero.aria": "유키아카리 메인 비주얼",
 
     "home.intro.eyebrow": "소개",
     "home.intro.headline.1": "백은의 봉우리에",
@@ -983,6 +990,8 @@
 
     "dining.hero.aria": "식사",
     "dining.hero.title": "식사",
+    "dining.photo.dinner.alt": "유키아카리의 저녁 요리",
+    "dining.photo.breakfast.alt": "유키아카리의 아침 요리",
     "dining.intro.title": "지역 식재료로 빚은 시골풍 가이세키",
     "dining.intro.subtitle": "사계절의 색과 대지의 은혜를 그대로 담았습니다.",
     "dining.intro.text": "지역 농가에서 직접 들여온 신선한 채소와 제철 해산물.<br>재료 본연의 맛을 소중히 하며 한 접시 한 접시 정성껏 준비합니다.<br>추억과 새로움이 조화를 이루는 따뜻한 맛을 즐겨 주세요.",
@@ -1396,6 +1405,7 @@
 
     "home.hero.title": "雪灯り",
     "home.hero.kana": "YUKIAKARI",
+    "home.hero.aria": "雪灯り主视觉画面",
 
     "home.intro.eyebrow": "关于",
     "home.intro.headline.1": "被白银群峰拥抱的",
@@ -1414,7 +1424,7 @@
 
     "home.dining.eyebrow": "餐饮",
     "home.dining.headline.1": "映照季节的",
-    "home.dining.headline.2": "雪灯り献立",
+    "home.dining.headline.2": "雪灯り的菜单",
     "home.dining.body": "将大地与海的馈赠置于静雅器皿之上。<br>火候与香气唤醒时令之味。<br>请享受如灯火般柔和的余韵。",
 
     "home.rooms.eyebrow": "客房",
@@ -1434,10 +1444,12 @@
 
     "dining.hero.aria": "餐饮",
     "dining.hero.title": "餐饮",
+    "dining.photo.dinner.alt": "雪灯り的晚餐料理",
+    "dining.photo.breakfast.alt": "雪灯り的早餐料理",
     "dining.intro.title": "以当地食材打造的乡土会席料理",
     "dining.intro.subtitle": "将四季的色彩与大地的恩惠尽收盘中。",
     "dining.intro.text": "来自本地农家的新鲜蔬菜与当季海产。<br>珍视食材本味，用心完成每一道料理。<br>怀旧与新意交织的温暖滋味，请细细品味。",
-    "dining.course.title": "献立",
+    "dining.course.title": "菜单",
     "dining.course.text": "以低温慢煮的柔嫩烤牛肉为主菜，<br>搭配酥脆的时令天妇罗与如宝石般点缀的散寿司。<br>煮物、拌物等多样风味可少量多品，尽享奢华层次。<br>视觉与味觉皆满足的匠心之作。",
     "dining.menu.dinner.label": "某日的晚餐",
     "dining.menu.breakfast.label": "某日的早餐",
@@ -1697,7 +1709,7 @@
     "reserve.plan.villa.meta1": "2间 / 2–4人",
     "reserve.plan.villa.meta2": "露天风吕 · 围炉",
 
-    "reserve.plan.viewbath.title": "展望风吕客房「風花」",
+    "reserve.plan.viewbath.title": "展望风吕客房「风花」",
     "reserve.plan.viewbath.text": "可眺望雪山的展望风吕客房。",
     "reserve.plan.viewbath.meta1": "5间 / 2–3人",
     "reserve.plan.viewbath.meta2": "展望风吕 · 顶层",
@@ -1847,6 +1859,7 @@
 
     "home.hero.title": "雪灯り",
     "home.hero.kana": "YUKIAKARI",
+    "home.hero.aria": "雪灯り主視覺畫面",
 
     "home.intro.eyebrow": "關於",
     "home.intro.headline.1": "被白銀群峰擁抱的",
@@ -1865,7 +1878,7 @@
 
     "home.dining.eyebrow": "餐飲",
     "home.dining.headline.1": "映照季節的",
-    "home.dining.headline.2": "雪灯り獻立",
+    "home.dining.headline.2": "雪灯り的菜單",
     "home.dining.body": "將大地與海的饋贈置於靜雅器皿之上。<br>火候與香氣喚醒時令之味。<br>請享受如燈火般柔和的餘韻。",
 
     "home.rooms.eyebrow": "客房",
@@ -1885,10 +1898,12 @@
 
     "dining.hero.aria": "餐飲",
     "dining.hero.title": "餐飲",
+    "dining.photo.dinner.alt": "雪燈り的晚餐料理",
+    "dining.photo.breakfast.alt": "雪燈り的早餐料理",
     "dining.intro.title": "以當地食材打造的鄉土會席料理",
     "dining.intro.subtitle": "將四季的色彩與大地的恩惠盡收盤中。",
     "dining.intro.text": "來自本地農家的新鮮蔬菜與當季海產。<br>珍視食材本味，用心完成每一道料理。<br>懷舊與新意交織的溫暖滋味，請細細品味。",
-    "dining.course.title": "獻立",
+    "dining.course.title": "菜單",
     "dining.course.text": "以低溫慢煮的柔嫩烤牛肉為主菜，<br>搭配酥脆的時令天婦羅與如寶石般點綴的散壽司。<br>煮物、拌物等多樣風味可少量多品，盡享奢華層次。<br>視覺與味覺皆滿足的匠心之作。",
     "dining.menu.dinner.label": "某日的晚餐",
     "dining.menu.breakfast.label": "某日的早餐",

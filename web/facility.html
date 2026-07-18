@@ -101,12 +101,12 @@
     </div>
 
     <main>
-        <section id="hero" class="hero hero--facility" aria-label="館内">
+        <section id="hero" class="hero hero--facility" aria-label="館内" data-i18n-aria="facility.hero.aria">
             <div class="hero__layer" aria-hidden="true"></div>
             <div class="hero__scrim" aria-hidden="true"></div>
             <div class="hero__overlay">
                 <div class="hero__title-wrap">
-                    <span class="hero__title-jp">館内</span>
+                    <span class="hero__title-jp" data-i18n="facility.hero.title">館内</span>
                 </div>
             </div>
         </section>
@@ -120,9 +120,9 @@
                 <div class="facility-intro__media">
                     <video class="facility-intro__video" src="assets/images/facility/facility-intro.mp4" autoplay muted loop playsinline></video>
                 </div>
-                <h2 class="facility-intro__title">静謐な回廊に包まれる館内</h2>
-                <p class="facility-intro__text">本館・新館・離れをつなぐ回廊と中庭が、館内の静かな動線をつくっています。館内案内はすべてマップ（俯瞰図）でご覧いただけます。</p>
-                <p class="facility-intro__text">施設のご利用時間と料金をあわせてご案内いたします。ご滞在の計画にお役立てください。</p>
+                <h2 class="facility-intro__title" data-i18n="facility.intro.title">静謐な回廊に包まれる館内</h2>
+                <p class="facility-intro__text" data-i18n="facility.intro.text1">本館・新館・離れをつなぐ回廊と中庭が、館内の静かな動線をつくっています。館内案内はすべてマップ（俯瞰図）でご覧いただけます。</p>
+                <p class="facility-intro__text" data-i18n="facility.intro.text2">施設のご利用時間と料金をあわせてご案内いたします。ご滞在の計画にお役立てください。</p>
             </div>
         </section>
 
@@ -134,47 +134,47 @@
             <div class="facility-maps__inner">
                 <div class="facility-floormap">
                     <div class="facility-floormap__inner">
-                        <div class="facility-carousel facility-carousel--with-label" data-carousel="floormap" tabindex="0" aria-label="フロアマップのスライダー">
-                            <button class="facility-carousel__nav facility-carousel__nav--prev" type="button" aria-label="前のマップ" data-carousel-prev></button>
+                        <div class="facility-carousel facility-carousel--with-label" data-carousel="floormap" tabindex="0" aria-label="フロアマップのスライダー" data-i18n-aria="facility.map.carousel">
+                            <button class="facility-carousel__nav facility-carousel__nav--prev" type="button" aria-label="前のマップ" data-carousel-prev data-i18n-aria="facility.map.prev"></button>
                             <div class="facility-carousel__viewport flickity-viewport">
                                 <ul class="facility-carousel__track flickity-slider" data-carousel-track>
-                                    <li class="facility-carousel__cell carousel-cell is-active" data-label="本館フロア" data-short-label="本館">
+                                    <li class="facility-carousel__cell carousel-cell is-active" data-label="本館フロア" data-short-label="本館" data-short-label-key="facility.map.main.short">
                                         <div class="facility-carousel__cell-inner">
-                                            <img src="assets/images/facility/main.png" alt="本館フロアマップ" loading="lazy" decoding="async">
+                                            <img src="assets/images/facility/main.png" alt="本館フロアマップ" loading="lazy" decoding="async" data-i18n-alt="facility.map.main.imgAlt">
                                             <div class="facility-carousel__caption">
                                                 <ol class="facility-carousel__list">
-                                                    <li><span class="facility-list__icon"><img src="assets/images/facility/1.png" alt="1"></span>エントランス</li>
-                                                    <li><span class="facility-list__icon"><img src="assets/images/facility/2.png" alt="2"></span>ホール、ロビー、売店</li>
-                                                    <li><span class="facility-list__icon"><img src="assets/images/facility/3.png" alt="3"></span>フロント</li>
-                                                    <li><span class="facility-list__icon"><img src="assets/images/facility/4.png" alt="4"></span>お食事処</li>
-                                                    <li><span class="facility-list__icon"><img src="assets/images/facility/5.png" alt="5"></span>中庭</li>
-                                                    <li><span class="facility-list__icon"><img src="assets/images/facility/6.png" alt="6"></span>お食事処</li>
-                                                    <li><span class="facility-list__icon"><img src="assets/images/facility/7.png" alt="7"></span>大広間</li>
-                                                    <li><span class="facility-list__icon"><img src="assets/images/facility/8.png" alt="8"></span>自販機/喫煙所</li>
+                                                    <li><span class="facility-list__icon"><img src="assets/images/facility/1.png" alt="1"></span><span data-i18n="facility.map.main.item1">エントランス</span></li>
+                                                    <li><span class="facility-list__icon"><img src="assets/images/facility/2.png" alt="2"></span><span data-i18n="facility.map.main.item2">ホール、ロビー、売店</span></li>
+                                                    <li><span class="facility-list__icon"><img src="assets/images/facility/3.png" alt="3"></span><span data-i18n="facility.map.main.item3">フロント</span></li>
+                                                    <li><span class="facility-list__icon"><img src="assets/images/facility/4.png" alt="4"></span><span data-i18n="facility.map.main.item4">お食事処</span></li>
+                                                    <li><span class="facility-list__icon"><img src="assets/images/facility/5.png" alt="5"></span><span data-i18n="facility.map.main.item5">中庭</span></li>
+                                                    <li><span class="facility-list__icon"><img src="assets/images/facility/6.png" alt="6"></span><span data-i18n="facility.map.main.item6">お食事処</span></li>
+                                                    <li><span class="facility-list__icon"><img src="assets/images/facility/7.png" alt="7"></span><span data-i18n="facility.map.main.item7">大広間</span></li>
+                                                    <li><span class="facility-list__icon"><img src="assets/images/facility/8.png" alt="8"></span><span data-i18n="facility.map.main.item8">自販機/喫煙所</span></li>
                                                 </ol>
                                             </div>
                                         </div>
                                     </li>
-                                    <li class="facility-carousel__cell carousel-cell" data-label="新館フロア" data-short-label="新館">
+                                    <li class="facility-carousel__cell carousel-cell" data-label="新館フロア" data-short-label="新館" data-short-label-key="facility.map.new.short">
                                         <div class="facility-carousel__cell-inner">
-                                            <img src="assets/images/facility/new.png" alt="新館フロアマップ" loading="lazy" decoding="async">
+                                            <img src="assets/images/facility/new.png" alt="新館フロアマップ" loading="lazy" decoding="async" data-i18n-alt="facility.map.new.imgAlt">
                                             <div class="facility-carousel__caption">
                                                 <ol class="facility-carousel__list">
-                                                    <li><span class="facility-list__icon"><img src="assets/images/facility/1.png" alt="1"></span>エントランス</li>
-                                                    <li><span class="facility-list__icon"><img src="assets/images/facility/2.png" alt="2"></span>お食事処</li>
-                                                    <li><span class="facility-list__icon"><img src="assets/images/facility/3.png" alt="3"></span>温水熱ブール</li>
-                                                    <li><span class="facility-list__icon"><img src="assets/images/facility/4.png" alt="4"></span>岩盤浴</li>
+                                                    <li><span class="facility-list__icon"><img src="assets/images/facility/1.png" alt="1"></span><span data-i18n="facility.map.new.item1">エントランス</span></li>
+                                                    <li><span class="facility-list__icon"><img src="assets/images/facility/2.png" alt="2"></span><span data-i18n="facility.map.new.item2">お食事処</span></li>
+                                                    <li><span class="facility-list__icon"><img src="assets/images/facility/3.png" alt="3"></span><span data-i18n="facility.map.new.item3">温水熱ブール</span></li>
+                                                    <li><span class="facility-list__icon"><img src="assets/images/facility/4.png" alt="4"></span><span data-i18n="facility.map.new.item4">岩盤浴</span></li>
                                                 </ol>
                                             </div>
                                         </div>
                                     </li>
-                                    <li class="facility-carousel__cell carousel-cell" data-label="離れエリア" data-short-label="離れ">
+                                    <li class="facility-carousel__cell carousel-cell" data-label="離れエリア" data-short-label="離れ" data-short-label-key="facility.map.annex.short">
                                         <div class="facility-carousel__cell-inner">
-                                            <img src="assets/images/facility/annex.png" alt="離れエリアマップ" loading="lazy" decoding="async">
+                                            <img src="assets/images/facility/annex.png" alt="離れエリアマップ" loading="lazy" decoding="async" data-i18n-alt="facility.map.annex.imgAlt">
                                             <div class="facility-carousel__caption">
                                                 <ol class="facility-carousel__list">
-                                                    <li><span class="facility-list__icon"><img src="assets/images/facility/1.png" alt="1"></span>ひのき風呂</li>
-                                                    <li><span class="facility-list__icon"><img src="assets/images/facility/2.png" alt="2"></span>自販機</li>
+                                                    <li><span class="facility-list__icon"><img src="assets/images/facility/1.png" alt="1"></span><span data-i18n="facility.map.annex.item1">ひのき風呂</span></li>
+                                                    <li><span class="facility-list__icon"><img src="assets/images/facility/2.png" alt="2"></span><span data-i18n="facility.map.annex.item2">自販機</span></li>
                                                 </ol>
                                             </div>
                                         </div>
@@ -182,33 +182,33 @@
                                 </ul>
                             </div>
                             <span class="facility-carousel__side-label" data-carousel-label-output aria-hidden="true">本館</span>
-                            <button class="facility-carousel__nav facility-carousel__nav--next" type="button" aria-label="次のマップ" data-carousel-next></button>
+                            <button class="facility-carousel__nav facility-carousel__nav--next" type="button" aria-label="次のマップ" data-carousel-next data-i18n-aria="facility.map.next"></button>
                             <div class="facility-carousel__dots">
-                                <button class="facility-carousel__dot is-active" type="button" aria-label="本館フロアへ" data-carousel-dot="0"></button>
-                                <button class="facility-carousel__dot" type="button" aria-label="新館フロアへ" data-carousel-dot="1"></button>
-                                <button class="facility-carousel__dot" type="button" aria-label="離れエリアへ" data-carousel-dot="2"></button>
+                                <button class="facility-carousel__dot is-active" type="button" aria-label="本館フロアへ" data-carousel-dot="0" data-i18n-aria="facility.map.dot.main"></button>
+                                <button class="facility-carousel__dot" type="button" aria-label="新館フロアへ" data-carousel-dot="1" data-i18n-aria="facility.map.dot.new"></button>
+                                <button class="facility-carousel__dot" type="button" aria-label="離れエリアへ" data-carousel-dot="2" data-i18n-aria="facility.map.dot.annex"></button>
                             </div>
                         </div>
                     </div>
                 </div>
                 <figure class="facility-sitemap">
-                    <img src="assets/images/facility/map.png" alt="館内全体マップ" loading="lazy" decoding="async">
+                    <img src="assets/images/facility/map.png" alt="館内全体マップ" loading="lazy" decoding="async" data-i18n-alt="facility.map.site.imgAlt">
                     <figcaption class="facility-sitemap__caption">
                         <ol class="facility-sitemap__list">
-                            <li><span class="facility-list__icon"><img src="assets/images/facility/1.png" alt="1"></span>混浴露天風呂・川風呂・酮竄風呂/女性専用露天風呂</li>
-                            <li><span class="facility-list__icon"><img src="assets/images/facility/2.png" alt="2"></span>大浴場/ミストサウナ/水風呂</li>
-                            <li><span class="facility-list__icon"><img src="assets/images/facility/3.png" alt="3"></span>家族風呂(竹の湯)</li>
-                            <li><span class="facility-list__icon"><img src="assets/images/facility/4.png" alt="4"></span>自販機/喫煙所</li>
-                            <li><span class="facility-list__icon"><img src="assets/images/facility/5.png" alt="5"></span>中庭</li>
-                            <li><span class="facility-list__icon"><img src="assets/images/facility/6.png" alt="6"></span>本館(フロント/本館客室/お食事処/大広間等)</li>
-                            <li><span class="facility-list__icon"><img src="assets/images/facility/7.png" alt="7"></span>蒸し処 温泉地獄</li>
-                            <li><span class="facility-list__icon"><img src="assets/images/facility/8.png" alt="8"></span>新館(お食事処/新館客室/温水熱プール/岩盤浴)</li>
-                            <li><span class="facility-list__icon"><img src="assets/images/facility/9.png" alt="9"></span>入口</li>
-                            <li><span class="facility-list__icon"><img src="assets/images/facility/10.png" alt="10"></span>家族風呂(もみじの番/あじさいの湯)</li>
-                            <li><span class="facility-list__icon"><img src="assets/images/facility/11.png" alt="11"></span>離れ和室</li>
-                            <li><span class="facility-list__icon"><img src="assets/images/facility/12.png" alt="12"></span>隠れ一戸建て 竹林別館</li>
-                            <li><span class="facility-list__icon"><img src="assets/images/facility/13.png" alt="13"></span>ひのき風呂</li>
-                            <li><span class="facility-list__icon"><img src="assets/images/facility/14.png" alt="14"></span>駐車場</li>
+                            <li><span class="facility-list__icon"><img src="assets/images/facility/1.png" alt="1"></span><span data-i18n="facility.map.site.item1">混浴露天風呂・川風呂・酮竄風呂/女性専用露天風呂</span></li>
+                            <li><span class="facility-list__icon"><img src="assets/images/facility/2.png" alt="2"></span><span data-i18n="facility.map.site.item2">大浴場/ミストサウナ/水風呂</span></li>
+                            <li><span class="facility-list__icon"><img src="assets/images/facility/3.png" alt="3"></span><span data-i18n="facility.map.site.item3">家族風呂(竹の湯)</span></li>
+                            <li><span class="facility-list__icon"><img src="assets/images/facility/4.png" alt="4"></span><span data-i18n="facility.map.site.item4">自販機/喫煙所</span></li>
+                            <li><span class="facility-list__icon"><img src="assets/images/facility/5.png" alt="5"></span><span data-i18n="facility.map.site.item5">中庭</span></li>
+                            <li><span class="facility-list__icon"><img src="assets/images/facility/6.png" alt="6"></span><span data-i18n="facility.map.site.item6">本館(フロント/本館客室/お食事処/大広間等)</span></li>
+                            <li><span class="facility-list__icon"><img src="assets/images/facility/7.png" alt="7"></span><span data-i18n="facility.map.site.item7">蒸し処 温泉地獄</span></li>
+                            <li><span class="facility-list__icon"><img src="assets/images/facility/8.png" alt="8"></span><span data-i18n="facility.map.site.item8">新館(お食事処/新館客室/温水熱プール/岩盤浴)</span></li>
+                            <li><span class="facility-list__icon"><img src="assets/images/facility/9.png" alt="9"></span><span data-i18n="facility.map.site.item9">入口</span></li>
+                            <li><span class="facility-list__icon"><img src="assets/images/facility/10.png" alt="10"></span><span data-i18n="facility.map.site.item10">家族風呂(もみじの番/あじさいの湯)</span></li>
+                            <li><span class="facility-list__icon"><img src="assets/images/facility/11.png" alt="11"></span><span data-i18n="facility.map.site.item11">離れ和室</span></li>
+                            <li><span class="facility-list__icon"><img src="assets/images/facility/12.png" alt="12"></span><span data-i18n="facility.map.site.item12">隠れ一戸建て 竹林別館</span></li>
+                            <li><span class="facility-list__icon"><img src="assets/images/facility/13.png" alt="13"></span><span data-i18n="facility.map.site.item13">ひのき風呂</span></li>
+                            <li><span class="facility-list__icon"><img src="assets/images/facility/14.png" alt="14"></span><span data-i18n="facility.map.site.item14">駐車場</span></li>
                         </ol>
                     </figcaption>
                 </figure>
@@ -221,42 +221,42 @@
 
         <section class="facility-overview section reveal">
             <div class="facility-overview__inner">
-                <p>雪灯りの敷地は、雪庭と回廊を中心に広がります。四季の静けさと共に、館内の景色がゆるやかに移ろいます。</p>
+                <p data-i18n="facility.overview.text">雪灯りの敷地は、雪庭と回廊を中心に広がります。四季の静けさと共に、館内の景色がゆるやかに移ろいます。</p>
             </div>
         </section>
 
         <section id="gallery" class="facility-gallery section reveal">
             <header class="facility-gallery__header">
-                <h3 class="facility-gallery__title">施設</h3>
+                <h3 class="facility-gallery__title" data-i18n="facility.gallery.title">施設</h3>
             </header>
-            <div class="facility-carousel facility-carousel--gallery" data-carousel="gallery" tabindex="0" aria-label="館内ギャラリーのスライダー">
-                <button class="facility-carousel__nav facility-carousel__nav--prev" type="button" aria-label="前の写真" data-carousel-prev></button>
+            <div class="facility-carousel facility-carousel--gallery" data-carousel="gallery" tabindex="0" aria-label="館内ギャラリーのスライダー" data-i18n-aria="facility.gallery.carousel">
+                <button class="facility-carousel__nav facility-carousel__nav--prev" type="button" aria-label="前の写真" data-carousel-prev data-i18n-aria="facility.gallery.prev"></button>
                 <div class="facility-carousel__viewport flickity-viewport">
                     <ul class="facility-carousel__track flickity-slider" data-carousel-track>
                         <li class="facility-carousel__cell carousel-cell is-active" data-label="ロビーラウンジ">
-                            <img class="facility-gallery__image" src="assets/images/facility/lobby-lounge.jpg" alt="ロビーラウンジ">
-                            <p class="facility-gallery__caption">ロビーラウンジ</p>
+                            <img class="facility-gallery__image" src="assets/images/facility/lobby-lounge.jpg" alt="ロビーラウンジ" data-i18n-alt="facility.gallery.caption.lobby">
+                            <p class="facility-gallery__caption" data-i18n="facility.gallery.caption.lobby">ロビーラウンジ</p>
                         </li>
                         <li class="facility-carousel__cell carousel-cell" data-label="大宴会場">
-                            <img class="facility-gallery__image" src="assets/images/facility/grand-banquet.jpg" alt="大宴会場">
-                            <p class="facility-gallery__caption">大宴会場</p>
+                            <img class="facility-gallery__image" src="assets/images/facility/grand-banquet.jpg" alt="大宴会場" data-i18n-alt="facility.gallery.caption.banquet">
+                            <p class="facility-gallery__caption" data-i18n="facility.gallery.caption.banquet">大宴会場</p>
                         </li>
                         <li class="facility-carousel__cell carousel-cell" data-label="回廊">
-                            <img class="facility-gallery__image" src="assets/images/facility/corridor.jpg" alt="回廊">
-                            <p class="facility-gallery__caption">回廊</p>
+                            <img class="facility-gallery__image" src="assets/images/facility/corridor.jpg" alt="回廊" data-i18n-alt="facility.gallery.caption.corridor">
+                            <p class="facility-gallery__caption" data-i18n="facility.gallery.caption.corridor">回廊</p>
                         </li>
                         <li class="facility-carousel__cell carousel-cell" data-label="中庭">
-                            <img class="facility-gallery__image" src="assets/images/facility/courtyard.jpg" alt="中庭">
-                            <p class="facility-gallery__caption">中庭</p>
+                            <img class="facility-gallery__image" src="assets/images/facility/courtyard.jpg" alt="中庭" data-i18n-alt="facility.gallery.caption.courtyard">
+                            <p class="facility-gallery__caption" data-i18n="facility.gallery.caption.courtyard">中庭</p>
                         </li>
                     </ul>
                 </div>
-                <button class="facility-carousel__nav facility-carousel__nav--next" type="button" aria-label="次の写真" data-carousel-next></button>
+                <button class="facility-carousel__nav facility-carousel__nav--next" type="button" aria-label="次の写真" data-carousel-next data-i18n-aria="facility.gallery.next"></button>
                 <div class="facility-carousel__dots">
-                    <button class="facility-carousel__dot is-active" type="button" aria-label="ロビーラウンジへ" data-carousel-dot="0"></button>
-                    <button class="facility-carousel__dot" type="button" aria-label="大宴会場へ" data-carousel-dot="1"></button>
-                    <button class="facility-carousel__dot" type="button" aria-label="回廊へ" data-carousel-dot="2"></button>
-                    <button class="facility-carousel__dot" type="button" aria-label="中庭へ" data-carousel-dot="3"></button>
+                    <button class="facility-carousel__dot is-active" type="button" aria-label="ロビーラウンジへ" data-carousel-dot="0" data-i18n-aria="facility.gallery.dot.lobby"></button>
+                    <button class="facility-carousel__dot" type="button" aria-label="大宴会場へ" data-carousel-dot="1" data-i18n-aria="facility.gallery.dot.banquet"></button>
+                    <button class="facility-carousel__dot" type="button" aria-label="回廊へ" data-carousel-dot="2" data-i18n-aria="facility.gallery.dot.corridor"></button>
+                    <button class="facility-carousel__dot" type="button" aria-label="中庭へ" data-carousel-dot="3" data-i18n-aria="facility.gallery.dot.courtyard"></button>
                 </div>
             </div>
         </section>
@@ -264,60 +264,60 @@
         <section id="features" class="facility-features section reveal">
             <div class="facility-features__item">
                 <figure class="facility-features__media">
-                    <img class="facility-features__image" src="assets/images/facility/afterbath-lounge.jpg" alt="湯上がり処">
+                    <img class="facility-features__image" src="assets/images/facility/afterbath-lounge.jpg" alt="湯上がり処" data-i18n-alt="facility.features.afterbath.title">
                 </figure>
                 <div class="facility-features__content">
-                    <h3 class="facility-features__title">湯上がり処</h3>
-                    <p class="facility-features__text">湯の余韻を味わう静かなラウンジ。雪茶とともに、旅の時間をほどきます。</p>
-                    <p class="facility-features__meta">● ご利用料金／無料　● ご利用時間／6:00〜23:00</p>
+                    <h3 class="facility-features__title" data-i18n="facility.features.afterbath.title">湯上がり処</h3>
+                    <p class="facility-features__text" data-i18n="facility.features.afterbath.text">湯の余韻を味わう静かなラウンジ。雪茶とともに、旅の時間をほどきます。</p>
+                    <p class="facility-features__meta" data-i18n="facility.features.afterbath.meta">● ご利用料金／無料　● ご利用時間／6:00〜23:00</p>
                 </div>
             </div>
             <div class="facility-features__item facility-features__item--reverse">
                 <figure class="facility-features__media">
-                    <img class="facility-features__image" src="assets/images/facility/drink-bar.jpg" alt="セルフドリンクバー">
+                    <img class="facility-features__image" src="assets/images/facility/drink-bar.jpg" alt="セルフドリンクバー" data-i18n-alt="facility.features.drink.title">
                 </figure>
                 <div class="facility-features__content">
-                    <h3 class="facility-features__title">セルフドリンクバー</h3>
-                    <p class="facility-features__text">地元ハーブティーや温かい煎茶をセルフでご用意しています。</p>
-                    <p class="facility-features__meta">● ご利用料金／無料　● ご利用時間／7:00〜22:00</p>
+                    <h3 class="facility-features__title" data-i18n="facility.features.drink.title">セルフドリンクバー</h3>
+                    <p class="facility-features__text" data-i18n="facility.features.drink.text">地元ハーブティーや温かい煎茶をセルフでご用意しています。</p>
+                    <p class="facility-features__meta" data-i18n="facility.features.drink.meta">● ご利用料金／無料　● ご利用時間／7:00〜22:00</p>
                 </div>
             </div>
             <div class="facility-features__item">
                 <figure class="facility-features__media">
-                    <img class="facility-features__image" src="assets/images/facility/grand-banquet.jpg" alt="大宴会場">
+                    <img class="facility-features__image" src="assets/images/facility/grand-banquet.jpg" alt="大宴会場" data-i18n-alt="facility.features.banquet.title">
                 </figure>
                 <div class="facility-features__content">
-                    <h3 class="facility-features__title">大宴会場</h3>
-                    <p class="facility-features__text">季節の会席や祝宴に対応する広間。人数に合わせて柔軟に設えます。</p>
-                    <p class="facility-features__meta">● ご利用料金／無料（宴会プランに含む）　● ご利用時間／18:00〜21:00</p>
+                    <h3 class="facility-features__title" data-i18n="facility.features.banquet.title">大宴会場</h3>
+                    <p class="facility-features__text" data-i18n="facility.features.banquet.text">季節の会席や祝宴に対応する広間。人数に合わせて柔軟に設えます。</p>
+                    <p class="facility-features__meta" data-i18n="facility.features.banquet.meta">● ご利用料金／無料（宴会プランに含む）　● ご利用時間／18:00〜21:00</p>
                 </div>
             </div>
         </section>
 
         <section id="outline" class="facility-outline section reveal">
             <header class="facility-outline__header">
-                <h3 class="facility-outline__title">施設概要</h3>
+                <h3 class="facility-outline__title" data-i18n="facility.outline.title">施設概要</h3>
             </header>
             <div class="facility-outline__body">
                 <ul class="facility-outline__list">
-                    <li>所在地：北海道札幌近郊（詳細はお問い合わせください）</li>
-                    <li>敷地面積：約4,000㎡</li>
-                    <li>客室数：本館12室・新館6室・離れ4棟</li>
-                    <li>チェックイン：15:00 / チェックアウト：10:00</li>
-                    <li>駐車場：15台（無料）</li>
-                    <li>Wi‑Fi：全館対応</li>
+                    <li data-i18n="facility.outline.item1">所在地：北海道札幌近郊（詳細はお問い合わせください）</li>
+                    <li data-i18n="facility.outline.item2">敷地面積：約4,000㎡</li>
+                    <li data-i18n="facility.outline.item3">客室数：本館12室・新館6室・離れ4棟</li>
+                    <li data-i18n="facility.outline.item4">チェックイン：15:00 / チェックアウト：10:00</li>
+                    <li data-i18n="facility.outline.item5">駐車場：15台（無料）</li>
+                    <li data-i18n="facility.outline.item6">Wi‑Fi：全館対応</li>
                 </ul>
-                <p class="facility-outline__note">※ 内容は仮設定です。正式情報にあわせて調整いたします。</p>
+                <p class="facility-outline__note" data-i18n="facility.outline.note">※ 内容は仮設定です。正式情報にあわせて調整いたします。</p>
             </div>
         </section>
 
         <section id="booking" class="booking reveal">
             <div class="booking__inner">
-                <h2 class="booking__title">ご予約</h2>
-                <p class="booking__text">ご予約は専用予約フォームまたは、<br>お電話にて承ります。<br>当サイトからのご予約が最もお得です。</p>
-                <a class="booking__cta" href="reserve/reserve.html" data-nav="reserve">宿泊のご予約はこちら</a>
+                <h2 class="booking__title" data-i18n="home.booking.title">ご予約</h2>
+                <p class="booking__text" data-i18n-html="home.booking.text">ご予約は専用予約フォームまたは、<br>お電話にて承ります。<br>当サイトからのご予約が最もお得です。</p>
+                <a class="booking__cta" href="reserve/reserve.html" data-nav="reserve" data-i18n="action.reserveLong">宿泊のご予約はこちら</a>
                 <p class="booking__tel">Tel. 011-598-0001</p>
-                <p class="booking__hours">受付時間 9:00 ～ 19:00</p>
+                <p class="booking__hours" data-i18n="contact.hours">受付時間 9:00 ～ 19:00</p>
             </div>
         </section>
     </main>

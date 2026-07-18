@@ -71,6 +71,24 @@
         return window.ykT('reserve.dynamic.dateRangeStay', '{checkin} ～ {checkout}').replace('{checkin}', checkin).replace('{checkout}', checkout);
     };
 
+    // 【体验修复 · 2026-07-19】原来这里直接展示 item.plan_name(数据库
+    // plans.name_ja 原始日语字段),购物车/预约完成页显示的是已翻译的房型名,
+    // 查询结果这里却总是日文,两边对不上(体验审查报告第六节新发现)。
+    // 0006 迁移给 lookup_reservation() 补上了 plan_code 字段,这里按 code 去
+    // 查 reserve.js/booking_info.js 购物车环节已经在用的同一个 key
+    // (`reserve.plan.<code>.title`),保证房型名称在全站范围内翻译一致。
+    // 日帰りプラン(daytrip-*)目前站内还没有这几个 key 的多语言版本(既有
+    // 限制,不在本次修复范围),查不到时退回原始 name_ja,不会显示空白。
+    const getPlanDisplayName = (item) => {
+        if (item.plan_code) {
+            const translated = window.ykT(`reserve.plan.${item.plan_code}.title`, null);
+            if (translated) {
+                return translated;
+            }
+        }
+        return item.plan_name || window.ykT('reserve.lookup.result.plan', 'プラン');
+    };
+
     const formatItemsDetail = (items) => {
         if (!Array.isArray(items) || !items.length) {
             return '--';
@@ -78,7 +96,7 @@
         return items
             .map((item, index) => {
                 const dates = formatDateRange(item.checkin_date, item.checkout_date);
-                const planName = item.plan_name || window.ykT('reserve.lookup.result.plan', 'プラン');
+                const planName = getPlanDisplayName(item);
                 return window.ykT('reserve.lookup.dynamic.itemLine', '客室{n}: {plan} / {dates} / {guests} {rooms} / {price}')
                     .replace('{n}', String(index + 1))
                     .replace('{plan}', planName)
@@ -100,7 +118,7 @@
             statusEl.textContent = getStatusLabel(record.status);
         }
         if (planEl) {
-            planEl.textContent = items.map((item) => item.plan_name).filter(Boolean).join(' / ') || '--';
+            planEl.textContent = items.map((item) => getPlanDisplayName(item)).filter(Boolean).join(' / ') || '--';
         }
         if (datesEl) {
             const first = items[0];

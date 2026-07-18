@@ -127,7 +127,7 @@ const PLAN_NAMES: Record<string, Record<Locale, string>> = {
     en: "View Bath Room “Kazahana”",
     ja: "展望風呂付客室「風花」",
     ko: "전망탕 객실 “카자하나”",
-    "zh-Hans": "展望风吕客房「風花」",
+    "zh-Hans": "展望风吕客房「风花」",
     "zh-Hant": "展望風呂客房「風花」",
   },
   modern: {

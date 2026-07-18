@@ -289,6 +289,21 @@
                     el.setAttribute('aria-label', value);
                 }
             });
+            // 【i18n补全 · 2026-07-19】新增 alt 属性的翻译支持——之前只有
+            // textContent(data-i18n)/innerHTML(data-i18n-html)/placeholder/
+            // value/aria-label 这几种,唯独没有 img alt,导致全站客室画廊、
+            // 楼层地图图例、菜品图这类"内容全靠 alt 传达"的图片一直没法
+            // 多语言化(体验审查报告262处清单里的大部分正是这一类)。
+            document.querySelectorAll('[data-i18n-alt]').forEach((el) => {
+                const key = el.dataset.i18nAlt;
+                if (!key) {
+                    return;
+                }
+                const value = map[key];
+                if (typeof value === 'string') {
+                    el.setAttribute('alt', value);
+                }
+            });
             const pageKey = document.body?.dataset?.page ? `page.${document.body.dataset.page}` : '';
             if (pageKey) {
                 const title = map[`${pageKey}.title`];

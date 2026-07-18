@@ -300,10 +300,22 @@
     // 缓存 key 为 `${planDbId}:${YYYY-MM-DD}`,与旧版保持一致的格式,便于对照。
     const availabilityCache = new Map();
 
-    // 记录"哪些月份已经批量拉取过全部 plan 的库存数据",key 形如 `${year}-${month}`。
+    // 【性能修复 · 2026-07-18 返工】记录"哪些月份已经发起过批量请求",key
+    // 形如 `${year}-${month}`,value 是该请求的 Promise(进行中或已完成)。
     // 同一个月内不管翻多少次筛选条件、切换多少次住宿/日帰り模式,只要这个
-    // key 已经在集合里,就不会重复发请求,直接读 availabilityCache。
-    const loadedAvailabilityRanges = new Set();
+    // key 已经在 Map 里,就直接复用同一个 Promise,不会重复发请求。
+    //
+    // 原来这里用的是一个 Set,只在请求真正拿到结果之后才 add(rangeKey)
+    // 标记"已加载"——如果同一个月份的 fetchAvailabilityRangeForMonth() 被
+    // 连续调用两次(见下方 init() 里的说明,页面首次加载时确实会发生),
+    // 第二次调用会在第一次的 RPC 请求还没返回、Set 还没被标记之前就先执行
+    // 完"检查 Set → 没有 → 发起新请求"这几步,导致同一个月被重复请求两次。
+    // 改成存 Promise 之后,"检查 Map 有没有这个 key"和"把这次请求的 Promise
+    // 存进 Map"这两步在函数最开始同步执行、中间没有 await 缺口,第二次调用
+    // 一定能看到第一次已经存进去的 Promise,直接复用,不会双发请求——这是
+    // 比"只删掉 init() 里那次多余调用"更彻底的修复,即使将来其它地方也不小心
+    // 对同一个月连续调用两次,也不会再触发重复请求。
+    const availabilityRangeRequests = new Map();
 
     // 当前商品目录里全部 plan 的数据库 UUID(住宿房型 + 日帰り,不做筛选),
     // 用于批量请求时一次性把整月、全部 plan 的库存都拉回来。
@@ -326,47 +338,63 @@
     // 范围内,过去的日期和超过9个月预订上限的日期本来就是禁用格子,不需要
     // 查库存)对应的批量库存数据。只有 monthDate 这个月第一次被渲染时才会
     // 真正发请求,重复调用直接短路返回。
-    const fetchAvailabilityRangeForMonth = async (monthDate) => {
+    const fetchAvailabilityRangeForMonth = (monthDate) => {
         const year = monthDate.getFullYear();
         const month = monthDate.getMonth();
         const rangeKey = `${year}-${month}`;
-        if (loadedAvailabilityRanges.has(rangeKey)) {
-            return;
+
+        // 复用已有的 Promise(不管是还在进行中还是已经完成)——这一行和下面
+        // `availabilityRangeRequests.set(...)` 之间没有任何 await,是同步
+        // 执行的,所以两次几乎同时发生的调用不可能都判断"还没有请求过"。
+        const existing = availabilityRangeRequests.get(rangeKey);
+        if (existing) {
+            return existing;
         }
-        const planIds = getAllPlanDbIds();
-        if (!planIds.length) {
-            return;
-        }
-        const firstOfMonth = new Date(year, month, 1);
-        const lastOfMonth = new Date(year, month + 1, 0);
-        const rangeStart = firstOfMonth < today ? today : firstOfMonth;
-        // get_availability_range 是 [p_start, p_end) 半开区间,p_end 要传
-        // "最后一天的次日"才能覆盖到当月最后一天。
-        const rangeEndExclusive = new Date(Math.min(lastOfMonth.getTime(), maxDate.getTime()));
-        rangeEndExclusive.setDate(rangeEndExclusive.getDate() + 1);
-        if (rangeStart >= rangeEndExclusive) {
-            // 这个月全部日期都在禁用范围外(理论上只有 minMonth/maxMonth 边界
-            // 月份可能出现),没有需要查询的天,直接标记为"已加载"即可。
-            loadedAvailabilityRanges.add(rangeKey);
-            return;
-        }
-        const { data, error } = await supabase.rpc('get_availability_range', {
-            p_plan_ids: planIds,
-            p_start: formatDateInput(rangeStart),
-            p_end: formatDateInput(rangeEndExclusive)
-        });
-        if (error) {
-            console.error('[reserve] get_availability_range 呼び出し失敗', error);
-            // 查询失败时不写入缓存、也不标记为已加载——computeDateStatus() 在
-            // 缓存缺失时的兜底是展示"可选"(见下方),不会因为这次失败就把
-            // 日期误标成满房;下次翻回这个月时会自动重试这次请求。
-            return;
-        }
-        (data || []).forEach((row) => {
-            const key = `${row.plan_id}:${row.occ_date}`;
-            availabilityCache.set(key, typeof row.remaining === 'number' ? row.remaining : null);
-        });
-        loadedAvailabilityRanges.add(rangeKey);
+
+        const requestPromise = (async () => {
+            const planIds = getAllPlanDbIds();
+            if (!planIds.length) {
+                // 商品目录理论上应该已经加载完成(init() 里 loadCatalog() 会
+                // await 在前面),这里只是防御性兜底。不缓存这次的空结果,
+                // 允许之后重试。
+                availabilityRangeRequests.delete(rangeKey);
+                return;
+            }
+            const firstOfMonth = new Date(year, month, 1);
+            const lastOfMonth = new Date(year, month + 1, 0);
+            const rangeStart = firstOfMonth < today ? today : firstOfMonth;
+            // get_availability_range 是 [p_start, p_end) 半开区间,p_end 要传
+            // "最后一天的次日"才能覆盖到当月最后一天。
+            const rangeEndExclusive = new Date(Math.min(lastOfMonth.getTime(), maxDate.getTime()));
+            rangeEndExclusive.setDate(rangeEndExclusive.getDate() + 1);
+            if (rangeStart >= rangeEndExclusive) {
+                // 这个月全部日期都在禁用范围外(理论上只有 minMonth/maxMonth
+                // 边界月份可能出现),没有需要查询的天,当作"已完成"处理即可
+                // (Promise 保留在 Map 里,下次同月份调用直接拿到这个空结果)。
+                return;
+            }
+            const { data, error } = await supabase.rpc('get_availability_range', {
+                p_plan_ids: planIds,
+                p_start: formatDateInput(rangeStart),
+                p_end: formatDateInput(rangeEndExclusive)
+            });
+            if (error) {
+                console.error('[reserve] get_availability_range 呼び出し失敗', error);
+                // 查询失败时把这次的 Promise 从 Map 里删掉——computeDateStatus()
+                // 在缓存缺失时的兜底是展示"可选"(见下方),不会因为这次失败就
+                // 把日期误标成满房;下次翻回这个月时会自动重新发起请求(而不是
+                // 永久卡在一个失败的结果上)。
+                availabilityRangeRequests.delete(rangeKey);
+                return;
+            }
+            (data || []).forEach((row) => {
+                const key = `${row.plan_id}:${row.occ_date}`;
+                availabilityCache.set(key, typeof row.remaining === 'number' ? row.remaining : null);
+            });
+        })();
+
+        availabilityRangeRequests.set(rangeKey, requestPromise);
+        return requestPromise;
     };
 
     // 汇总"当前模式(住宿/日帰り) + 当前房型筛选"下相关 plan 在某天的总剩余量,
@@ -1648,8 +1676,16 @@
         currentPlans = defaultPlans;
 
         toggleOptions();
+        // 【性能修复 · 2026-07-18 返工】这里原来在 setSelectionMode('checkin')
+        // 之后又显式调用了一次 renderCalendar()——但 setSelectionMode() 内部
+        // 本来就会调用 renderCalendar()(见该函数定义),这一行完全是多余的。
+        // 在改成批量 RPC 之前这个冗余调用只是多做了一次没必要的DOM渲染,代价
+        // 很小;现在 renderCalendar() 会触发 get_availability_range 批量请求,
+        // 冗余调用就意味着页面每次首次加载都会多打一次请求。上面的
+        // fetchAvailabilityRangeForMonth() 已经改成用 Promise 缓存彻底堵死了
+        // "同月份重复请求"这个问题(即使真的调用两次也不会双发请求),这里
+        // 顺手把这次冗余调用本身也删掉,不需要再依赖去重逻辑兜底。
         setSelectionMode('checkin');
-        renderCalendar();
         updateCheckoutBounds();
         updateSummary();
         applySearch();

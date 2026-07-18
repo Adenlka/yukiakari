@@ -639,20 +639,28 @@
     border-color: rgba(220, 182, 120, 0.85);
 }
 
+/* 【性能优化】这4张图原本直接引用首页轮播/rooms.html全屏hero同一份
+   1920px原图(room-views.jpg 还同时被 style.css 的 .feature__media--rooms
+   和 rooms.css 的 .hero--rooms 全屏大图复用),但 .plan-card__media 这里
+   实际只是一张小卡片缩略图(桌面双栏布局约283px宽,最宽的单栏堆叠场景也
+   只到约900px宽),用1920px原图等于把首屏级别的大图当缩略图用,浪费带宽。
+   改成引用专门为卡片裁的 *-card.jpg(1400px宽,按2倍retina覆盖了单栏堆叠
+   模式下最常见的宽度区间),不改动、不覆盖原图文件——原图仍原样服务于
+   首页轮播和 rooms.html 的全屏hero,两处用途已分离成两份独立文件。 */
 .plan-card__media--villa {
-    background-image: url("../assets/images/rooms/room-views.jpg");
+    background-image: url("../assets/images/rooms/room-views-card.jpg");
 }
 
 .plan-card__media--viewbath {
-    background-image: url("../assets/images/hero/hero-slide-01-exterior.jpg");
+    background-image: url("../assets/images/hero/hero-slide-01-exterior-card.jpg");
 }
 
 .plan-card__media--modern {
-    background-image: url("../assets/images/hero/hero-slide-03-stonewall.jpg");
+    background-image: url("../assets/images/hero/hero-slide-03-stonewall-card.jpg");
 }
 
 .plan-card__media--standard {
-    background-image: url("../assets/images/hero/hero-slide-10-Onsenhotel.jpg");
+    background-image: url("../assets/images/hero/hero-slide-10-Onsenhotel-card.jpg");
 }
 
 .reserve-results__footnote {

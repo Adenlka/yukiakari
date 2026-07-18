@@ -1,13 +1,417 @@
 /*
-  占位文件:管理后台独立视觉风格(admin.css)
+  管理后台独立视觉风格(admin.css)
 
-  用途:见 docs/yukiakari_设计方案_v1.md 第五节 —— 后台走简洁控制台风格
-  (白底/浅灰背景、表格、状态色标签、筛选栏),不套用前台和风装饰元素,
-  可保留前台品牌色做局部点缀(导航栏/强调按钮)。
-
-  与 style.css 等前台样式表完全独立,避免互相覆盖产生意外样式冲突。
-
-  实现阶段(角色3下一步)再补:具体的表格/表单/按钮/状态标签样式。
+  依据 docs/yukiakari_设计方案_v1.md 第五节:后台走简洁控制台风格
+  (白底/浅灰背景、清晰的表格与状态色标签、筛选栏),不套用前台的和风装饰
+  排版(前台是深色底+衬线字体+大量装饰性 clip-path,见 style.css),
+  只保留前台品牌色(--brand-accent,取自 style.css 的 --color-accent)
+  做局部点缀,让人一眼认出"同一个旅馆的后台",但整体走数据管理界面的
+  效率优先逻辑。与 style.css 完全独立,不共享类名,避免样式互相污染。
 */
 
-/* TODO(角色3下一阶段): 后台控制台风格实现 */
+:root {
+    --admin-bg: #f4f5f7;
+    --admin-surface: #ffffff;
+    --admin-border: #e2e4e9;
+    --admin-text: #1f2430;
+    --admin-text-muted: #6b7280;
+    --brand-accent: #b8894f; /* 前台 --color-accent(#dcb678)在浅色背景下适当加深,保证对比度 */
+    --brand-accent-soft: #f6ead9;
+    --admin-danger: #b3261e;
+    --admin-danger-soft: #fbe9e7;
+    --admin-success: #2e7d32;
+    --admin-success-soft: #e6f4ea;
+    --admin-warning: #b26a00;
+    --admin-warning-soft: #fff2df;
+    --admin-radius: 8px;
+    --admin-shadow: 0 1px 2px rgba(16, 24, 40, 0.06), 0 1px 3px rgba(16, 24, 40, 0.08);
+    --admin-font: "Hiragino Sans", "Noto Sans JP", "Yu Gothic", -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: var(--admin-bg);
+    color: var(--admin-text);
+    font-family: var(--admin-font);
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+a {
+    color: var(--brand-accent);
+}
+
+/* ---------- 顶部导航 ---------- */
+.admin-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    background: var(--admin-surface);
+    border-bottom: 1px solid var(--admin-border);
+    padding: 12px 24px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.admin-nav__brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--admin-text);
+    text-decoration: none;
+}
+
+.admin-nav__brand-mark {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--brand-accent);
+    display: inline-block;
+}
+
+.admin-nav__links {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex: 1;
+    margin-left: 24px;
+}
+
+.admin-nav__link {
+    padding: 8px 14px;
+    border-radius: var(--admin-radius);
+    color: var(--admin-text-muted);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.admin-nav__link:hover {
+    background: var(--admin-bg);
+    color: var(--admin-text);
+}
+
+.admin-nav__link.is-active {
+    background: var(--brand-accent-soft);
+    color: var(--brand-accent);
+}
+
+.admin-nav__user {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 13px;
+    color: var(--admin-text-muted);
+}
+
+/* ---------- 页面容器 ---------- */
+.admin-main {
+    max-width: 1160px;
+    margin: 0 auto;
+    padding: 28px 24px 64px;
+}
+
+.admin-page-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0 0 4px;
+}
+
+.admin-page-lead {
+    color: var(--admin-text-muted);
+    font-size: 14px;
+    margin: 0 0 20px;
+}
+
+/* ---------- 卡片/面板 ---------- */
+.admin-panel {
+    background: var(--admin-surface);
+    border: 1px solid var(--admin-border);
+    border-radius: var(--admin-radius);
+    box-shadow: var(--admin-shadow);
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+/* ---------- 筛选栏 ---------- */
+.admin-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: flex-end;
+}
+
+.admin-filters__field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 12px;
+    color: var(--admin-text-muted);
+}
+
+.admin-filters__field input {
+    min-width: 160px;
+}
+
+.admin-filters__actions {
+    display: flex;
+    gap: 8px;
+}
+
+/* ---------- 表单控件 ---------- */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="tel"],
+input[type="date"],
+input[type="search"],
+select,
+textarea {
+    font-family: inherit;
+    font-size: 14px;
+    color: var(--admin-text);
+    background: var(--admin-surface);
+    border: 1px solid var(--admin-border);
+    border-radius: 6px;
+    padding: 9px 12px;
+    outline: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: var(--brand-accent);
+    box-shadow: 0 0 0 3px var(--brand-accent-soft);
+}
+
+label {
+    font-size: 13px;
+    color: var(--admin-text-muted);
+}
+
+/* ---------- 按钮 ---------- */
+.admin-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 9px 16px;
+    border-radius: 6px;
+    border: 1px solid transparent;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    background: var(--brand-accent);
+    color: #fff;
+    transition: opacity 0.15s ease;
+}
+
+.admin-button:hover {
+    opacity: 0.88;
+}
+
+.admin-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.admin-button--ghost {
+    background: transparent;
+    border-color: var(--admin-border);
+    color: var(--admin-text);
+}
+
+.admin-button--danger {
+    background: var(--admin-danger);
+}
+
+.admin-button--small {
+    padding: 5px 10px;
+    font-size: 12px;
+}
+
+/* ---------- 表格 ---------- */
+.admin-table-wrap {
+    overflow-x: auto;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+}
+
+.admin-table th,
+.admin-table td {
+    text-align: left;
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--admin-border);
+    white-space: nowrap;
+}
+
+.admin-table td.admin-table__wrap {
+    white-space: normal;
+    max-width: 320px;
+}
+
+.admin-table th {
+    color: var(--admin-text-muted);
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    background: var(--admin-bg);
+}
+
+.admin-table tbody tr:hover {
+    background: var(--admin-bg);
+}
+
+.admin-table__actions {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.admin-empty,
+.admin-loading {
+    padding: 32px 16px;
+    text-align: center;
+    color: var(--admin-text-muted);
+    font-size: 14px;
+}
+
+/* ---------- 状态标签 ---------- */
+.admin-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.admin-badge--confirmed {
+    background: var(--admin-success-soft);
+    color: var(--admin-success);
+}
+
+.admin-badge--cancelled {
+    background: var(--admin-danger-soft);
+    color: var(--admin-danger);
+}
+
+.admin-badge--completed {
+    background: var(--brand-accent-soft);
+    color: var(--brand-accent);
+}
+
+.admin-badge--unread {
+    background: var(--admin-warning-soft);
+    color: var(--admin-warning);
+}
+
+.admin-badge--read {
+    background: var(--admin-bg);
+    color: var(--admin-text-muted);
+}
+
+/* ---------- 登录页 ---------- */
+.admin-login {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+}
+
+.admin-login__card {
+    width: 100%;
+    max-width: 380px;
+    background: var(--admin-surface);
+    border: 1px solid var(--admin-border);
+    border-radius: 12px;
+    box-shadow: var(--admin-shadow);
+    padding: 32px 28px;
+}
+
+.admin-login__brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    font-size: 18px;
+    margin-bottom: 4px;
+}
+
+.admin-login__lead {
+    color: var(--admin-text-muted);
+    font-size: 13px;
+    margin: 0 0 24px;
+}
+
+.admin-login__field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 16px;
+}
+
+.admin-login__field input {
+    width: 100%;
+}
+
+.admin-login__submit {
+    width: 100%;
+    margin-top: 8px;
+}
+
+.admin-login__error {
+    background: var(--admin-danger-soft);
+    color: var(--admin-danger);
+    border-radius: 6px;
+    padding: 10px 12px;
+    font-size: 13px;
+    margin: 0 0 16px;
+    display: none;
+}
+
+.admin-login__error.is-visible {
+    display: block;
+}
+
+.admin-login__back {
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+    font-size: 13px;
+    color: var(--admin-text-muted);
+}
+
+/* ---------- 工具类 ---------- */
+.is-hidden {
+    display: none !important;
+}
+
+.admin-text-muted {
+    color: var(--admin-text-muted);
+}
+
+.admin-inline-error {
+    color: var(--admin-danger);
+    font-size: 13px;
+}

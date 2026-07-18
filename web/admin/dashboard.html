@@ -3,18 +3,89 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Dashboard - yukiakari</title>
+  <title>予約管理 - 雪灯り 管理画面</title>
+  <meta name="robots" content="noindex, nofollow">
   <!--
-    占位文件:管理后台预约列表/管理界面骨架。
-    用途:登录后展示预约列表,支持查看/搜索/确认/取消(需 Supabase RLS 限权,见设计方案第三节)。
-    依赖:assets/js/supabase-client.js + assets/js/admin/admin-dashboard.js + assets/css/admin.css
-    实现阶段再补:会话校验(未登录跳回 login.html)、表格渲染、状态标签、筛选栏。
+    予約管理ページ。reservations(+ reservation_items/plans を埋め込み取得)を
+    一覧表示し、予約コード/お客様名/日付で絞り込み、ステータス変更(完了に
+    する/キャンセル)ができる。書き込みは status/cancelled_at の2列だけに
+    絞ってあり(RLS の列レベル権限と一致させてある、詳しくは admin-dashboard.js
+    冒頭のコメント参照)、それ以外のフィールドを書き換えようとするコードは
+    そもそも書いていない。
   -->
   <link rel="stylesheet" href="../assets/css/admin.css">
 </head>
 <body>
-  <!-- TODO(角色3下一阶段): 预约列表/管理界面实现 -->
+  <nav class="admin-nav">
+    <a class="admin-nav__brand" href="dashboard.html">
+      <span class="admin-nav__brand-mark" aria-hidden="true"></span>
+      <span>雪灯り 管理画面</span>
+    </a>
+    <div class="admin-nav__links">
+      <a class="admin-nav__link is-active" href="dashboard.html">予約管理</a>
+      <a class="admin-nav__link" href="contact-messages.html">お問い合わせ管理</a>
+    </div>
+    <div class="admin-nav__user">
+      <span data-admin-user>--</span>
+      <button class="admin-button admin-button--ghost admin-button--small" type="button" data-logout>ログアウト</button>
+    </div>
+  </nav>
+
+  <main class="admin-main">
+    <h1 class="admin-page-title">予約管理</h1>
+    <p class="admin-page-lead">登録されている予約の一覧です。予約コード・お客様名・日付で絞り込めます。</p>
+
+    <div class="admin-panel">
+      <form class="admin-filters" data-filter-form>
+        <div class="admin-filters__field">
+          <label for="filter-code">予約コード</label>
+          <input type="text" id="filter-code" placeholder="例）YK260718ABCDE">
+        </div>
+        <div class="admin-filters__field">
+          <label for="filter-name">お客様名</label>
+          <input type="text" id="filter-name" placeholder="例）山田太郎">
+        </div>
+        <div class="admin-filters__field">
+          <label for="filter-date">日付(宿泊/利用日を含む予約)</label>
+          <input type="date" id="filter-date">
+        </div>
+        <div class="admin-filters__actions">
+          <button class="admin-button" type="submit">絞り込む</button>
+          <button class="admin-button admin-button--ghost" type="button" data-filter-reset>リセット</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="admin-panel">
+      <p class="admin-loading" data-loading>読み込み中…</p>
+      <p class="admin-empty is-hidden" data-empty>該当する予約が見つかりませんでした。</p>
+      <p class="admin-inline-error is-hidden" data-load-error></p>
+      <div class="admin-table-wrap is-hidden" data-table-wrap>
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>予約コード</th>
+              <th>お客様</th>
+              <th>連絡先</th>
+              <th>プラン内容</th>
+              <th>人数/客室</th>
+              <th>合計金額</th>
+              <th>支払方法</th>
+              <th>ステータス</th>
+              <th>登録日時</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody data-table-body></tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <script src="../config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
   <script src="../assets/js/supabase-client.js"></script>
+  <script src="../assets/js/admin/admin-guard.js"></script>
   <script src="../assets/js/admin/admin-dashboard.js"></script>
 </body>
 </html>

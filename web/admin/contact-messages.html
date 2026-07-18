@@ -3,17 +3,82 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Contact Messages - yukiakari Admin</title>
+  <title>お問い合わせ管理 - 雪灯り 管理画面</title>
+  <meta name="robots" content="noindex, nofollow">
   <!--
-    占位文件:联系表单留言管理页骨架(设计方案第七节:1.3 联系表单纳入 admin 后台管理)。
-    用途:展示 contact_messages 表中的留言列表,供管理员查看(SELECT 仅管理员可读,anon 只能 INSERT)。
-    依赖:assets/js/supabase-client.js + assets/css/admin.css
-    实现阶段再补:列表渲染、已读/未读状态、分页。
+    联系表单留言管理页。展示 contact_messages 表中的留言(SELECT 仅管理员
+    可读,anon 只能 INSERT,见 0002_rls_policies.sql),支持标记已读/未読
+    (UPDATE 仅限 status 一列,RLS 列级权限已经限定死)。
   -->
   <link rel="stylesheet" href="../assets/css/admin.css">
 </head>
 <body>
-  <!-- TODO(角色3下一阶段): 留言列表实现 -->
+  <nav class="admin-nav">
+    <a class="admin-nav__brand" href="dashboard.html">
+      <span class="admin-nav__brand-mark" aria-hidden="true"></span>
+      <span>雪灯り 管理画面</span>
+    </a>
+    <div class="admin-nav__links">
+      <a class="admin-nav__link" href="dashboard.html">予約管理</a>
+      <a class="admin-nav__link is-active" href="contact-messages.html">お問い合わせ管理</a>
+    </div>
+    <div class="admin-nav__user">
+      <span data-admin-user>--</span>
+      <button class="admin-button admin-button--ghost admin-button--small" type="button" data-logout>ログアウト</button>
+    </div>
+  </nav>
+
+  <main class="admin-main">
+    <h1 class="admin-page-title">お問い合わせ管理</h1>
+    <p class="admin-page-lead">お問い合わせフォームから送信された内容の一覧です。</p>
+
+    <div class="admin-panel">
+      <form class="admin-filters" data-filter-form>
+        <div class="admin-filters__field">
+          <label for="filter-status">ステータス</label>
+          <select id="filter-status">
+            <option value="">すべて</option>
+            <option value="unread">未読のみ</option>
+            <option value="read">既読のみ</option>
+          </select>
+        </div>
+        <div class="admin-filters__field">
+          <label for="filter-keyword">お名前・メールで検索</label>
+          <input type="text" id="filter-keyword" placeholder="例）山田太郎 / info@example.com">
+        </div>
+        <div class="admin-filters__actions">
+          <button class="admin-button" type="submit">絞り込む</button>
+          <button class="admin-button admin-button--ghost" type="button" data-filter-reset>リセット</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="admin-panel">
+      <p class="admin-loading" data-loading>読み込み中…</p>
+      <p class="admin-empty is-hidden" data-empty>該当するお問い合わせが見つかりませんでした。</p>
+      <p class="admin-inline-error is-hidden" data-load-error></p>
+      <div class="admin-table-wrap is-hidden" data-table-wrap>
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>受信日時</th>
+              <th>お名前</th>
+              <th>連絡先</th>
+              <th>内容</th>
+              <th>ステータス</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody data-table-body></tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <script src="../config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
   <script src="../assets/js/supabase-client.js"></script>
+  <script src="../assets/js/admin/admin-guard.js"></script>
+  <script src="../assets/js/admin/admin-contact-messages.js"></script>
 </body>
 </html>

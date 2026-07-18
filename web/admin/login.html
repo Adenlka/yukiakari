@@ -3,19 +3,46 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Login - yukiakari</title>
+  <title>管理者ログイン - 雪灯り</title>
+  <meta name="robots" content="noindex, nofollow">
   <!--
-    占位文件:管理后台登录页骨架。
-    用途:管理员通过邮箱+密码登录(Supabase Auth,GoTrue),登录成功后跳转 dashboard.html。
-    依赖:assets/js/supabase-client.js(初始化 client)+ assets/js/admin/admin-auth.js(登录逻辑)
-         assets/css/admin.css(独立后台视觉风格,见设计方案第五节)
-    实现阶段再补:表单字段、CSRF/频率限制配合的前端提示、错误信息展示(不暴露堆栈)。
+    管理者ログインページ。Supabase Auth(邮箱+密码)登录,登录成功跳转
+    dashboard.html。管理员账号本身不开放自助注册,只能由 Aden 在 Supabase
+    Dashboard 手动创建(见 docs/yukiakari_变更记录.md 本轮记录里的提醒)。
   -->
   <link rel="stylesheet" href="../assets/css/admin.css">
 </head>
 <body>
-  <!-- TODO(角色3下一阶段): 登录表单实现 -->
+  <div class="admin-login">
+    <div class="admin-login__card">
+      <div class="admin-login__brand">
+        <span class="admin-nav__brand-mark" aria-hidden="true"></span>
+        <span>雪灯り 管理画面</span>
+      </div>
+      <p class="admin-login__lead">管理者アカウントでログインしてください。</p>
+
+      <p class="admin-login__error" data-login-error role="alert"></p>
+
+      <form data-login-form novalidate>
+        <div class="admin-login__field">
+          <label for="login-email">メールアドレス</label>
+          <input type="email" id="login-email" name="email" autocomplete="username" required>
+        </div>
+        <div class="admin-login__field">
+          <label for="login-password">パスワード</label>
+          <input type="password" id="login-password" name="password" autocomplete="current-password" required>
+        </div>
+        <button class="admin-button admin-login__submit" type="submit" data-login-submit>ログイン</button>
+      </form>
+
+      <a class="admin-login__back" href="../index_web.html">サイトトップへ戻る</a>
+    </div>
+  </div>
+
+  <script src="../config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
   <script src="../assets/js/supabase-client.js"></script>
+  <script src="../assets/js/admin/admin-guard.js"></script>
   <script src="../assets/js/admin/admin-auth.js"></script>
 </body>
 </html>

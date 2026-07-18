@@ -1,0 +1,49 @@
+﻿/* notfound.css —— 404 页面专用样式,和 faq.css 的 .faq-hero 视觉语言保持一致
+   (居中大标题 + 说明文字 + 深色背景,沿用 style.css 里的全局变量),
+   没有直接复用 faq.css 是因为 404 页面独立于任何一个内容页,不想让它
+   意外依赖某个具体页面的样式文件。*/
+
+.notfound-hero {
+    min-height: calc(100vh - 260px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 160px 24px 100px;
+    text-align: center;
+}
+
+.notfound-hero__inner {
+    max-width: 640px;
+    margin: 0 auto;
+    display: grid;
+    gap: 20px;
+}
+
+.notfound-hero__code {
+    margin: 0;
+    font-size: clamp(56px, 12vw, 120px);
+    letter-spacing: 0.15em;
+    color: var(--color-accent);
+    font-weight: 600;
+}
+
+.notfound-hero__title {
+    margin: 0;
+    font-size: clamp(24px, 4vw, 34px);
+    letter-spacing: 0.12em;
+}
+
+.notfound-hero__lead {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.9;
+    color: rgba(238, 242, 243, 0.75);
+}
+
+.notfound-hero__actions {
+    margin-top: 12px;
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+}

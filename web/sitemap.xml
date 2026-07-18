@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  sitemap.xml —— 只列出全站 16 个公开主站页面(和 OGP/canonical 覆盖的
+  范围完全一致)。不列入:
+  - admin/ 下的管理后台页面(login.html/dashboard.html/contact-messages.html),
+    这些本来就不该被搜索引擎索引,robots.txt 也已经 Disallow 了这个目录。
+  - reserve/ 下的预约流程中间页(reserve.html/booking_info.html/
+    booking_lookup.html/booking_complete.html),这几个页面依赖购物车/
+    会话状态才有意义,直接从搜索结果进入没有实际内容可看,不适合被索引
+    为独立着陆页;真正需要被发现的"如何预约"入口已经通过首页/各页面的
+    "予約"按钮链接过去,爬虫仍能顺着链接找到,只是不作为 sitemap 里的
+    独立条目。
+  - 404.html 本身已加 <meta name="robots" content="noindex">,不需要出现
+    在 sitemap 里。
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+        <loc>https://yukiakari-lgz5.vercel.app/</loc>
+        <lastmod>2026-07-18</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>1.0</priority>
+    </url>
+    <url>
+        <loc>https://yukiakari-lgz5.vercel.app/about.html</loc>
+        <lastmod>2026-07-18</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://yukiakari-lgz5.vercel.app/rooms.html</loc>
+        <lastmod>2026-07-18</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
+    </url>
+    <url>
+        <loc>https://yukiakari-lgz5.vercel.app/room-awanoyuki.html</loc>
+        <lastmod>2026-07-18</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://yukiakari-lgz5.vercel.app/room-kazahana.html</loc>
+        <lastmod>2026-07-18</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://yukiakari-lgz5.vercel.app/room-tsukiakari.html</loc>
+        <lastmod>2026-07-18</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://yukiakari-lgz5.vercel.app/room-standard.html</loc>
+        <lastmod>2026-07-18</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://yukiakari-lgz5.vercel.app/spa.html</loc>
+        <lastmod>2026-07-18</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://yukiakari-lgz5.vercel.app/dining.html</loc>
+        <lastmod>2026-07-18</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://yukiakari-lgz5.vercel.app/facility.html</loc>
+        <lastmod>2026-07-18</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://yukiakari-lgz5.vercel.app/access.html</loc>
+        <lastmod>2026-07-18</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://yukiakari-lgz5.vercel.app/contact.html</loc>
+        <lastmod>2026-07-18</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://yukiakari-lgz5.vercel.app/faq.html</loc>
+        <lastmod>2026-07-18</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://yukiakari-lgz5.vercel.app/guidelines.html</loc>
+        <lastmod>2026-07-18</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.5</priority>
+    </url>
+    <url>
+        <loc>https://yukiakari-lgz5.vercel.app/privacypolicy.html</loc>
+        <lastmod>2026-07-18</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.3</priority>
+    </url>
+    <url>
+        <loc>https://yukiakari-lgz5.vercel.app/sitepolicy.html</loc>
+        <lastmod>2026-07-18</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.3</priority>
+    </url>
+</urlset>

@@ -287,34 +287,92 @@
             : `${formatGuestsLabel(guests)} / ${formatNightsLabel(nightsValue)}`
     );
 
-    // ---------- 房态查询:调用 get_availability() RPC,替换原来的伪随机算法 ----------
-    // 简单内存缓存,key 为 `${planId}:${日期}`,避免同一个月里来回翻页/切换
-    // 筛选条件时重复请求同一个日期。
+    // ---------- 房态查询:调用 get_availability_range() 批量 RPC ----------
+    // 【性能修复】原来 computeDateStatus() 对日历网格里每一天 × 每个 plan 各
+    // 发一次 get_availability() RPC,一个月网格 35~42 格 × 4 个房型 ≈ 140 次
+    // 独立 HTTP 请求(DevTools 实测单页 188 requests)。现在改成每次渲染一个
+    // 新月份时,对"这个月全部 plan(不管当前是否被房型筛选/住宿-日帰り模式
+    // 过滤掉)"只发一次 get_availability_range 批量请求,结果整月一次性存进
+    // availabilityCache;computeDateStatus() 改成纯读缓存的同步函数,不再发
+    // 请求。之所以每次都拉全部 plan 而不是只拉当前筛选下用得到的 plan,是为
+    // 了让"切换住宿/日帰り模式、切换房型筛选"这两个操作命中同一份月度缓存,
+    // 不必因为筛选变了就重新请求——见下方 loadedAvailabilityRanges 的说明。
+    // 缓存 key 为 `${planDbId}:${YYYY-MM-DD}`,与旧版保持一致的格式,便于对照。
     const availabilityCache = new Map();
 
-    const fetchAvailability = async (planDbId, date) => {
-        if (!planDbId) {
-            return null;
-        }
-        const key = `${planDbId}:${formatDateInput(date)}`;
-        if (availabilityCache.has(key)) {
-            return availabilityCache.get(key);
-        }
-        const { data, error } = await supabase.rpc('get_availability', {
-            p_plan_id: planDbId,
-            p_date: formatDateInput(date)
+    // 记录"哪些月份已经批量拉取过全部 plan 的库存数据",key 形如 `${year}-${month}`。
+    // 同一个月内不管翻多少次筛选条件、切换多少次住宿/日帰り模式,只要这个
+    // key 已经在集合里,就不会重复发请求,直接读 availabilityCache。
+    const loadedAvailabilityRanges = new Set();
+
+    // 当前商品目录里全部 plan 的数据库 UUID(住宿房型 + 日帰り,不做筛选),
+    // 用于批量请求时一次性把整月、全部 plan 的库存都拉回来。
+    const getAllPlanDbIds = () => {
+        const ids = new Set();
+        Object.values(planDetailsByRoom).forEach((plan) => {
+            if (plan.dbId) {
+                ids.add(plan.dbId);
+            }
         });
-        const value = error ? null : (typeof data === 'number' ? data : null);
-        if (error) {
-            console.error('[reserve] get_availability 呼び出し失敗', error);
+        daytripPlans.forEach((plan) => {
+            if (plan.dbId) {
+                ids.add(plan.dbId);
+            }
+        });
+        return Array.from(ids);
+    };
+
+    // 拉取"某个月份、日历网格里实际会展示的那些天"(裁剪到 [today, maxDate]
+    // 范围内,过去的日期和超过9个月预订上限的日期本来就是禁用格子,不需要
+    // 查库存)对应的批量库存数据。只有 monthDate 这个月第一次被渲染时才会
+    // 真正发请求,重复调用直接短路返回。
+    const fetchAvailabilityRangeForMonth = async (monthDate) => {
+        const year = monthDate.getFullYear();
+        const month = monthDate.getMonth();
+        const rangeKey = `${year}-${month}`;
+        if (loadedAvailabilityRanges.has(rangeKey)) {
+            return;
         }
-        availabilityCache.set(key, value);
-        return value;
+        const planIds = getAllPlanDbIds();
+        if (!planIds.length) {
+            return;
+        }
+        const firstOfMonth = new Date(year, month, 1);
+        const lastOfMonth = new Date(year, month + 1, 0);
+        const rangeStart = firstOfMonth < today ? today : firstOfMonth;
+        // get_availability_range 是 [p_start, p_end) 半开区间,p_end 要传
+        // "最后一天的次日"才能覆盖到当月最后一天。
+        const rangeEndExclusive = new Date(Math.min(lastOfMonth.getTime(), maxDate.getTime()));
+        rangeEndExclusive.setDate(rangeEndExclusive.getDate() + 1);
+        if (rangeStart >= rangeEndExclusive) {
+            // 这个月全部日期都在禁用范围外(理论上只有 minMonth/maxMonth 边界
+            // 月份可能出现),没有需要查询的天,直接标记为"已加载"即可。
+            loadedAvailabilityRanges.add(rangeKey);
+            return;
+        }
+        const { data, error } = await supabase.rpc('get_availability_range', {
+            p_plan_ids: planIds,
+            p_start: formatDateInput(rangeStart),
+            p_end: formatDateInput(rangeEndExclusive)
+        });
+        if (error) {
+            console.error('[reserve] get_availability_range 呼び出し失敗', error);
+            // 查询失败时不写入缓存、也不标记为已加载——computeDateStatus() 在
+            // 缓存缺失时的兜底是展示"可选"(见下方),不会因为这次失败就把
+            // 日期误标成满房;下次翻回这个月时会自动重试这次请求。
+            return;
+        }
+        (data || []).forEach((row) => {
+            const key = `${row.plan_id}:${row.occ_date}`;
+            availabilityCache.set(key, typeof row.remaining === 'number' ? row.remaining : null);
+        });
+        loadedAvailabilityRanges.add(rangeKey);
     };
 
     // 汇总"当前模式(住宿/日帰り) + 当前房型筛选"下相关 plan 在某天的总剩余量,
-    // 换算成日历要用的 available/limited/unavailable 三档展示。
-    const computeDateStatus = async (date) => {
+    // 换算成日历要用的 available/limited/unavailable 三档展示。纯读缓存,
+    // 不发请求——缓存由 fetchAvailabilityRangeForMonth() 统一批量填充。
+    const computeDateStatus = (date) => {
         const daytripMode = isDaytrip();
         const relevantPlans = daytripMode ? daytripPlans : Object.keys(planDetailsByRoom).map((code) => ({
             roomType: code,
@@ -326,12 +384,20 @@
             : relevantPlans;
         const targets = filtered.length ? filtered : relevantPlans;
 
-        const results = await Promise.all(targets.map((plan) => fetchAvailability(plan.dbId, date)));
+        const dateKey = formatDateInput(date);
+        const results = targets.map((plan) => {
+            if (!plan.dbId) {
+                return undefined;
+            }
+            const key = `${plan.dbId}:${dateKey}`;
+            return availabilityCache.get(key);
+        });
         const validResults = results.filter((value) => typeof value === 'number');
         if (!validResults.length) {
-            // 查询失败(网络问题等)时保守展示为"可选",不因为前端查询故障就
-            // 把日期误标成满房劝退用户 —— 真正的库存校验在提交时由后端
-            // submit_reservation() 再做一次,不会因为这里的展示问题导致超卖。
+            // 缓存缺失(还没拉到/请求失败)时保守展示为"可选",不因为前端查询
+            // 故障就把日期误标成满房劝退用户 —— 真正的库存校验在提交时由
+            // 后端 submit_reservation() 再做一次,不会因为这里的展示问题
+            // 导致超卖。
             return 'available';
         }
         const total = validResults.reduce((sum, value) => sum + Math.max(0, value), 0);
@@ -754,25 +820,30 @@
     // 日历网格的日期可用性(available/limited/unavailable)现在来自数据库真实
     // 库存,而不是伪随机数。为了不阻塞翻页/切换筛选的即时反馈,renderCalendar()
     // 先同步画出格子(默认给一个乐观的 is-available 初始状态),再用
-    // refreshVisibleAvailability() 异步把真实结果补上去。
+    // refreshVisibleAvailability() 异步把真实结果补上去——现在这一步只对
+    // "当前月份是否已经批量拉取过"发起至多一次 get_availability_range 请求
+    // (fetchAvailabilityRangeForMonth 内部会短路已加载过的月份),不再是
+    // 每个格子各发一次请求。
     let availabilityRequestToken = 0;
 
     const refreshVisibleAvailability = async () => {
         const token = (availabilityRequestToken += 1);
+        await fetchAvailabilityRangeForMonth(currentMonth);
+        if (token !== availabilityRequestToken) {
+            // 用户在这次批量请求返回之前已经翻页/切换了月份,这批结果已经
+            // 过期,不应用(避免把新月份的格子误刷成旧月份的库存状态)。
+            return;
+        }
         const buttons = Array.from(calendarGrid.querySelectorAll('button[data-date]'));
-        await Promise.all(buttons.map(async (button) => {
+        buttons.forEach((button) => {
             const date = parseDate(button.dataset.date);
-            if (!date) {
+            if (!date || !button.isConnected) {
                 return;
             }
-            const status = await computeDateStatus(date);
-            if (token !== availabilityRequestToken || !button.isConnected) {
-                // 用户已经翻页/切换了筛选条件,这批结果已经过期,丢弃不应用
-                return;
-            }
+            const status = computeDateStatus(date);
             button.classList.remove('is-available', 'is-limited', 'is-unavailable');
             button.classList.add(`is-${status}`);
-        }));
+        });
     };
 
     const renderCalendar = () => {

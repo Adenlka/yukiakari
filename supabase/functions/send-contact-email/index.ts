@@ -24,9 +24,20 @@
 //   WEBHOOK_SECRET 一致的值>`。本函数收到请求后校验这个 header,对不上就
 //   直接拒绝,不区分"没带这个头"还是"带了但值不对"。
 //
-// 部署前需要在 Supabase Dashboard 配置的两个 Secrets:
+// 【真实感提升轮 · 邮件收发件地址配置】收发件地址不再硬编码占位值,改成
+// 读 MAIL_FROM / MAIL_TO 两个环境变量。当前项目还没有自有域名,MAIL_FROM
+// 暂时用 Resend 提供的测试发信地址 onboarding@resend.dev——这个地址只能
+// 发往"注册 Resend 账号时用的那个邮箱",发给其它收件人会被 Resend 拒绝,
+// 这是 Resend 对未验证域名的限制,不是本函数的 bug。等旅馆方将来有了自己
+// 的域名,在 Resend 后台完成域名验证(加 DNS 记录证明域名所有权)后,就可以
+// 把 MAIL_FROM 换成正式的发信地址(比如 notify@真实域名),不需要改代码,
+// 只需要改 Supabase Secrets 里的环境变量值。
+//
+// 部署前需要在 Supabase Dashboard 配置的四个 Secrets:
 //   RESEND_API_KEY   Resend 的 API Key
 //   WEBHOOK_SECRET   自己生成一个随机字符串,同时填进上面的 Webhook Header 里
+//   MAIL_FROM        发件地址,当前阶段填 Resend 测试地址(如 onboarding@resend.dev)
+//   MAIL_TO          旅馆方实际收件邮箱,支持逗号分隔多个地址
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { timingSafeEqual } from "https://deno.land/std@0.224.0/crypto/timing_safe_equal.ts";
@@ -90,6 +101,29 @@ Deno.serve(async (req: Request) => {
     return jsonResponse({ error: "服务未正确配置" }, 500);
   }
 
+  // ---------- 收发件地址:改读环境变量,不再硬编码 ----------
+  // 未配置时不能让函数直接崩溃或抛 500——留言这条数据本身已经在
+  // submit-contact-message 那一步落库成功了,本函数只是"锦上添花"的邮件
+  // 通知,配置缺失只应该导致"这封通知邮件发不出去",不应该影响任何已经
+  // 完成的数据写入,也不应该让 Supabase Database Webhook 因为收到非 2xx
+  // 响应而反复重试。这里打明确的错误日志方便排查,然后直接优雅降级返回
+  // sent:false,和下面邮件发送失败/异常时的处理方式保持一致。
+  const mailFrom = Deno.env.get("MAIL_FROM");
+  const mailToRaw = Deno.env.get("MAIL_TO");
+  if (!mailFrom || !mailToRaw) {
+    console.error(
+      "MAIL_FROM 或 MAIL_TO 未配置,跳过发信(留言已落库,不受影响)。" +
+        "请在 Supabase Dashboard → Edge Functions → send-contact-email → Secrets 里配置这两个变量。",
+    );
+    return jsonResponse({ sent: false, reason: "mail_env_not_configured" }, 200);
+  }
+  // MAIL_TO 支持逗号分隔多个收件地址,去空格 + 过滤空字符串
+  const mailTo = mailToRaw.split(",").map((addr) => addr.trim()).filter(Boolean);
+  if (!mailTo.length) {
+    console.error("MAIL_TO 配置内容解析后为空(可能是纯逗号/空格),跳过发信");
+    return jsonResponse({ sent: false, reason: "mail_env_not_configured" }, 200);
+  }
+
   let payload: { record?: ContactMessageRecord };
   try {
     payload = await req.json();
@@ -140,10 +174,8 @@ Deno.serve(async (req: Request) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        // 实现阶段替换为已在 Resend 验证过的发信域名/地址
-        from: "yukiakari Contact Form <notify@yukiakari.example>",
-        // 实现阶段替换为客户方真实收件地址
-        to: ["front-desk@yukiakari.example"],
+        from: `yukiakari Contact Form <${mailFrom}>`,
+        to: mailTo,
         reply_to: email || undefined,
         subject: `新的联系表单留言 - ${escapeHtml(name || "匿名")}`,
         html: `<p><strong>姓名:</strong>${escapeHtml(name)}</p>

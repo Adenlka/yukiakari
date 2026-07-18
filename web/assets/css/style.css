@@ -1189,12 +1189,6 @@ body.menu-open {
     margin: 0;
 }
 
-.section__media {
-    min-height: 320px;
-    background: linear-gradient(140deg, rgba(220, 182, 120, 0.12), rgba(21, 24, 28, 0.2)), url("../images/cuisine/焼きおにぎり.jpg") center/cover;
-    border-radius: 8px;
-}
-
 .section--onsen {
     background: linear-gradient(180deg, rgba(21, 24, 28, 0.2), rgba(10, 12, 14, 0.9));
 }

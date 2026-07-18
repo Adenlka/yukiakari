@@ -195,6 +195,16 @@
             }, 2200);
         };
 
+        // 【体验修复 · 2026-07-19】暴露成全局函数,给 reserve/ 页面的 JS
+        // (reserve.js 等)复用这套"固定定位、不受滚动位置影响"的提示样式。
+        // 起因:reserve.js 加购物车漏填日期时原本只把提示写进购物车面板里的
+        // 一小行文字(.reserve-cart__note),但同时会把页面滚动到日历区域
+        // (focusCalendar()),这两个位置往往不在同一屏,滚动过去后根本看不到
+        // 那行提示,体验上等于"点了没反应"(任务卡原话:静默失败)。这个
+        // toast 是 position: fixed(见 style.css .lang-toast),不管页面滚动到
+        // 哪里都会显示在右下角,能真正解决"看不到提示"的问题。
+        window.ykToast = showToast;
+
         const translatePage = (lang) => {
             const map = dictionary[lang] || dictionary.ja || {};
             document.querySelectorAll('[data-i18n]').forEach((el) => {
@@ -313,8 +323,46 @@
             window.dispatchEvent(new CustomEvent('yk:languagechange', { detail: { lang } }));
         };
 
+        // 【体验修复 · 2026-07-19】原来这里是
+        // `stored || document.documentElement.lang || 'ja'`——但每个 HTML
+        // 文件的 <html lang> 都硬编码写死 "ja"(见各页面 <head> 部分),
+        // 从来不会是空值,导致第二个 fallback 形同虚设:没有 stored 偏好时
+        // 永远直接落到 "ja",从没真正读过浏览器语言,无痕窗口下访问不管
+        // 浏览器语言是什么都只会显示日语。改成没有 stored 偏好时去匹配
+        // navigator.languages(浏览器按优先级排好的语言列表),匹配不到
+        // 任何支持的语言才最终 fallback 到 'ja'。
+        const SUPPORTED_LANGS = ['en', 'ja', 'ko', 'zh-Hans', 'zh-Hant'];
+
+        // 把 navigator.languages 里的 BCP-47 标签匹配到站点支持的语言代码。
+        // 中文单独处理:navigator 报告的是 zh-TW/zh-HK/zh-CN 这类"地区"代码,
+        // 站点用的是 zh-Hans/zh-Hant 这种"文字体系"代码,两者对不上,需要
+        // 按任务卡要求的对照关系手动映射——繁体地区(台湾/香港/澳门)落到
+        // zh-Hant,简体地区(大陆/新加坡)及裸 "zh" 落到 zh-Hans。
+        const matchBrowserLanguage = (languages) => {
+            for (const raw of languages || []) {
+                const tag = (raw || '').toLowerCase();
+                if (!tag) {
+                    continue;
+                }
+                if (tag.startsWith('zh')) {
+                    if (tag.includes('hant') || tag === 'zh-tw' || tag === 'zh-hk' || tag === 'zh-mo') {
+                        return 'zh-Hant';
+                    }
+                    return 'zh-Hans';
+                }
+                const primary = tag.split('-')[0];
+                if (SUPPORTED_LANGS.includes(primary)) {
+                    return primary;
+                }
+            }
+            return null;
+        };
+
         const stored = localStorage.getItem('preferredLanguage');
-        applyLanguage(stored || document.documentElement.lang || 'ja');
+        const browserMatch = matchBrowserLanguage(
+            navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language]
+        );
+        applyLanguage(stored || browserMatch || 'ja');
 
         langButtons.forEach((btn) => {
             btn.addEventListener('click', () => {

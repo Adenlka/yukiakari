@@ -1426,13 +1426,28 @@
     };
 
     const addToCart = (plan, extras) => {
+        // 【体验修复 · 2026-07-19】漏填日期时,原来只把提示写进购物车面板的
+        // .reserve-cart__note 里,同时 focusCalendar() 把页面滚动去了日历
+        // 区域——两处不在同一屏,滚过去根本看不到那行提示,等同于点了没反应
+        // (任务卡原话:加购物车漏填日期静默失败)。这里补上 window.ykToast
+        // (script.js 暴露的固定定位提示,不受滚动位置影响),让用户不管滚到
+        // 哪里都能看到"缺什么"。showCartNote 保留不删——购物车面板里的提示
+        // 对之后还留意着那个区域的用户依然有用,两者不冲突。
         if (!checkinDate) {
-            showCartNote(window.ykT('reserve.dynamic.selectDate', '日付を選択してください。'));
+            const message = window.ykT('reserve.dynamic.selectDate', '日付を選択してください。');
+            showCartNote(message);
+            if (window.ykToast) {
+                window.ykToast(message);
+            }
             focusCalendar();
             return;
         }
         if (!isDaytrip() && !checkoutDate) {
-            showCartNote(window.ykT('reserve.dynamic.selectCheckout', 'チェックアウト日を選択してください。'));
+            const message = window.ykT('reserve.dynamic.selectCheckout', 'チェックアウト日を選択してください。');
+            showCartNote(message);
+            if (window.ykToast) {
+                window.ykToast(message);
+            }
             focusCalendar();
             return;
         }

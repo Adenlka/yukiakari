@@ -17,12 +17,19 @@
 
     // 这里展示的是 booking_info.js 提交 submit-reservation Edge Function 后
     // 拿到的真实返回结果(预约码 + 服务端重新算出来的总价),不是前端自己拼出来
-    // 的数据。sessionStorage 只是页面跳转之间的临时传值,读一次就清掉,
-    // 不含任何需要长期保存的敏感信息。
+    // 的数据。sessionStorage 只是页面跳转之间的临时传值。
     //
-    // 【i18n】sessionStorage 读一次就清空(下面 finally 块),但语言切换时
-    // 还需要重新渲染一遍支付方式标签,所以把解析出来的 record 缓存在模块
-    // 变量里,不再重新读 sessionStorage(此时已经清空,读不到了)。
+    // 【体验修复 · 2026-07-19】这里原来读完 sessionStorage 后立即
+    // removeItem,导致这个完成页一刷新就白屏(任务卡原话:"阻断级体验问题"
+    // 之一)。分析下来这个"读完即清"其实是在解决一个不存在的问题:
+    // sessionStorage 本来就只在当前标签页存活,关掉标签页/浏览器自然清空,
+    // 不需要手动清理;而下一次真正提交新预约时,booking_info.js 会重新
+    // setItem 覆盖掉这条旧数据,不会出现"刷新后误显示上一次预约"的情况。
+    // 所以直接不删除即可——顾客刷新页面、或者不小心后退再前进,依然能看到
+    // 自己的预约码,不会丢失信息。
+    //
+    // 【i18n】语言切换时还需要重新渲染一遍支付方式标签,所以把解析出来的
+    // record 缓存在模块变量里,不用每次都重新读+解析 sessionStorage。
     let cachedRecord = null;
 
     const renderRecord = (record) => {
@@ -59,9 +66,6 @@
         } catch (error) {
             cachedRecord = null;
             renderRecord(null);
-        } finally {
-            // 读完即清,避免刷新/重复访问这个页面时反复展示同一条(已经提交过的)结果
-            sessionStorage.removeItem('reservationSuccess');
         }
     }
 

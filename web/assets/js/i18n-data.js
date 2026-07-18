@@ -446,6 +446,7 @@
     "reserve.complete.totalLabel": "Total",
     "reserve.complete.paymentLabel": "Payment status",
     "reserve.complete.note": "Use this code and phone number to view your reservation.",
+    "reserve.complete.emailNote": "Please keep this code safe. We have also sent a confirmation email to the address you provided.",
     "reserve.complete.lookup": "View reservation details",
     "reserve.complete.back": "Back to reservation page"
   },
@@ -896,6 +897,7 @@
     "reserve.complete.totalLabel": "合計",
     "reserve.complete.paymentLabel": "支払い状況",
     "reserve.complete.note": "この番号と電話番号で予約内容の照会が可能です。",
+    "reserve.complete.emailNote": "この番号は必ずお控えください。ご入力いただいたメールアドレス宛にも確認メールをお送りしております。",
     "reserve.complete.lookup": "予約内容を照会する",
     "reserve.complete.back": "予約ページへ戻る"
   },
@@ -1346,6 +1348,7 @@
     "reserve.complete.totalLabel": "합계",
     "reserve.complete.paymentLabel": "결제 상태",
     "reserve.complete.note": "이 번호와 전화번호로 예약 조회가 가능합니다.",
+    "reserve.complete.emailNote": "이 번호를 꼭 보관해 주세요. 입력하신 이메일 주소로도 확인 메일을 보내드렸습니다.",
     "reserve.complete.lookup": "예약 조회하기",
     "reserve.complete.back": "예약 페이지로"
   },
@@ -1796,6 +1799,7 @@
     "reserve.complete.totalLabel": "合计",
     "reserve.complete.paymentLabel": "付款状态",
     "reserve.complete.note": "请保存该编号与电话以便查询。",
+    "reserve.complete.emailNote": "请务必保存此编号。我们也已向您填写的邮箱发送了确认邮件。",
     "reserve.complete.lookup": "查看预约内容",
     "reserve.complete.back": "返回预约页面"
   },
@@ -2246,6 +2250,7 @@
     "reserve.complete.totalLabel": "合計",
     "reserve.complete.paymentLabel": "付款狀態",
     "reserve.complete.note": "請保存此編號與電話以便查詢。",
+    "reserve.complete.emailNote": "請務必保存此編號。我們也已向您填寫的信箱發送了確認郵件。",
     "reserve.complete.lookup": "查看預約內容",
     "reserve.complete.back": "返回預約頁面"
   }

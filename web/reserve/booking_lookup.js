@@ -19,16 +19,26 @@
     const paymentEl = document.querySelector('[data-result-payment]');
     const arrivalEl = document.querySelector('[data-result-arrival]');
 
-    const PAYMENT_METHOD_LABELS = {
-        onsite: '現地決済',
-        bank_transfer: '銀行振込'
-    };
+    // 【i18n】记住最近一次查询成功的结果,语言切换时用它重新渲染一遍
+    // showResult(),不然已经显示出来的查询结果不会跟着切换语言变化。
+    let lastRecord = null;
 
-    const STATUS_LABELS = {
-        confirmed: '予約確定',
-        cancelled: 'キャンセル済み',
-        completed: 'ご利用済み'
-    };
+    // 【i18n】现地決済/銀行振込 复用 booking_info.html 已有的
+    // reserve.info.payment.onsite / reserve.info.payment.bankTransfer。
+    const getPaymentMethodLabel = (method) => (
+        method === 'bank_transfer'
+            ? window.ykT('reserve.info.payment.bankTransfer', '銀行振込')
+            : window.ykT('reserve.info.payment.onsite', '現地決済')
+    );
+
+    // 【i18n】新增 reserve.lookup.status.* 三个 key(booking_lookup.html本身
+    // 没有对应的静态文案,是查询结果里才会出现的状态标签)。
+    const getStatusLabel = (status) => window.ykT(`reserve.lookup.status.${status}`, null) || status || '--';
+
+    // 【i18n】人数/客室数标签复用 reserve.search.guests.N / reserve.info.roomCount.N
+    // (和 reserve.js/booking_info.js 用的是同一组翻译)。
+    const formatGuestsLabel = (n) => window.ykT(`reserve.search.guests.${n}`, null) || window.ykT('reserve.dynamic.guestsUnit', '{n}名').replace('{n}', n);
+    const formatRoomsLabel = (n) => window.ykT(`reserve.info.roomCount.${n}`, null) || window.ykT('reserve.dynamic.roomsUnit', '{n}室').replace('{n}', n);
 
     const normalizePhone = (value) => (value || '').replace(/\D/g, '');
     const normalizeCode = (value) => (value || '').replace(/\s/g, '').toUpperCase();
@@ -56,9 +66,9 @@
             return '--';
         }
         if (!checkout || checkout === checkin) {
-            return `日帰り ${checkin}`;
+            return window.ykT('reserve.dynamic.dateRangeDaytrip', '日帰り {date}').replace('{date}', checkin);
         }
-        return `${checkin} ～ ${checkout}`;
+        return window.ykT('reserve.dynamic.dateRangeStay', '{checkin} ～ {checkout}').replace('{checkin}', checkin).replace('{checkout}', checkout);
     };
 
     const formatItemsDetail = (items) => {
@@ -68,7 +78,14 @@
         return items
             .map((item, index) => {
                 const dates = formatDateRange(item.checkin_date, item.checkout_date);
-                return `客室${index + 1}: ${item.plan_name || 'プラン'} / ${dates} / ${item.guests}名 ${item.room_count}室 / ${formatCurrency(item.line_total)}`;
+                const planName = item.plan_name || window.ykT('reserve.lookup.result.plan', 'プラン');
+                return window.ykT('reserve.lookup.dynamic.itemLine', '客室{n}: {plan} / {dates} / {guests} {rooms} / {price}')
+                    .replace('{n}', String(index + 1))
+                    .replace('{plan}', planName)
+                    .replace('{dates}', dates)
+                    .replace('{guests}', formatGuestsLabel(item.guests))
+                    .replace('{rooms}', formatRoomsLabel(item.room_count))
+                    .replace('{price}', formatCurrency(item.line_total));
             })
             .join('\n');
     };
@@ -80,7 +97,7 @@
         const items = Array.isArray(record.items) ? record.items : [];
 
         if (statusEl) {
-            statusEl.textContent = STATUS_LABELS[record.status] || record.status || '--';
+            statusEl.textContent = getStatusLabel(record.status);
         }
         if (planEl) {
             planEl.textContent = items.map((item) => item.plan_name).filter(Boolean).join(' / ') || '--';
@@ -91,11 +108,11 @@
         }
         if (guestsEl) {
             const totalGuests = items.reduce((sum, item) => sum + (Number(item.guests) || 0), 0);
-            guestsEl.textContent = totalGuests ? `${totalGuests}名` : '--';
+            guestsEl.textContent = totalGuests ? formatGuestsLabel(totalGuests) : '--';
         }
         if (roomsEl) {
             const totalRooms = items.reduce((sum, item) => sum + (Number(item.room_count) || 0), 0);
-            roomsEl.textContent = totalRooms ? `${totalRooms}室` : '--';
+            roomsEl.textContent = totalRooms ? formatRoomsLabel(totalRooms) : '--';
         }
         if (roomDetailEl) {
             roomDetailEl.textContent = formatItemsDetail(items);
@@ -104,7 +121,7 @@
             priceEl.textContent = formatCurrency(record.total_price);
         }
         if (paymentEl) {
-            paymentEl.textContent = PAYMENT_METHOD_LABELS[record.payment_method] || '--';
+            paymentEl.textContent = getPaymentMethodLabel(record.payment_method) || '--';
         }
         if (arrivalEl) {
             arrivalEl.textContent = record.arrival_time || '--';
@@ -188,6 +205,15 @@
             return;
         }
 
+        lastRecord = data.data;
         showResult(data.data);
+    });
+
+    // 【i18n】语言切换时如果页面上正显示着查询结果,重新渲染一遍(状态/支付
+    // 方式/人数客室数这些标签需要跟着切换)。
+    window.addEventListener('yk:languagechange', () => {
+        if (lastRecord) {
+            showResult(lastRecord);
+        }
     });
 })();

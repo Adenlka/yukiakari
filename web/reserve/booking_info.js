@@ -92,10 +92,14 @@
     const SERVICE_RATE = 0.1;
     const TAX_RATE = 0.1;
 
-    const PAYMENT_METHOD_LABELS = {
-        onsite: '現地決済',
-        bank_transfer: '銀行振込'
-    };
+    // 【i18n】现地決済/銀行振込 复用 reserve.info.payment.onsite /
+    // reserve.info.payment.bankTransfer(booking_info.html 静态区块本来就
+    // 用这两个 key),用函数取值而不是常量对象,保证语言切换后取到最新翻译。
+    const getPaymentMethodLabel = (method) => (
+        method === 'bank_transfer'
+            ? window.ykT('reserve.info.payment.bankTransfer', '銀行振込')
+            : window.ykT('reserve.info.payment.onsite', '現地決済')
+    );
 
     // 追加选项价格用来做前端即时展示估算,从数据库 plan_extras 读取(不再硬编码),
     // 真正入账价格由后端 submit_reservation() 重新计算。
@@ -135,27 +139,29 @@
         return 1;
     };
 
+    // 【i18n】和 reserve.js 购物车里的日期格式共用同一组 key
+    // (reserve.dynamic.dateRangeDaytrip / dateRangeStay),两处语义完全一致。
     const getDatesLabel = () => {
         if (draft && draft.checkin) {
             if (draft.checkin === draft.checkout || isDaytrip()) {
-                return `日帰り ${draft.checkin}`;
+                return window.ykT('reserve.dynamic.dateRangeDaytrip', '日帰り {date}').replace('{date}', draft.checkin);
             }
             if (draft.checkout) {
-                return `${draft.checkin} ～ ${draft.checkout}`;
+                return window.ykT('reserve.dynamic.dateRangeStay', '{checkin} ～ {checkout}').replace('{checkin}', draft.checkin).replace('{checkout}', draft.checkout);
             }
             return draft.checkin;
         }
         const fallback = cartItems[0];
         if (fallback && fallback.checkin) {
             if (fallback.checkin === fallback.checkout || String(fallback.nights) === '0') {
-                return `日帰り ${fallback.checkin}`;
+                return window.ykT('reserve.dynamic.dateRangeDaytrip', '日帰り {date}').replace('{date}', fallback.checkin);
             }
             if (fallback.checkout) {
-                return `${fallback.checkin} ～ ${fallback.checkout}`;
+                return window.ykT('reserve.dynamic.dateRangeStay', '{checkin} ～ {checkout}').replace('{checkin}', fallback.checkin).replace('{checkout}', fallback.checkout);
             }
             return fallback.checkin;
         }
-        return '未選択';
+        return window.ykT('reserve.info.value.unselected', '未選択');
     };
 
     const computePlanTotals = (plan, options) => {
@@ -264,7 +270,13 @@
         roomState.forEach((room, index) => {
             const line = document.createElement('div');
             const planLabel = room.planTitle ? `${room.planTitle} / ` : '';
-            line.textContent = `客室${index + 1}: ${planLabel}${room.guests}名`;
+            // 【i18n】"客室{n}: {plan}{guests}"这个组合格式没有对应的静态
+            // data-i18n 元素(是每次渲染都重新拼的动态摘要行),新增
+            // reserve.info.roomSummaryLine key。
+            line.textContent = window.ykT('reserve.info.roomSummaryLine', '客室{n}: {plan}{guests}')
+                .replace('{n}', String(index + 1))
+                .replace('{plan}', planLabel)
+                .replace('{guests}', window.ykT(`reserve.search.guests.${room.guests}`, `${room.guests}名`));
             roomSummaryEl.appendChild(line);
         });
     };
@@ -281,7 +293,7 @@
 
             const head = document.createElement('div');
             head.className = 'booking-info__room-head';
-            head.textContent = `客室 ${index + 1}`;
+            head.textContent = window.ykT('reserve.info.roomLabel', '客室 {n}').replace('{n}', String(index + 1));
             wrapper.appendChild(head);
 
             if (room.planTitle) {
@@ -296,10 +308,11 @@
 
             const guestsLabel = document.createElement('label');
             guestsLabel.className = 'booking-info__label';
-            guestsLabel.textContent = '人数';
+            guestsLabel.textContent = window.ykT('reserve.info.label.guests', '人数');
+            // 【i18n】复用 reserve.search.guests.N(reserve.html 已有 1-6 档翻译)
             const guestOptions = [1, 2, 3, 4, 5, 6].map((countValue) => ({
                 value: String(countValue),
-                label: `${countValue}名`
+                label: window.ykT(`reserve.search.guests.${countValue}`, `${countValue}名`)
             }));
             const guestsSelect = document.createElement('select');
             guestsSelect.className = 'booking-info__select';
@@ -314,12 +327,14 @@
 
             const noteLabel = document.createElement('label');
             noteLabel.className = 'booking-info__label';
-            noteLabel.textContent = 'ご要望';
+            // 【i18n】复用 booking_info.html 静态区块已有的
+            // reserve.info.field.requests / reserve.info.placeholder.requests。
+            noteLabel.textContent = window.ykT('reserve.info.field.requests', 'ご要望');
             const noteInput = document.createElement('input');
             noteInput.className = 'booking-info__input';
             noteInput.type = 'text';
             noteInput.value = room.note || '';
-            noteInput.placeholder = 'アレルギー・記念日など';
+            noteInput.placeholder = window.ykT('reserve.info.placeholder.requests', 'アレルギーや記念日のご相談など');
             noteLabel.appendChild(noteInput);
 
             grid.appendChild(guestsLabel);
@@ -377,7 +392,7 @@
     );
 
     const updatePaymentSummary = () => {
-        const label = PAYMENT_METHOD_LABELS[getSelectedPaymentMethod()] || '--';
+        const label = getPaymentMethodLabel(getSelectedPaymentMethod()) || '--';
         if (summaryPaymentText) {
             summaryPaymentText.textContent = label;
         }
@@ -390,12 +405,12 @@
         const planAmenities = cartItems.map((item) => item.amenity).filter(Boolean).join(' / ');
         const breakdown = computeBreakdown();
 
-        setText(summaryEls.title, planTitles || 'プランを選択してください');
+        setText(summaryEls.title, planTitles || window.ykT('reserve.info.value.selectPlan', 'プランを選択してください'));
         setText(summaryEls.price, formatCurrency(breakdown.base));
         setText(summaryEls.amenity, planAmenities || '--');
-        setText(summaryEls.dates, getDatesLabel(), '未選択');
-        setText(summaryEls.guests, `${totalGuests}名`);
-        setText(summaryEls.rooms, `${totalRooms}室`);
+        setText(summaryEls.dates, getDatesLabel(), window.ykT('reserve.info.value.unselected', '未選択'));
+        setText(summaryEls.guests, formatGuestsLabel(totalGuests));
+        setText(summaryEls.rooms, formatRoomsLabel(totalRooms));
         setText(summaryEls.total, formatCurrency(breakdown.total));
 
         if (breakdownEls.base) {
@@ -468,15 +483,15 @@
         }
         const value = field.value.trim();
         if (field.hasAttribute('required') && !value) {
-            showError(field, '必須項目です。');
+            showError(field, window.ykT('reserve.info.validation.required', '必須項目です。'));
             return false;
         }
         if (field.type === 'email' && value && !field.validity.valid) {
-            showError(field, 'メールアドレスをご確認ください。');
+            showError(field, window.ykT('reserve.info.validation.email', 'メールアドレスをご確認ください。'));
             return false;
         }
         if (field.id === 'tel' && value && normalizePhone(value).length < 9) {
-            showError(field, '電話番号をご確認ください。');
+            showError(field, window.ykT('reserve.info.validation.tel', '電話番号をご確認ください。'));
             return false;
         }
         clearError(field);
@@ -501,12 +516,20 @@
         submit.disabled = !agree.checked;
     };
 
+    // 【i18n】客室数标签复用 reserve.info.roomCount.N(booking_info.html
+    // 静态下拉本来就是这组 key,1-4 档已有翻译);超出这个范围(多个购物车
+    // 项目合并后的总客室数可能超过单项上限4间)才退回模板拼接。
+    const formatRoomsLabel = (n) => window.ykT(`reserve.info.roomCount.${n}`, null) || window.ykT('reserve.dynamic.roomsUnit', '{n}室').replace('{n}', n);
+    // 【i18n】人数标签,复用 reserve.search.guests.N(现有 1-8 档),多个购物车
+    // 项目的人数加总后超出这个范围才退回模板拼接。
+    const formatGuestsLabel = (n) => window.ykT(`reserve.search.guests.${n}`, null) || window.ykT('reserve.dynamic.guestsUnit', '{n}名').replace('{n}', n);
+
     if (roomCountSelect) {
         const ensureRoomOption = (count) => {
             if (!roomCountSelect.querySelector(`option[value=\"${count}\"]`)) {
                 const option = document.createElement('option');
                 option.value = String(count);
-                option.textContent = `${count}室`;
+                option.textContent = formatRoomsLabel(count);
                 roomCountSelect.appendChild(option);
             }
         };
@@ -618,7 +641,12 @@
     // supabase.functions.invoke 返回 { data, error };出错时 error.context 是
     // 原始 Response,里面是我们 Edge Function 自己写的、不含内部细节的中文提示。
     const extractErrorMessage = async (error) => {
-        const fallback = '予約の送信に失敗しました。しばらくしてから再度お試しください。';
+        // 这个兜底提示只在 submit-reservation Edge Function 没能返回安全文案时
+        // 才会用到(比如网络层面直接失败,error.context 拿不到 body),
+        // 正常路径下用户看到的是后端返回的具体错误(如"库存不足"),那部分
+        // 文案由后端 submit_reservation() 生成,不接入前端 i18n 字典
+        // (后端目前只产出中文提示,属已知限制,见本轮变更记录)。
+        const fallback = window.ykT('reserve.dynamic.submitReservationError', '予約の送信に失敗しました。しばらくしてから再度お試しください。');
         if (!error) {
             return fallback;
         }
@@ -650,11 +678,13 @@
                 return;
             }
             if (!cartItems.length || cartItems.some((item) => !item.planDbId)) {
-                showSubmitError('プラン情報が正しく取得できていません。予約ページからやり直してください。');
+                showSubmitError(window.ykT('reserve.info.submitError.missingPlan', 'プラン情報が正しく取得できていません。予約ページからやり直してください。'));
                 return;
             }
             if (!supabase) {
-                showSubmitError('予約システムに接続できませんでした。しばらくしてから再度お試しください。');
+                // 【i18n】和 reserve.js 里的"未接続"提示是同一句日文,复用同一个
+                // key(reserve.dynamic.connectError),不重复定义。
+                showSubmitError(window.ykT('reserve.dynamic.connectError', '予約システムに接続できませんでした。しばらくしてから再度お試しください。'));
                 return;
             }
 
@@ -662,7 +692,7 @@
 
             submit.disabled = true;
             const originalLabel = submit.textContent;
-            submit.textContent = '送信中…';
+            submit.textContent = window.ykT('reserve.info.submitSending', '送信中…');
 
             const { data, error } = await supabase.functions.invoke('submit-reservation', {
                 body: payload
@@ -709,6 +739,12 @@
         }
         updateSummary();
     };
+
+    // 【i18n】语言切换时重新渲染房间列表(标签/占位符文字)和顶部摘要。
+    window.addEventListener('yk:languagechange', () => {
+        renderRooms();
+        updateSummary();
+    });
 
     init();
 })();

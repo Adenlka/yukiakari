@@ -1,0 +1,5 @@
+{
+  "buildCommand": "node scripts/generate-config.js",
+  "installCommand": "echo \"no npm dependencies to install (generate-config.js only uses Node built-ins)\"",
+  "outputDirectory": "web"
+}

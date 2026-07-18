@@ -1,8 +1,9 @@
 // supabase/functions/send-contact-email/index.ts
 //
-// 用途:contact.html 提交联系表单后,前端先用 anon key 直接 INSERT 进
-// contact_messages 表(RLS 只允许 anon INSERT,不允许 SELECT,见
-// supabase/migrations/0002_rls_policies.sql——这就是需求文档确认的"双写"
+// 用途:contact.html 提交联系表单后,前端调用 submit-contact-message Edge
+// Function(限流后再调 submit_contact_message() SECURITY DEFINER 函数写入
+// contact_messages——anon 对该表本身已无直接 INSERT 权限,见
+// supabase/migrations/0002_rls_policies.sql,这就是需求文档确认的"双写"
 // 方案里"写库"的那一半)。写入成功后,由 Supabase Dashboard → Database →
 // Webhooks 配置的 Database Webhook 自动 POST 到本函数(Table =
 // contact_messages,Events = INSERT),本函数再调用 Resend API 发一封通知

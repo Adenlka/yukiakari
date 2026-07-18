@@ -16,7 +16,7 @@
     <header class="header header--fixed">
         <div class="header__inner">
             <div class="header__brand">
-                <a class="header__logo" href="../index_web.html#hero" aria-label="雪灯り">
+                <a class="header__logo" href="../index.html#hero" aria-label="雪灯り">
                     <img src="../assets/images/common/icon.png" alt="雪灯り">
                 </a>
                 <button class="header__menu-btn" type="button" aria-expanded="false" aria-controls="site-menu" aria-label="メニューを開く">
@@ -34,7 +34,7 @@
     <div id="site-menu" class="menu" aria-hidden="true">
         <div class="menu__panel">
             <div class="menu__top">
-                <a href="../index_web.html#hero">
+                <a href="../index.html#hero">
                     <img class="menu__logo" src="../assets/images/common/logo-yukiakari-white.png" alt="雪灯り">
                 </a>
             </div>
@@ -471,7 +471,7 @@
     <footer class="footer">
         <div class="footer__inner">
             <div class="footer__column">
-                <a class="footer__logo-link" href="../index_web.html">
+                <a class="footer__logo-link" href="../index.html">
                 <img class="footer__logo" src="../assets/images/common/icon.png" alt="雪灯り">
                 </a>
             </div>
@@ -513,6 +513,10 @@
 <script src="../assets/js/i18n-extra-facility.js"></script>
 <script src="../assets/js/i18n-extra-policy.js"></script>
 <script src="../assets/js/i18n-extra-rooms.js"></script>
+    <!-- i18n-runtime.js:给本页 JS 里"运行时动态生成的文案"(购物车提示等,
+         需求文档2.7/4.2)提供 window.ykT() 翻译函数,只有 reserve/ 四个页面
+         需要,按需引入,不放进全站通用脚本列表。 -->
+    <script src="../assets/js/i18n-runtime.js"></script>
     <script src="../assets/js/script.js"></script>
     <!-- Supabase 接入:引入顺序固定,config.js → supabase-js CDN → supabase-client.js → 页面脚本 -->
     <script src="../config.js"></script>

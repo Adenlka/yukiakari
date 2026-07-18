@@ -1,0 +1,8 @@
+{
+  "name": "yukiakari",
+  "private": true,
+  "description": "雪灯り官网 —— 纯静态站点(web/)+ Supabase 后端(supabase/)。这个 package.json 只是给 Vercel 构建阶段用的极简构建脚本入口,不引入任何前端框架或依赖(见 docs/yukiakari_设计方案_v1.md 第六节方案A)。",
+  "scripts": {
+    "build": "node scripts/generate-config.js"
+  }
+}

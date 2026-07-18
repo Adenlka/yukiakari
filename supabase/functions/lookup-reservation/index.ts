@@ -16,8 +16,24 @@ const RATE_WINDOW_SECONDS = 60;
 
 const NOT_FOUND_MESSAGE = "未找到符合条件的预约,请确认预约码与手机号";
 
+// 【安全修复 · 安全审查报告中危问题⑤】CORS 不再硬编码 "*",改成读取
+// ALLOWED_ORIGIN 环境变量(Supabase Dashboard → Edge Functions → Secrets,
+// 和 SUPABASE_URL 配置在同一个地方)。说明:这两个函数用的是公开的 anon
+// key、不依赖 Cookie 做身份凭证,CORS 并不是这里唯一或最主要的防线——任何
+// 人本来就能绕开浏览器直接用 curl/脚本调用,真正的防线是限流和 RLS/RPC
+// 内部校验。CORS 收紧的价值在于防止第三方网站在访客毫不知情的浏览器里
+// 静默发起大量请求(把访客当"肉鸡"消耗限流配额、干扰真实用户提交)。
+// 本地开发/尚未配置该变量时退回 "*"(不阻塞调试),并打印警告提醒部署前
+// 记得配置,避免生产环境忘记收紧。
+const allowedOrigin = Deno.env.get("ALLOWED_ORIGIN");
+if (!allowedOrigin) {
+  console.warn(
+    "[lookup-reservation] 未配置 ALLOWED_ORIGIN 环境变量,CORS 暂时退回 \"*\"。" +
+      "部署到生产环境前请在 Supabase Dashboard 配置这个变量为实际前端域名。",
+  );
+}
 const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Origin": allowedOrigin || "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 

@@ -305,6 +305,12 @@
             }
             updateActive(lang);
             translatePage(lang);
+            // reserve/ 四个页面的 JS 里有一部分文案是运行时动态拼出来的
+            // (购物车提示、查询结果等),不在上面 data-i18n 系列选择器覆盖
+            // 范围内。这里广播一个事件,让这些页面自己的脚本(见
+            // assets/js/i18n-runtime.js 的注释)在语言切换时重新渲染一次,
+            // 不然切换语言只会更新静态文案,已经渲染出来的动态内容不会跟着变。
+            window.dispatchEvent(new CustomEvent('yk:languagechange', { detail: { lang } }));
         };
 
         const stored = localStorage.getItem('preferredLanguage');

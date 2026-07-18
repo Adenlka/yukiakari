@@ -54,7 +54,10 @@
     if (!supabase) {
         console.error('[reserve] window.supabaseClient 未初始化,请检查 config.js 与 supabase-js CDN 是否正确引入。');
         if (resultsSummary) {
-            resultsSummary.textContent = '予約システムに接続できませんでした。しばらくしてから再度お試しください。';
+            // 【i18n】动态文案改用 ykT() 读取 YK_I18N 字典(需求文档2.7/4.2),
+            // 详见 assets/js/i18n-runtime.js 的说明;第二个参数是查不到 key
+            // 时的兜底文案,原样保留原来的日文,不会因为字典缺项而白屏。
+            resultsSummary.textContent = window.ykT('reserve.dynamic.connectError', '予約システムに接続できませんでした。しばらくしてから再度お試しください。');
         }
         return;
     }
@@ -265,6 +268,25 @@
 
     const formatCurrency = (value) => (Number.isFinite(value) ? `¥${value.toLocaleString('ja-JP')}` : '--');
 
+    // 【i18n】人数标签(如"3名"/"3 guests")优先用 reserve.search.guests.N 这组
+    // 已翻译好的分级 key(原有 1-6 档已扩充到 1-8,覆盖购物车人数下拉的范围),
+    // 理论上不会走到兜底分支,兜底只是防止字典漏配时显示空白。
+    const formatGuestsLabel = (n) => window.ykT(`reserve.search.guests.${n}`, `${n}名`);
+    // 【i18n】客室数标签(如"2室"/"2 rooms")复用 reserve.info.roomCount.N
+    // (booking_info.html 已有的 1-4 档,和这里的 MAX_ROOMS=4 上限完全对齐)。
+    const formatRoomsLabel = (n) => window.ykT(`reserve.info.roomCount.${n}`, null) || window.ykT('reserve.dynamic.roomsUnit', '{n}室').replace('{n}', n);
+    // 【i18n】晚数标签(如"2泊")优先复用 reserve.search.nights.N(reserve.html
+    // 静态下拉已有 1-14 档翻译),超出范围(理论上很少见,住宿上限见
+    // submit_reservation() 的30晚校验)才退回模板拼接。
+    const formatNightsLabel = (n) => window.ykT(`reserve.search.nights.${n}`, null) || window.ykT('reserve.dynamic.nightsUnit', '{n}泊').replace('{n}', n);
+    // 【i18n】价格卡片/弹窗共用的"日帰り"或"{人数} / {晚数}"标签,抽成共享函数
+    // 避免写两份重复逻辑。
+    const formatGuestsNightsLabel = (guests, nightsValue) => (
+        isDaytrip()
+            ? window.ykT('reserve.search.nights.daytrip', '日帰り')
+            : `${formatGuestsLabel(guests)} / ${formatNightsLabel(nightsValue)}`
+    );
+
     // ---------- 房态查询:调用 get_availability() RPC,替换原来的伪随机算法 ----------
     // 简单内存缓存,key 为 `${planId}:${日期}`,避免同一个月里来回翻页/切换
     // 筛选条件时重复请求同一个日期。
@@ -466,8 +488,9 @@
             priceNote.textContent = plan.unitLabel || '1室 / 1泊';
         }
         if (priceSub) {
-            const label = isDaytrip() ? '日帰り' : `${guests}名 / ${nightsValue}泊`;
-            priceSub.textContent = `目安合計 ${formatCurrency(totals.total)} (${label})`;
+            priceSub.textContent = window.ykT('reserve.dynamic.priceEstimateLabel', '目安合計 {price} ({label})')
+                .replace('{price}', formatCurrency(totals.total))
+                .replace('{label}', formatGuestsNightsLabel(guests, nightsValue));
         }
     };
 
@@ -526,7 +549,9 @@
             updatePlanCard(card, plan);
         });
         if (resultsTitle) {
-            resultsTitle.textContent = daytripMode ? 'おすすめ日帰りプラン' : 'おすすめ宿泊プラン';
+            resultsTitle.textContent = daytripMode
+                ? window.ykT('reserve.results.title.daytrip', 'おすすめ日帰りプラン')
+                : window.ykT('reserve.results.title.stay', 'おすすめ宿泊プラン');
         }
     };
 
@@ -629,7 +654,7 @@
         }
         const option = document.createElement('option');
         option.value = String(value);
-        option.textContent = `${value}泊`;
+        option.textContent = formatNightsLabel(value);
         nightsSelect.appendChild(option);
     };
 
@@ -639,18 +664,25 @@
         }
         const guests = getGuestsValue();
         if (!checkinDate) {
-            resultsSummary.textContent = '日付を選択してください。';
+            resultsSummary.textContent = window.ykT('reserve.dynamic.selectDate', '日付を選択してください。');
             return;
         }
         if (checkinDate && checkoutDate) {
             if (isDaytrip() && isSameDay(checkinDate, checkoutDate)) {
-                resultsSummary.textContent = `日帰り ${formatDate(checkinDate)} / ${guests}名`;
+                resultsSummary.textContent = window.ykT('reserve.dynamic.summaryDaytrip', '日帰り {date} / {guests}')
+                    .replace('{date}', formatDate(checkinDate))
+                    .replace('{guests}', formatGuestsLabel(guests));
                 return;
             }
-            resultsSummary.textContent = `チェックイン ${formatDate(checkinDate)} / チェックアウト ${formatDate(checkoutDate)} / ${guests}名`;
+            resultsSummary.textContent = window.ykT('reserve.dynamic.summaryStay', 'チェックイン {checkin} / チェックアウト {checkout} / {guests}')
+                .replace('{checkin}', formatDate(checkinDate))
+                .replace('{checkout}', formatDate(checkoutDate))
+                .replace('{guests}', formatGuestsLabel(guests));
             return;
         }
-        resultsSummary.textContent = `チェックイン ${formatDate(checkinDate)} / ${guests}名`;
+        resultsSummary.textContent = window.ykT('reserve.dynamic.summaryCheckinOnly', 'チェックイン {checkin} / {guests}')
+            .replace('{checkin}', formatDate(checkinDate))
+            .replace('{guests}', formatGuestsLabel(guests));
     };
 
     const updateNights = () => {
@@ -746,7 +778,9 @@
     const renderCalendar = () => {
         const year = currentMonth.getFullYear();
         const month = currentMonth.getMonth();
-        monthLabel.textContent = `${year}年${month + 1}月`;
+        monthLabel.textContent = window.ykT('reserve.dynamic.calendarMonth', '{year}年{month}月')
+            .replace('{year}', String(year))
+            .replace('{month}', String(month + 1));
         if (prevButton) {
             prevButton.disabled = currentMonth <= minMonth;
         }
@@ -1017,9 +1051,9 @@
     };
 
     const cartSummaryEl = document.querySelector('.reserve-cart__summary');
-    insertDisclaimer(cartSummaryEl, '※表示価格は目安です。実際のご請求額はご予約確定時にサーバー側で再計算されます。');
+    insertDisclaimer(cartSummaryEl, window.ykT('reserve.dynamic.priceDisclaimerCart', '※表示価格は目安です。実際のご請求額はご予約確定時にサーバー側で再計算されます。'));
     if (planModalPrice) {
-        insertDisclaimer(planModalPrice, '※上記は目安価格です。最終価格はご予約確定時に再計算されます。');
+        insertDisclaimer(planModalPrice, window.ykT('reserve.dynamic.priceDisclaimerModal', '※上記は目安価格です。最終価格はご予約確定時に再計算されます。'));
     }
 
     const normalizeExtras = (plan, extras) => {
@@ -1095,7 +1129,9 @@
         if (!cart.length) {
             const empty = document.createElement('p');
             empty.className = 'reserve-cart__empty';
-            empty.textContent = 'プランがまだ追加されていません。';
+            // 【i18n】复用静态 HTML 里 data-i18n="reserve.cart.empty" 已有的
+            // 同一句翻译(reserve.html 的空购物车提示),不新建重复 key。
+            empty.textContent = window.ykT('reserve.cart.empty', 'プランがまだ追加されていません。');
             cartList.appendChild(empty);
             if (cartTotal) {
                 cartTotal.textContent = '--';
@@ -1149,10 +1185,11 @@
             meta.className = 'reserve-cart__item-meta';
             const dateLine = document.createElement('span');
             dateLine.textContent = item.checkin ? (item.checkin === item.checkout || item.nights === '0'
-                ? `日帰り ${item.checkin}`
-                : `${item.checkin} ～ ${item.checkout}`) : '日付未選択';
+                ? window.ykT('reserve.dynamic.dateRangeDaytrip', '日帰り {date}').replace('{date}', item.checkin)
+                : window.ykT('reserve.dynamic.dateRangeStay', '{checkin} ～ {checkout}').replace('{checkin}', item.checkin).replace('{checkout}', item.checkout))
+                : window.ykT('reserve.dynamic.dateUnselected', '日付未選択');
             const guestLine = document.createElement('span');
-            guestLine.textContent = `${item.guests}名 / ${item.roomCount}室`;
+            guestLine.textContent = `${formatGuestsLabel(item.guests)} / ${formatRoomsLabel(item.roomCount)}`;
             meta.appendChild(dateLine);
             meta.appendChild(guestLine);
 
@@ -1160,26 +1197,29 @@
             controls.className = 'reserve-cart__item-controls';
 
             const guestLabel = document.createElement('label');
-            guestLabel.textContent = '人数';
+            // 【i18n】复用 booking_info.html 已有的 reserve.info.label.guests
+            // ("人数"这个词在两个页面语义完全相同),不新建重复 key。
+            guestLabel.textContent = window.ykT('reserve.info.label.guests', '人数');
             const guestSelect = document.createElement('select');
             guestSelect.className = 'reserve-cart__select';
             for (let i = 1; i <= 8; i += 1) {
                 const opt = document.createElement('option');
                 opt.value = String(i);
-                opt.textContent = `${i}名`;
+                opt.textContent = formatGuestsLabel(i);
                 guestSelect.appendChild(opt);
             }
             guestSelect.value = String(item.guests);
             guestLabel.appendChild(guestSelect);
 
             const roomLabel = document.createElement('label');
-            roomLabel.textContent = '客室数';
+            // 【i18n】复用 booking_info.html 已有的 reserve.info.field.roomCount。
+            roomLabel.textContent = window.ykT('reserve.info.field.roomCount', '客室数');
             const roomSelectEl = document.createElement('select');
             roomSelectEl.className = 'reserve-cart__select';
             for (let i = 1; i <= MAX_ROOMS; i += 1) {
                 const opt = document.createElement('option');
                 opt.value = String(i);
-                opt.textContent = `${i}室`;
+                opt.textContent = formatRoomsLabel(i);
                 roomSelectEl.appendChild(opt);
             }
             roomSelectEl.value = String(item.roomCount);
@@ -1188,7 +1228,7 @@
             const removeButton = document.createElement('button');
             removeButton.className = 'reserve-cart__remove';
             removeButton.type = 'button';
-            removeButton.textContent = '削除';
+            removeButton.textContent = window.ykT('reserve.dynamic.remove', '削除');
 
             controls.appendChild(guestLabel);
             controls.appendChild(roomLabel);
@@ -1198,7 +1238,9 @@
             extrasWrap.className = 'reserve-cart__item-meta';
             if (item.extras && item.extras.length) {
                 const extrasTitle = document.createElement('span');
-                extrasTitle.textContent = 'オプション';
+                // 【i18n】复用 booking_info.html 价格明细里的 reserve.info.breakdown.addons
+                // (同样是"追加选项"这个概念的"オプション"一词)。
+                extrasTitle.textContent = window.ykT('reserve.info.breakdown.addons', 'オプション');
                 extrasWrap.appendChild(extrasTitle);
                 item.extras.forEach((extraId) => {
                     const rule = extraOptions[extraId];
@@ -1218,8 +1260,15 @@
                         renderCart();
                     });
                     const text = document.createElement('span');
-                    const target = rule.per === 'room' ? '室' : '名';
-                    text.textContent = `${rule.label} (+${formatCurrency(rule.price)} / ${target}${rule.perNight ? '・泊' : ''})`;
+                    // 【已知限制】rule.label 来自数据库 plan_extras.name_ja(如"夕朝食
+                    // アップグレード"),是业务数据不是 UI 文案,不接入 i18n 字典——
+                    // 和 reserve.js 顶部 PLAN_STATIC_CONTENT 的既定原则一致(只把
+                    // "价格/库存"这类数据接入数据库,不把营销文案/商品名做成多语言,
+                    // 这两者本来就不在同一责任范围)。这里只翻译"室/名/・泊"这几个
+                    // 单位词本身。
+                    const target = rule.per === 'room' ? window.ykT('reserve.dynamic.unitRoom', '室') : window.ykT('reserve.dynamic.unitGuest', '名');
+                    const perNightSuffix = rule.perNight ? window.ykT('reserve.dynamic.perNightSuffix', '・泊') : '';
+                    text.textContent = `${rule.label} (+${formatCurrency(rule.price)} / ${target}${perNightSuffix})`;
                     label.appendChild(checkbox);
                     label.appendChild(text);
                     extrasWrap.appendChild(label);
@@ -1268,9 +1317,9 @@
             cartContinue.disabled = false;
         }
         if (autoAdjusted) {
-            showCartNote('人数に合わせて客室数を自動調整しました。');
+            showCartNote(window.ykT('reserve.dynamic.roomsAutoAdjusted', '人数に合わせて客室数を自動調整しました。'));
         } else if (hasOverRooms) {
-            showCartNote('人数に対して客室数が多めのプランがあります。');
+            showCartNote(window.ykT('reserve.dynamic.roomsOverNote', '人数に対して客室数が多めのプランがあります。'));
         } else {
             showCartNote('');
         }
@@ -1279,12 +1328,12 @@
 
     const addToCart = (plan, extras) => {
         if (!checkinDate) {
-            showCartNote('日付を選択してください。');
+            showCartNote(window.ykT('reserve.dynamic.selectDate', '日付を選択してください。'));
             focusCalendar();
             return;
         }
         if (!isDaytrip() && !checkoutDate) {
-            showCartNote('チェックアウト日を選択してください。');
+            showCartNote(window.ykT('reserve.dynamic.selectCheckout', 'チェックアウト日を選択してください。'));
             focusCalendar();
             return;
         }
@@ -1299,7 +1348,7 @@
             existing.checkout = updated.checkout;
             existing.nights = updated.nights;
             existing.planDbId = updated.planDbId;
-            showCartNote('同じプランを更新しました。');
+            showCartNote(window.ykT('reserve.dynamic.updatedSamePlan', '同じプランを更新しました。'));
         } else {
             cart.push(buildCartItem(plan, extras));
         }
@@ -1334,8 +1383,9 @@
                 meal: document.querySelector('#daytrip-meal')?.value || ''
             }
         });
-        const label = isDaytrip() ? '日帰り' : `${guests}名 / ${nightsValue}泊`;
-        planModalPrice.textContent = `${formatCurrency(totals.total)} (${label})`;
+        planModalPrice.textContent = window.ykT('reserve.dynamic.priceModalLabel', '{price} ({label})')
+            .replace('{price}', formatCurrency(totals.total))
+            .replace('{label}', formatGuestsNightsLabel(guests, nightsValue));
     };
 
     const openPlanModal = (plan) => {
@@ -1382,8 +1432,11 @@
                     updatePlanModalPrice();
                 });
                 const text = document.createElement('span');
-                const target = rule.per === 'room' ? '室' : '名';
-                text.textContent = `${rule.label} (+${formatCurrency(rule.price)} / ${target}${rule.perNight ? '・泊' : ''})`;
+                // 【已知限制】同上方 renderCart() 里的说明:rule.label 是数据库
+                // plan_extras.name_ja(业务数据),不接入 i18n,这里只翻译单位词。
+                const target = rule.per === 'room' ? window.ykT('reserve.dynamic.unitRoom', '室') : window.ykT('reserve.dynamic.unitGuest', '名');
+                const perNightSuffix = rule.perNight ? window.ykT('reserve.dynamic.perNightSuffix', '・泊') : '';
+                text.textContent = `${rule.label} (+${formatCurrency(rule.price)} / ${target}${perNightSuffix})`;
                 label.appendChild(input);
                 label.appendChild(text);
                 planModalExtras.appendChild(label);
@@ -1516,7 +1569,7 @@
         const ok = await loadCatalog();
         if (!ok) {
             if (resultsSummary) {
-                resultsSummary.textContent = 'プラン情報の取得に失敗しました。しばらくしてから再度お試しください。';
+                resultsSummary.textContent = window.ykT('reserve.dynamic.catalogError', 'プラン情報の取得に失敗しました。しばらくしてから再度お試しください。');
             }
             return;
         }
@@ -1532,6 +1585,19 @@
         loadCart();
         renderCart();
     };
+
+    // 【i18n】语言切换时(script.js 的 applyLanguage() 会 dispatch 这个事件,
+    // 见该文件对应位置注释)重新渲染一遍这几处"JS 动态生成"的内容——
+    // updateSummary()/renderCalendar()/renderCart() 覆盖了购物车、日历月份
+    // 标题、搜索结果摘要这几块 data-i18n 覆盖不到的地方;updatePlanCards()
+    // 会连带刷新已渲染的价格卡片文案(含 おすすめ日帰り/宿泊プラン 标题)。
+    window.addEventListener('yk:languagechange', () => {
+        updateSummary();
+        renderCalendar();
+        renderCart();
+        updatePlanCards(isDaytrip());
+        applySearch();
+    });
 
     init();
 })();

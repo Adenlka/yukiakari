@@ -56,10 +56,12 @@
         }
     };
 
-    // 前端校验只是体验优化,不是安全边界。contact_messages 表的 RLS 只给 anon
-    // INSERT 权限(见 supabase/migrations/0002_rls_policies.sql),真正的输入
-    // 校验/转义交给数据库约束和后续管理端处理,这里校验不到位也不会产生安全问题,
-    // 顶多是插入了一条格式不太规范的留言。
+    // 前端校验只是体验优化,不是安全边界。真正写入 contact_messages 的路径是
+    // submit-contact-message Edge Function → submit_contact_message() SECURITY
+    // DEFINER 函数(见 supabase/migrations/0002_rls_policies.sql);anon 对该表
+    // 已经没有直接 INSERT 权限,Edge Function 内部还会重复一遍限流+输入校验,
+    // 不信任前端传来的任何字段。这里的前端校验不到位也不会产生安全问题,顶多是
+    // 用户体验差一点(比如提交后才被 Edge Function 拒绝)。
     const validateField = (field, { silent = false } = {}) => {
         if (!field) {
             return true;

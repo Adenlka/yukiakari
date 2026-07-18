@@ -28,8 +28,19 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 const RATE_LIMIT = 5; // 每个 IP 每个窗口最多提交次数
 const RATE_WINDOW_SECONDS = 300; // 窗口长度:5分钟。联系表单不像预约那样需要频繁重试,窗口比 submit-reservation 长一些足够挡住脚本刷单。
 
+// 【安全修复 · 安全审查报告中危问题⑤】CORS 不再硬编码 "*",改成读取
+// ALLOWED_ORIGIN 环境变量,和 submit-reservation/lookup-reservation 保持
+// 一致处理(详见那两个文件里对应位置的注释)。本地开发/尚未配置该变量时
+// 退回 "*",并打印警告提醒部署前记得配置。
+const allowedOrigin = Deno.env.get("ALLOWED_ORIGIN");
+if (!allowedOrigin) {
+  console.warn(
+    "[submit-contact-message] 未配置 ALLOWED_ORIGIN 环境变量,CORS 暂时退回 \"*\"。" +
+      "部署到生产环境前请在 Supabase Dashboard 配置这个变量为实际前端域名。",
+  );
+}
 const corsHeaders = {
-  "Access-Control-Allow-Origin": "*", // 部署时按实际前端域名收紧,和 submit-reservation/lookup-reservation 保持一致处理
+  "Access-Control-Allow-Origin": allowedOrigin || "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 

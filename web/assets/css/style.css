@@ -1,9 +1,35 @@
-﻿:root {
+﻿/* 【性能优化】自托管字体子集,替代原来的 Google Fonts CDN 引入。
+   两个 woff2 文件是用 scripts/subset-fonts.py 从 Noto Serif CJK JP(Noto
+   Serif JP 的原始来源项目,字形完全一致)按全站实际用到的字符生成的子集,
+   只包含 400、600 两档字重——所以下面全站的 font-weight 只能用 400/600,
+   其它字重(500/700等)会被浏览器"伪造"出来,CJK 汉字笔画密集,伪造粗体
+   容易糊成一团,不能用。
+   font-display: swap:字体还没下载完时先用兜底的系统 serif 显示文字,
+   字体下载完成后无缝换上,不会出现文字消失的空白期(FOIT)。
+   顾客在表单里输入的生僻字如果不在这个子集里,会显示成系统 serif 兜底
+   字体——这是可以接受的降级行为,详见 scripts/subset-fonts.py 头部注释。 */
+@font-face {
+    font-family: "Noto Serif JP Subset";
+    src: url("../fonts/noto-serif-jp-subset-400.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Noto Serif JP Subset";
+    src: url("../fonts/noto-serif-jp-subset-600.woff2") format("woff2");
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+:root {
     --color-bg: #15181c;
     --color-text: #eef2f3;
     --color-accent: #dcb678;
     --color-panel: #1c2026;
-    --font-jp: "Noto Serif JP", serif;
+    --font-jp: "Noto Serif JP Subset", serif;
     --hero-slide-duration: 10s;
     --hero-fade-duration: 2.6s;
     --noise-texture: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E");

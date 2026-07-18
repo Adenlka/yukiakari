@@ -22,3 +22,15 @@ Thumbs.db
 
 # --- Node(如未来构建脚本引入依赖) ---
 node_modules/
+
+# --- Python(scripts/ 下脚本运行产生的缓存) ---
+__pycache__/
+*.pyc
+
+# --- 字体子集化源文件(体积太大不适合进 Git,约 24.5MB/份) ---
+# scripts/subset-fonts.py 需要这个目录里的两个 Noto Serif CJK JP 源字体才能
+# 重新生成 web/assets/fonts/ 下的 woff2 子集,但源字体本身不需要(也不应该)
+# 提交进仓库——这正是本轮字体子集化要解决的"体积膨胀"问题,如果把 49MB 的
+# 源字体提交进 Git 历史,等于把问题从"网页加载慢"搬到了"仓库体积爆炸",
+# 得不偿失。获取方式见 scripts/subset-fonts.py 文件头部注释。
+scripts/font-src/

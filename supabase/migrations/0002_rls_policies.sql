@@ -80,13 +80,25 @@ create policy "admin can select reservation_item_extras" on reservation_item_ext
     using (exists (select 1 from admin_profiles ap where ap.user_id = auth.uid()));
 
 -- ============================================================
--- contact_messages:anon 只能 INSERT(不能 SELECT/UPDATE/DELETE),
+-- contact_messages:anon 不给任何直接写权限(见下方【安全修复】说明),
+-- 统一走 submit_contact_message() 函数写入。
 -- 管理员可以 SELECT 全部 + UPDATE status(标记已读)。
 -- ============================================================
-create policy "anon can submit contact message" on contact_messages
-    for insert
-    to anon
-    with check (true);
+-- 【安全修复 · 安全审查报告问题④返工】原来这里有一条
+-- `for insert to anon with check (true)` 的策略,配合 Supabase 平台默认给
+-- anon 的表级 INSERT 权限,anon 可以无条件插入。第一轮修复时只是新增了
+-- `submit-contact-message` Edge Function 在写库前做限流,但这条策略本身
+-- 没有收紧——anon key 是公开的,任何人都能完全跳过这个 Edge Function,
+-- 直接拿 anon key 对 PostgREST 的 /rest/v1/contact_messages 发 INSERT
+-- 请求,RLS 这条策略依然会放行,Edge Function 里的限流形同虚设。这个问题
+-- 和 reservations 表当初的设计考虑是同一个道理(见下面 submit_reservation()
+-- 的注释):只要 anon 对表本身有直接写权限,前面挡多少层应用层限流都没用,
+-- 必须把"能不能写"这件事完全收回到一个 SECURITY DEFINER 函数手里。
+-- 现在彻底不给 anon 任何 INSERT 策略(RLS 默认拒绝没有匹配策略的操作),
+-- 再用下面的 revoke 在表权限这一层也堵死,双重保险。写入唯一入口改成
+-- submit_contact_message() 函数(定义见文件末尾,和 submit_reservation()/
+-- lookup_reservation() 同样的 security definer 写法)。
+revoke insert on contact_messages from anon;
 
 create policy "admin can select contact_messages" on contact_messages
     for select
@@ -462,3 +474,59 @@ $$;
 
 revoke all on function lookup_reservation(text, text) from public;
 grant execute on function lookup_reservation(text, text) to anon, authenticated;
+
+-- ============================================================
+-- submit_contact_message():提交联系表单留言的唯一入口
+-- (安全审查报告问题④返工新增,详见上方 contact_messages 表的
+-- 【安全修复】说明——anon 对表本身已经没有 INSERT 权限,写入只能经过这个
+-- SECURITY DEFINER 函数)
+--
+-- 只接收业务字段(姓名/假名/邮箱/电话/留言/隐私同意),不接收 status 等
+-- 不该由用户指定的字段——status 由表默认值 'unread' 决定,函数签名里根本
+-- 没有这个参数,调用方无论传什么都改不了它,这一点和 submit_reservation()
+-- 里 total_price 只能由服务端算出、不接收前端传值是同一个设计原则。
+-- ============================================================
+create or replace function submit_contact_message(
+    p_guest_name      text,
+    p_guest_kana      text,
+    p_guest_email     text,
+    p_guest_phone     text,
+    p_message         text,
+    p_privacy_agreed  boolean
+) returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+    -- ---------- 基础输入校验(不信任前端/Edge Function传来的任何字段) ----------
+    if p_guest_name is null or btrim(p_guest_name) = '' then
+        raise exception '缺少必填的姓名' using errcode = 'YK001';
+    end if;
+    if p_guest_email is null or p_guest_email !~ '^[^@[:space:]]+@[^@[:space:]]+\.[^@[:space:]]+$' then
+        raise exception '邮箱格式不正确' using errcode = 'YK001';
+    end if;
+    if p_message is null or btrim(p_message) = '' then
+        raise exception '缺少必填的留言内容' using errcode = 'YK001';
+    end if;
+
+    insert into contact_messages (
+        guest_name, guest_kana, guest_email, guest_phone, message, privacy_agreed
+    ) values (
+        btrim(p_guest_name), p_guest_kana, btrim(p_guest_email), p_guest_phone, btrim(p_message),
+        coalesce(p_privacy_agreed, false)
+    );
+exception
+    when sqlstate 'YK001' then
+        -- 上面手动 raise 的业务校验错误,消息本身不含表名/字段名等内部细节,
+        -- 可以原样透传给调用方。
+        raise;
+    when others then
+        -- 其它未预期的数据库错误统一替换成通用提示,不把原始 SQLERRM 返回
+        -- 给调用方(安全底线:错误信息不暴露堆栈/SQL/路径)。
+        raise exception '留言提交失败,请稍后重试' using errcode = 'P0001';
+end;
+$$;
+
+revoke all on function submit_contact_message(text, text, text, text, text, boolean) from public;
+grant execute on function submit_contact_message(text, text, text, text, text, boolean) to anon, authenticated;

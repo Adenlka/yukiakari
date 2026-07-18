@@ -2,20 +2,26 @@
 //
 // 用途:联系表单(web/contact.html)提交的唯一入口。
 //
-// 【安全修复 · 安全审查报告中危问题④】contact_messages 表的 RLS 策略是
-// `for insert to anon with check (true)`——无条件允许插入,之前 contact.js
-// 是前端直接 `supabase.from('contact_messages').insert(...)`,这意味着
-// 任何脚本都能绕开页面,拿公开的 anon key 直接对 PostgREST 的
-// /rest/v1/contact_messages 发起批量 POST,完全没有频率限制,可以无限量
-// 灌库(存储膨胀 + 管理后台一次性全量拉取会被拖慢)。
-// 修复方式:把 insert 这一步从前端直接调用改成经过这个 Edge Function,
-// 提交前先调用 check_rate_limit() RPC(supabase/migrations/0003_rate_limits.sql
-// 里已有的通用限流函数,与 submit-reservation/lookup-reservation 用的是
-// 同一个函数),用 IP 做限流 key。
+// 【安全修复 · 安全审查报告中危问题④,本文件为返工后的版本】
+// contact_messages 表原来的 RLS 策略是 `for insert to anon with check
+// (true)`——无条件允许插入。第一轮修复只是加了这个 Edge Function 在写库
+// 前做限流,但没有收紧那条 RLS 策略,导致限流可以被完全绕过:anon key 是
+// 公开的,任何人都能跳过这个 Edge Function,直接拿 anon key 对 PostgREST
+// 的 /rest/v1/contact_messages 发 INSERT 请求,那条策略依然会放行,这里的
+// 限流形同虚设——这是角色4复查后指出的返工原因。
+//
+// 现在的修复:supabase/migrations/0002_rls_policies.sql 已经把
+// `anon can submit contact message` 这条策略删掉,并 `revoke insert on
+// contact_messages from anon`,anon 对表本身完全没有写权限了。写入唯一
+// 入口改成 submit_contact_message()(SECURITY DEFINER 函数,和
+// submit_reservation()/lookup_reservation() 同样的写法),这个 Edge
+// Function 现在做的事情是:先过 check_rate_limit() 限流,通过后调用这个
+// RPC——不管有没有人绕开本函数直接打 PostgREST,RLS 这一层本身就已经
+// 挡死了,限流不再是唯一防线,是纵深防御的其中一层。
 //
 // 密钥说明:和 submit-reservation/lookup-reservation 一样,本函数只使用
-// SUPABASE_ANON_KEY,不使用 service_role key —— contact_messages 的 RLS
-// 本身已经允许 anon INSERT,这里不需要绕过 RLS 的更高权限。
+// SUPABASE_ANON_KEY,不使用 service_role key —— submit_contact_message()
+// 本身已经是 SECURITY DEFINER,这一层不需要再叠加一次更高权限的 key。
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
@@ -100,21 +106,24 @@ Deno.serve(async (req: Request) => {
     return jsonResponse({ error: "メールアドレスの形式が正しくありません。" }, 400);
   }
 
-  const { error } = await supabase.from("contact_messages").insert({
-    guest_name: guestName,
-    guest_kana: guestKana,
-    guest_email: guestEmail,
-    guest_phone: guestPhone,
-    message,
-    privacy_agreed: privacyAgreed,
+  // anon 对 contact_messages 表本身已经没有 INSERT 权限(见
+  // 0002_rls_policies.sql 的 revoke),唯一的写入路径就是这个 RPC。
+  const { error } = await supabase.rpc("submit_contact_message", {
+    p_guest_name: guestName,
+    p_guest_kana: guestKana,
+    p_guest_email: guestEmail,
+    p_guest_phone: guestPhone,
+    p_message: message,
+    p_privacy_agreed: privacyAgreed,
   });
 
   if (error) {
-    // 不把原始 PostgREST/数据库报错(可能带表名/字段名)透传给前端,统一
-    // 替换成通用提示,原始错误只记日志供排查(安全底线:错误信息不暴露
-    // 堆栈/SQL/路径)。
-    console.error("contact_messages insert error:", error);
-    return jsonResponse({ error: "送信に失敗しました。しばらくしてから再度お試しください。" }, 500);
+    console.error("submit_contact_message RPC error:", error);
+    // submit_contact_message() 内部把"业务校验错误"(errcode YK001)和
+    // "未预期的数据库错误"(errcode P0001,已被函数统一替换成通用提示)
+    // 分开处理,两种情况传到这里的 error.message 都已经是不含表名/字段名
+    // 的安全文案,可以直接透传给前端,和 submit-reservation 的处理方式一致。
+    return jsonResponse({ error: error.message || "送信に失敗しました。しばらくしてから再度お試しください。" }, 400);
   }
 
   return jsonResponse({ ok: true });

@@ -44,7 +44,9 @@
     'page.room-tsukiakari.title': 'モダン和洋室「月明」 | 雪灯り',
     'page.room-tsukiakari.description': '雪灯りの客室「月明」のご案内。間取り・設備・料金をご紹介します。',
     'page.room-standard.title': '本館 スタンダード和室 | 雪灯り',
-    'page.room-standard.description': '雪灯りの本館和室のご案内。間取り・設備・料金をご紹介します。'
+    'page.room-standard.description': '雪灯りの本館和室のご案内。間取り・設備・料金をご紹介します。',
+    'page.notfound.title': 'ページが見つかりません | 雪灯り',
+    'page.notfound.description': 'お探しのページが見つかりませんでした。雪灯りのトップページからお探しのコンテンツをご覧ください。'
   });
 
   assign('en', {
@@ -87,7 +89,9 @@
     'page.room-tsukiakari.title': 'Modern Jap.-Western “Tsukiakari” | Yukiakari',
     'page.room-tsukiakari.description': 'Details of the Tsukiakari room: layout, facilities, and rates.',
     'page.room-standard.title': 'Main Building Standard Room | Yukiakari',
-    'page.room-standard.description': 'Details of the standard room: layout, facilities, and rates.'
+    'page.room-standard.description': 'Details of the standard room: layout, facilities, and rates.',
+    'page.notfound.title': 'Page Not Found | Yukiakari',
+    'page.notfound.description': 'The page you were looking for could not be found. Please return to the Yukiakari homepage to find what you need.'
   });
 
   assign('ko', {
@@ -130,7 +134,9 @@
     'page.room-tsukiakari.title': '모던 화양실 “츠키아카리” | 유키아카리',
     'page.room-tsukiakari.description': '츠키아카리 객실의 구조, 설비, 요금을 안내합니다.',
     'page.room-standard.title': '본관 스탠다드 일본식 객실 | 유키아카리',
-    'page.room-standard.description': '스탠다드 객실의 구조, 설비, 요금을 안내합니다.'
+    'page.room-standard.description': '스탠다드 객실의 구조, 설비, 요금을 안내합니다.',
+    'page.notfound.title': '페이지를 찾을 수 없습니다 | 유키아카리',
+    'page.notfound.description': '찾으시는 페이지를 찾을 수 없습니다. 유키아카리 홈페이지에서 원하시는 콘텐츠를 확인해 주세요.'
   });
 
   assign('zh-Hans', {
@@ -173,7 +179,9 @@
     'page.room-tsukiakari.title': '现代和洋室「月明」 | 雪灯り',
     'page.room-tsukiakari.description': '介绍月明房型的格局、设施与价格。',
     'page.room-standard.title': '本馆标准和室 | 雪灯り',
-    'page.room-standard.description': '介绍本馆标准和室的格局、设施与价格。'
+    'page.room-standard.description': '介绍本馆标准和室的格局、设施与价格。',
+    'page.notfound.title': '找不到页面 | 雪灯り',
+    'page.notfound.description': '未能找到您要访问的页面。请返回雪灯り首页查找所需内容。'
   });
 
   assign('zh-Hant', {
@@ -216,6 +224,8 @@
     'page.room-tsukiakari.title': '現代和洋室「月明」 | 雪灯り',
     'page.room-tsukiakari.description': '介紹月明房型的格局、設施與價格。',
     'page.room-standard.title': '本館標準和室 | 雪灯り',
-    'page.room-standard.description': '介紹本館標準和室的格局、設施與價格。'
+    'page.room-standard.description': '介紹本館標準和室的格局、設施與價格。',
+    'page.notfound.title': '找不到頁面 | 雪灯り',
+    'page.notfound.description': '未能找到您要造訪的頁面。請返回雪灯り首頁查找所需內容。'
   });
 })();

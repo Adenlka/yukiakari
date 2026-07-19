@@ -41,6 +41,11 @@
     "form.required": "Required",
     "loader.label": "Loading",
 
+    "notfound.title": "Page Not Found",
+    "notfound.lead": "The URL may have changed or the page may have been removed.<br>Please return to the homepage to find what you're looking for.",
+    "notfound.cta.home": "Return to Homepage",
+    "notfound.cta.reserve": "Book Now",
+
     "home.hero.title": "Yukiakari",
     "home.hero.kana": "YUKIAKARI",
     "home.hero.aria": "Yukiakari main visual",
@@ -494,6 +499,11 @@
     "contact.submit": "入力内容を確認する",
     "form.required": "必須",
     "loader.label": "読み込み中",
+
+    "notfound.title": "お探しのページが見つかりませんでした",
+    "notfound.lead": "URLが変更されたか、削除された可能性があります。<br>お手数ですが、トップページから改めてお探しください。",
+    "notfound.cta.home": "トップページへ戻る",
+    "notfound.cta.reserve": "ご予約はこちら",
 
     "home.hero.title": "雪灯り",
     "home.hero.kana": "YUKIAKARI",
@@ -949,6 +959,11 @@
     "form.required": "필수",
     "loader.label": "로딩 중",
 
+    "notfound.title": "페이지를 찾을 수 없습니다",
+    "notfound.lead": "URL이 변경되었거나 삭제되었을 수 있습니다.<br>홈페이지에서 다시 찾아 주세요.",
+    "notfound.cta.home": "홈페이지로 돌아가기",
+    "notfound.cta.reserve": "예약하기",
+
     "home.hero.title": "유키아카리",
     "home.hero.kana": "YUKIAKARI",
     "home.hero.aria": "유키아카리 메인 비주얼",
@@ -1403,6 +1418,11 @@
     "form.required": "必填",
     "loader.label": "加载中",
 
+    "notfound.title": "未能找到您要访问的页面",
+    "notfound.lead": "该网址可能已变更或已被删除。<br>请返回首页重新查找。",
+    "notfound.cta.home": "返回首页",
+    "notfound.cta.reserve": "前往预约",
+
     "home.hero.title": "雪灯り",
     "home.hero.kana": "YUKIAKARI",
     "home.hero.aria": "雪灯り主视觉画面",
@@ -1856,6 +1876,11 @@
     "contact.submit": "確認填寫內容",
     "form.required": "必填",
     "loader.label": "載入中",
+
+    "notfound.title": "未能找到您要造訪的頁面",
+    "notfound.lead": "該網址可能已變更或已被刪除。<br>請返回首頁重新查找。",
+    "notfound.cta.home": "返回首頁",
+    "notfound.cta.reserve": "前往預約",
 
     "home.hero.title": "雪灯り",
     "home.hero.kana": "YUKIAKARI",
